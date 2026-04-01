@@ -34,7 +34,7 @@
         {{-- Si un post est mis à la une dans l'administration, 
             celui ci s'affiche, sinon on affiche les posts facebook 
         ou rien du tout --}}
-        @if($favoriPost)
+        {{-- @if($favoriPost)
         <div class="favoriPost p-0 m-0">
             <x-title>Actualité</x-title>
             <x-cadre>
@@ -58,7 +58,7 @@
                 </div>
             </x-cadre>
         </div>
-        @endif
+        @endif --}}
         {{-- Elément post end --}}
         {{-- Elément maps start --}}
         <div class="maps" aria-labelledby="maps-title">
