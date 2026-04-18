@@ -1,8 +1,12 @@
 <?php
 
+use App\Http\Controllers\Api\CaramboleSyncController;
+use App\Http\Controllers\Api\LicenciesController;
+use App\Http\Controllers\Api\LicenseImportBatchController;
+use App\Http\Controllers\API\PostController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\CaramboleSyncController;
+use PharIo\Manifest\License;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,3 +27,21 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // routes/api.php (temporaire pour debug)
 Route::post('/carambole/sync-test', \App\Http\Controllers\Api\CaramboleSyncController::class);
+
+Route::prefix('v1')->group(function () {
+    Route::get('/posts', [PostController::class, 'index']);
+    Route::get('/post/{id}', [PostController::class, 'show']);
+    Route::get('/posts/discipline/{discipline}', [PostController::class, 'getPostsByDiscipline']);
+    Route::get('/post/slug/{slug}', [PostController::class, 'getPostBySlug']);
+    Route::get('/posts/favoris', [PostController::class, 'getPostIsFavoris']);
+    Route::get('/posts/decade/{year}', [PostController::class, 'getPostByDecade']);
+    Route::get('/posts/year/{year}', [PostController::class, 'getPostByYear']);
+    Route::get('/licencies', [LicenciesController::class, 'index']);
+    Route::get('/licencies/search/{name}', [LicenciesController::class, 'searchByName']);
+
+    // Routes batches
+    Route::get('/license-import/batches', [LicenseImportBatchController::class, 'index']);
+    Route::get('/license-import/batches/{batch}', [LicenseImportBatchController::class, 'show']);
+    Route::get('/license-import/batches/{batch}/report', [LicenseImportBatchController::class, 'report']);
+    Route::get('/license-import/batches/{batch}/diff', [LicenseImportBatchController::class, 'diff']);
+});
