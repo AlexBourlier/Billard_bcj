@@ -45,6 +45,16 @@ final class TelematFullReplaceProjectionStrategy implements TelematProjectionStr
 
                 DB::table('licencies')->delete();
 
+                $driver = DB::getDriverName();
+
+                if ($driver === 'mysql') {
+                    DB::statement('ALTER TABLE licencies AUTO_INCREMENT = 1');
+                }
+
+                if ($driver === 'sqlite') {
+                    DB::statement("DELETE FROM sqlite_sequence WHERE name = 'licencies'");
+                }
+
                 if ($rows !== []) {
                     DB::table('licencies')->insert($rows);
                 }

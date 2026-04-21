@@ -15,6 +15,11 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         // Génère chaque nuit à 03:10 (à adapter)
         $schedule->command('sitemap:generate')->dailyAt('15:19');
+
+        $schedule->command('license-import:scheduled-run')
+            ->everyTenMinutes()
+            ->withoutOverlapping()
+            ->appendOutputTo(storage_path('logs/license-import-scheduler.log'));
     }
 
     /**
