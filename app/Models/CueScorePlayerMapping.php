@@ -22,10 +22,12 @@ class CueScorePlayerMapping extends Model
         'notes',
     ];
 
+    // Note: 'is_confirmed' est casté en boolean pour faciliter les requêtes et les manipulations de données
     protected $casts = [
         'is_confirmed' => 'boolean',
     ];
 
+    // Relation avec la table des licencies pour accéder aux informations du licencié associé à ce mapping
     public function licencie()
     {
         return $this->belongsTo(Licencies::class, 'licencie_id');

@@ -30,16 +30,19 @@ class CueScoreRankingEntry extends Model
         'additional_data',
     ];
 
+    // Note: 'additional_data' est casté en array pour faciliter l'accès aux données supplémentaires stockées au format JSON, et 'points' est casté en decimal pour garantir une manipulation correcte des valeurs numériques avec deux décimales
     protected $casts = [
         'additional_data' => 'array',
         'points' => 'decimal:2',
     ];
 
+    // Relations pour accéder au ranking et au fetch associés à cette entrée de classement
     public function ranking()
     {
         return $this->belongsTo(CueScoreRanking::class, 'cuescore_ranking_id');
     }
 
+    // Relation pour accéder au fetch associé à cette entrée de classement, ce qui permet de retracer l'origine des données de classement et d'analyser les différentes tentatives de récupération des données
     public function fetch()
     {
         return $this->belongsTo(CueScoreRankingFetch::class, 'cuescore_ranking_fetch_id');
