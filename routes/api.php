@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\CaramboleSyncController;
 use App\Http\Controllers\Api\LicenciesController;
 use App\Http\Controllers\Api\LicenseImportBatchController;
+use App\Http\Controllers\Api\CueScoreController;
 use App\Http\Controllers\API\PostController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -44,4 +45,10 @@ Route::prefix('v1')->group(function () {
     Route::get('/license-import/batches/{batch}', [LicenseImportBatchController::class, 'show']);
     Route::get('/license-import/batches/{batch}/report', [LicenseImportBatchController::class, 'report']);
     Route::get('/license-import/batches/{batch}/diff', [LicenseImportBatchController::class, 'diff']);
+
+    // routes pour les classements CueScore
+    Route::get('/cuescore/rankings', [CueScoreController::class, 'index']);
+    Route::get('/cuescore/rankings/{ranking}', [CueScoreController::class, 'show']);
+    Route::get('/cuescore/rankings/{ranking}/club', [CueScoreController::class, 'club']);
+    Route::get('/cuescore/rankings/{ranking}/teams', [CueScoreController::class, 'teams']);
 });
