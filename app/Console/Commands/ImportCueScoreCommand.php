@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\CueScoreRanking;
+use App\Services\CueScore\CueScorePlayerMatcher;
 use App\Services\CueScore\CueScoreRankingImporter;
 use Illuminate\Console\Command;
 
@@ -11,12 +12,15 @@ class ImportCueScoreCommand extends Command
     protected $signature = 'cuescore:import 
                             {rankingId? : ID interne de cuescore_rankings}
                             {--discipline= : Filtrer par discipline}
-                            {--active-only : Importer uniquement les classements actifs}';
+                            {--active-only : Importer uniquement les classements actifs}
+                            {--with-match : Lancer automatiquement le matching après import}';
 
     protected $description = 'Import CueScore rankings and tournaments';
 
-    public function handle(CueScoreRankingImporter $importer): int
-    {
+    public function handle(
+        CueScoreRankingImporter $importer,
+        CueScorePlayerMatcher $matcher
+    ): int {
         $query = CueScoreRanking::query()->orderBy('sort_order');
 
         if ($rankingId = $this->argument('rankingId')) {
@@ -57,6 +61,16 @@ class ImportCueScoreCommand extends Command
                     $fetch->status,
                     $fetch->records_count
                 ));
+
+                if ($ranking->ranking_type === 'individual' && $fetch->status === 'success') {
+                    $matched = $matcher->matchEntriesForFetch($fetch->id);
+
+                    $this->info(sprintf(
+                        'Matching OK - fetch #%d - mappings traités=%d',
+                        $fetch->id,
+                        $matched
+                    ));
+                }
             } catch (\Throwable $e) {
                 $this->error(sprintf(
                     'Erreur sur [%s] : %s',
