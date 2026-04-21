@@ -11,4 +11,9 @@ final class Licencies extends Model
     protected $table = 'licencies';
 
     protected $guarded = [];
+
+    public function playerMappings()
+    {
+        return $this->hasMany(CueScorePlayerMapping::class, 'licencie_id');
+    }
 }
