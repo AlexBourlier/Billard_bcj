@@ -165,7 +165,18 @@ class CueScoreRankingSeeder extends Seeder
 
         ];
 
-        DB::table('cuescore_rankings')->truncate(); // Optionnel : vide la table avant d'insérer les nouvelles données
+        DB::table('cuescore_rankings')->delete(); // Optionnel : vide la table avant d'insérer les nouvelles données
+        
+        $driver = DB::getDriverName();
+
+        if ($driver === 'mysql') {
+            DB::statement('ALTER TABLE cuescore_rankings AUTO_INCREMENT = 1');
+        }
+
+        if ($driver === 'sqlite') {
+            DB::statement("DELETE FROM sqlite_sequence WHERE name = 'cuescore_rankings'");
+        }
+
         DB::table('cuescore_rankings')->insert($rankings);
     }
 }
