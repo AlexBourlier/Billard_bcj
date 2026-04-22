@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\CaramboleSyncController;
 use App\Http\Controllers\Api\LicenciesController;
 use App\Http\Controllers\Api\LicenseImportBatchController;
+use App\Http\Controllers\Api\CueScoreController;
 use App\Http\Controllers\API\PostController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -44,4 +45,19 @@ Route::prefix('v1')->group(function () {
     Route::get('/license-import/batches/{batch}', [LicenseImportBatchController::class, 'show']);
     Route::get('/license-import/batches/{batch}/report', [LicenseImportBatchController::class, 'report']);
     Route::get('/license-import/batches/{batch}/diff', [LicenseImportBatchController::class, 'diff']);
+
+    // routes pour les classements CueScore
+    Route::prefix('/cuescore')->group(function () {
+        Route::get('/rankings', [CueScoreController::class, 'index']);
+        // Routes agrégées pour les classements CueScore (ex: classement + club + teams)
+        Route::get('/club', [CueScoreController::class, 'clubOverview']);
+        Route::get('/rankings/{ranking}', [CueScoreController::class, 'show']);
+        Route::get('/rankings/{ranking}/club', [CueScoreController::class, 'club']);
+        Route::get('/rankings/{ranking}/teams', [CueScoreController::class, 'teams']);
+        
+        Route::get('/{discipline}/{scope}/{rankingType}', [CueScoreController::class, 'byDisciplineScopeAndType']);
+    });
+
+
+    
 });

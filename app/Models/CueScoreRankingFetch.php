@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class CueScoreRankingFetch extends Model
 {
@@ -28,16 +30,18 @@ class CueScoreRankingFetch extends Model
     protected $casts = [
         'fetched_at' => 'datetime',
         'is_active' => 'boolean',
+        'records_count' => 'integer',
+        'http_status' => 'integer',
     ];
 
     // Relations pour accéder au ranking associé à ce fetch et aux entrées de classement associées à ce fetch, ce qui permet de retracer l'origine des données de classement et d'analyser les différentes tentatives de récupération des données
-    public function ranking()
+    public function ranking(): BelongsTo
     {
         return $this->belongsTo(CueScoreRanking::class, 'cuescore_ranking_id');
     }
 
     // Relation pour accéder aux entrées de classement associées à ce fetch, ce qui permet de retracer l'origine des données de classement et d'analyser les différentes tentatives de récupération des données
-    public function entries()
+    public function entries(): HasMany
     {
         return $this->hasMany(CueScoreRankingEntry::class, 'cuescore_ranking_fetch_id');
     }
