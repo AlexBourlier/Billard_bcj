@@ -87,46 +87,19 @@ class CueScoreController extends Controller
 
     public function clubOverview(Request $request): JsonResponse
     {
-        $rankings = $this->applyRankingFilters(
-            CueScoreRanking::query()->where('is_active', true)->orderBy('sort_order')->orderBy('id'),
-            $request,
-            true
-        )->get();
+        return $this->clubOverviewFromFilters([
+            'discipline' => $request->string('discipline')->toString(),
+            'scope' => $request->string('scope')->toString(),
+            'ranking_type' => $request->string('ranking_type')->toString(),
+        ]);
+    }
 
-        $data = $rankings->map(function (CueScoreRanking $ranking) {
-            $activeFetch = $this->getActiveFetch($ranking);
-
-            if ($activeFetch === null) {
-                return [
-                    'ranking' => $this->serializeRanking($ranking),
-                    'fetch' => null,
-                    'count' => 0,
-                    'data' => [],
-                ];
-            }
-
-            $rankingData = $ranking->ranking_type === 'team'
-                ? $this->buildTeamRankingData($ranking, $activeFetch->id)
-                : $this->buildIndividualRankingData($ranking, $activeFetch->id);
-
-            return [
-                'ranking' => $this->serializeRanking($ranking),
-                'fetch' => $this->serializeFetch($activeFetch),
-                'count' => $rankingData['data']->count(),
-                'data' => $rankingData['data']->values(),
-                ...$rankingData['meta'],
-            ];
-        })->values();
-
-        return response()->json([
-            'count' => $data->count(),
-            'filters' => [
-                'discipline' => $request->query('discipline'),
-                'scope' => $request->query('scope'),
-                'ranking_type' => $request->query('ranking_type'),
-                'team_category' => $request->query('team_category'),
-            ],
-            'data' => $data,
+    public function byDisciplineScopeAndType(string $discipline, string $scope, string $rankingType): JsonResponse
+    {
+        return $this->clubOverviewFromFilters([
+            'discipline' => $discipline,
+            'scope' => $scope,
+            'ranking_type' => $rankingType,
         ]);
     }
 
@@ -362,6 +335,59 @@ class CueScoreController extends Controller
         }
 
         return false;
+    }
+
+    private function clubOverviewFromFilters(array $filters): JsonResponse
+    {
+        $query = CueScoreRanking::query()
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderBy('id');
+
+        if (!empty($filters['discipline'])) {
+            $query->where('discipline', mb_strtolower($filters['discipline']));
+        }
+
+        if (!empty($filters['scope'])) {
+            $query->where('scope', mb_strtolower($filters['scope']));
+        }
+
+        if (!empty($filters['ranking_type'])) {
+            $query->where('ranking_type', mb_strtolower($filters['ranking_type']));
+        }
+
+        $rankings = $query->get();
+
+        $data = $rankings->map(function (CueScoreRanking $ranking) {
+            $activeFetch = $this->getActiveFetch($ranking);
+
+            if ($activeFetch === null) {
+                return [
+                    'ranking' => $this->serializeRanking($ranking),
+                    'fetch' => null,
+                    'count' => 0,
+                    'data' => [],
+                ];
+            }
+
+            $rankingData = $ranking->ranking_type === 'team'
+                ? $this->buildTeamRankingData($ranking, $activeFetch->id)
+                : $this->buildIndividualRankingData($ranking, $activeFetch->id);
+
+            return [
+                'ranking' => $this->serializeRanking($ranking),
+                'fetch' => $this->serializeFetch($activeFetch),
+                'count' => $rankingData['data']->count(),
+                'data' => $rankingData['data']->values(),
+                ...$rankingData['meta'],
+            ];
+        })->values();
+
+        return response()->json([
+            'count' => $data->count(),
+            'filters' => $filters,
+            'data' => $data,
+        ]);
     }
 
     private function normalizeClubText(?string $value): string
