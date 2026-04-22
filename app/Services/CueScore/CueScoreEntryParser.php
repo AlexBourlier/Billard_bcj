@@ -63,4 +63,38 @@ class CueScoreEntryParser
             ->values()
             ->all();
     }
+
+    public function parseTournamentResults(array $payload): array
+    {
+        return collect($payload)
+            ->filter(fn ($value, $key) => is_array($value) && is_numeric((string) $key))
+            ->map(function (array $players, $position) {
+                return collect($players)->map(function (array $player) use ($position) {
+                    return [
+                        'entry_type' => 'player',
+                        'rank_position' => (int) $position,
+                        'participant_name' => $player['name'] ?? null,
+                        'participant_external_id' => isset($player['playerId']) ? (string) $player['playerId'] : null,
+                        'participant_url' => $player['url'] ?? null,
+                        'team_name' => null,
+                        'team_external_id' => null,
+                        'team_url' => null,
+                        'points' => null,
+                        'played' => null,
+                        'wins' => null,
+                        'losses' => null,
+                        'ties' => null,
+                        'additional_data' => [
+                            'firstname' => $player['firstname'] ?? null,
+                            'lastname' => $player['lastname'] ?? null,
+                            'country' => $player['country']['name'] ?? null,
+                            'city' => $player['livesIn']['city'] ?? null,
+                        ],
+                    ];
+                });
+            })
+            ->flatten(1)
+            ->values()
+            ->all();
+    }
 }

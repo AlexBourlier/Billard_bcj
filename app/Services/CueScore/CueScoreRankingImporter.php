@@ -23,9 +23,21 @@ class CueScoreRankingImporter
 
         $payload = $response->json();
 
-        $entries = $ranking->source_type === 'ranking'
-            ? $this->parser->parseRankingParticipants($payload)
-            : $this->parser->parseTournamentStandings($payload);
+        if ($ranking->source_type === 'ranking' && $ranking->ranking_type === 'individual') {
+            $response = $this->client->fetchRanking($ranking->cuescore_id);
+            $payload = $response->json();
+            $entries = $this->parser->parseRankingParticipants($payload);
+        } elseif ($ranking->source_type === 'tournament' && $ranking->ranking_type === 'team') {
+            $response = $this->client->fetchTournamentStandings($ranking->cuescore_id);
+            $payload = $response->json();
+            $entries = $this->parser->parseTournamentStandings($payload);
+        } elseif ($ranking->source_type === 'tournament' && $ranking->ranking_type === 'individual') {
+            $response = $this->client->fetchTournamentResults($ranking->cuescore_id);
+            $payload = $response->json();
+            $entries = $this->parser->parseTournamentResults($payload);
+        } else {
+            throw new \RuntimeException('Type de classement CueScore non supporté.');
+        }
 
         return DB::transaction(function () use ($ranking, $response, $payload, $entries) {
             CueScoreRankingFetch::where('cuescore_ranking_id', $ranking->id)

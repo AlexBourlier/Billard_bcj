@@ -272,18 +272,26 @@ class CueScoreController extends Controller
             $query->where('scope', $request->string('scope')->toString());
         }
 
-        $ranking = $query->get();
+        if ($request->filled('ranking_type')) {
+            $query->where('ranking_type', $request->string('ranking_type')->toString());
+        }
+
+        if ($request->filled('team_category')) {
+            $query->where('team_category', $request->string('team_category')->toString());
+        }
+
+        $rankings = $query->get();
 
         $rules = \App\Models\ClubMatchingRule::query()
             ->where('is_active', true)
             ->get();
 
-        $data = $ranking->map(function (CueScoreRanking $ranking) use ($rules) {
+        $data = $rankings->map(function (CueScoreRanking $ranking) use ($rules) {
             $activeFetch = $ranking->fetches()
                 ->where('is_active', true)
                 ->latest('id')
                 ->first();
-            
+
             if ($activeFetch === null) {
                 return [
                     'ranking' => [
@@ -318,13 +326,13 @@ class CueScoreController extends Controller
                     ->unique()
                     ->values();
 
-                $mappings = CuescorePlayerMapping::query()
+                $mappings = CueScorePlayerMapping::query()
                     ->with('licencie')
                     ->whereIn('cuescore_participant_id', $participantIds)
                     ->where('is_confirmed', true)
                     ->get()
                     ->keyBy(fn ($mapping) => (string) $mapping->cuescore_participant_id);
-                
+
                 $rankingData = $entries
                     ->filter(function ($entry) use ($mappings) {
                         return $entry->participant_external_id !== null
@@ -356,8 +364,9 @@ class CueScoreController extends Controller
                                 'prenom' => $licencie->prenom ?? null,
                             ] : null,
                         ];
-                    })->values();
-                
+                    })
+                    ->values();
+
                 return [
                     'ranking' => [
                         'id' => $ranking->id,
@@ -387,7 +396,7 @@ class CueScoreController extends Controller
                 ->where('entry_type', 'team')
                 ->orderBy('rank_position')
                 ->get();
-            
+
             $hasClubTeam = $entries->contains(function ($entry) use ($rules) {
                 return $this->teamMatchesClubRules($entry->team_name, $rules);
             });
@@ -439,16 +448,22 @@ class CueScoreController extends Controller
 
         return response()->json([
             'count' => $data->count(),
+            'filters' => [
+                'discipline' => $request->query('discipline'),
+                'scope' => $request->query('scope'),
+                'ranking_type' => $request->query('ranking_type'),
+                'team_category' => $request->query('team_category'),
+            ],
             'data' => $data,
         ]);
     }
 
     private function teamMatchesClubRules(?string $teamName, $rules): bool
     {
-        $teamName = mb_strtolower((string) $teamName);
+        $teamName = $this->normalizeClubText($teamName);
 
         foreach ($rules as $rule) {
-            $value = mb_strtolower((string) $rule->matching_value);
+            $value = $this->normalizeClubText((string) $rule->matching_value);
 
             if ($value === '') {
                 continue;
@@ -468,5 +483,33 @@ class CueScoreController extends Controller
         }
 
         return false;
+    }
+
+    private function normalizeClubText(?string $value): string
+    {
+        if ($value === null) {
+            return '';
+        }
+
+        $value = trim($value);
+        $value = mb_strtolower($value, 'UTF-8');
+
+        $replacements = [
+            'à' => 'a', 'á' => 'a', 'â' => 'a', 'ä' => 'a',
+            'ç' => 'c',
+            'è' => 'e', 'é' => 'e', 'ê' => 'e', 'ë' => 'e',
+            'ì' => 'i', 'í' => 'i', 'î' => 'i', 'ï' => 'i',
+            'ñ' => 'n',
+            'ò' => 'o', 'ó' => 'o', 'ô' => 'o', 'ö' => 'o',
+            'ù' => 'u', 'ú' => 'u', 'û' => 'u', 'ü' => 'u',
+            'ý' => 'y', 'ÿ' => 'y',
+            '\'' => ' ',
+            '-' => ' ',
+        ];
+
+        $value = strtr($value, $replacements);
+        $value = preg_replace('/\s+/', ' ', $value) ?? $value;
+
+        return trim($value);
     }
 }

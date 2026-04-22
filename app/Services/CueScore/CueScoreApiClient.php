@@ -30,4 +30,12 @@ class CueScoreApiClient
             'id' => $tournamentId,
         ]);
     }
+
+    // public function parseTournamentResults(string $tournamentId): Response
+    // {
+    //     return Http::timeout(30)->get(self::BASE_URL . '/tournament/', [
+    //         'id' => $tournamentId,
+    //         'results' => 'parse',
+    //     ]);
+    // }
 }
