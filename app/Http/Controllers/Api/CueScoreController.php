@@ -205,29 +205,7 @@ class CueScoreController extends Controller
             ->get();
 
         $hasClubTeam = $entries->contains(function ($entry) use ($rules) {
-            $teamName = mb_strtolower((string) $entry->team_name);
-
-            foreach ($rules as $rule) {
-                $value = mb_strtolower((string) $rule->matching_value);
-
-                if ($value === '') {
-                    continue;
-                }
-
-                if ($rule->matching_mode === 'contains' && str_contains($teamName, $value)) {
-                    return true;
-                }
-
-                if ($rule->matching_mode === 'equals' && $teamName === $value) {
-                    return true;
-                }
-
-                if ($rule->matching_mode === 'starts_with' && str_starts_with($teamName, $value)) {
-                    return true;
-                }
-            }
-
-            return false;
+            return $this->teamMatchesClubRules($entry->team_name, $rules);
         });
 
         if (! $hasClubTeam) {
@@ -247,7 +225,7 @@ class CueScoreController extends Controller
             ]);
         }
 
-        $data = $entries->map(function ($entry) {
+        $data = $entries->map(function ($entry) use ($rules) {
             return [
                 'rank_position' => $entry->rank_position,
                 'team_name' => $entry->team_name,
@@ -258,6 +236,7 @@ class CueScoreController extends Controller
                 'wins' => $entry->wins,
                 'losses' => $entry->losses,
                 'ties' => $entry->ties,
+                'is_club_team' => $this->teamMatchesClubRules($entry->team_name, $rules),
                 'additional_data' => $entry->additional_data,
             ];
         })->values();
@@ -276,5 +255,218 @@ class CueScoreController extends Controller
                 'club_team_present' => true,
             ],
         ]);
+    }
+
+    public function clubOverview(Request $request): JsonResponse
+    {
+        $query = CueScoreRanking::query()
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderBy('id');
+
+        if ($request->filled('discipline')) {
+            $query->where('discipline', $request->string('discipline')->toString());
+        }
+
+        if ($request->filled('scope')) {
+            $query->where('scope', $request->string('scope')->toString());
+        }
+
+        $ranking = $query->get();
+
+        $rules = \App\Models\ClubMatchingRule::query()
+            ->where('is_active', true)
+            ->get();
+
+        $data = $ranking->map(function (CueScoreRanking $ranking) use ($rules) {
+            $activeFetch = $ranking->fetches()
+                ->where('is_active', true)
+                ->latest('id')
+                ->first();
+            
+            if ($activeFetch === null) {
+                return [
+                    'ranking' => [
+                        'id' => $ranking->id,
+                        'name' => $ranking->name,
+                        'cuescore_id' => $ranking->cuescore_id,
+                        'url' => $ranking->url,
+                        'source_type' => $ranking->source_type,
+                        'discipline' => $ranking->discipline,
+                        'scope' => $ranking->scope,
+                        'ranking_type' => $ranking->ranking_type,
+                        'team_category' => $ranking->team_category,
+                        'season' => $ranking->season,
+                    ],
+                    'fetch' => null,
+                    'count' => 0,
+                    'data' => [],
+                ];
+            }
+
+            if ($ranking->ranking_type === 'individual') {
+                $entries = $ranking->entries()
+                    ->where('cuescore_ranking_fetch_id', $activeFetch->id)
+                    ->where('entry_type', 'player')
+                    ->orderBy('rank_position')
+                    ->get();
+
+                $participantIds = $entries
+                    ->pluck('participant_external_id')
+                    ->filter()
+                    ->map(fn ($id) => (string) $id)
+                    ->unique()
+                    ->values();
+
+                $mappings = CuescorePlayerMapping::query()
+                    ->with('licencie')
+                    ->whereIn('cuescore_participant_id', $participantIds)
+                    ->where('is_confirmed', true)
+                    ->get()
+                    ->keyBy(fn ($mapping) => (string) $mapping->cuescore_participant_id);
+                
+                $rankingData = $entries
+                    ->filter(function ($entry) use ($mappings) {
+                        return $entry->participant_external_id !== null
+                            && $mappings->has((string) $entry->participant_external_id);
+                    })
+                    ->map(function ($entry) use ($mappings) {
+                        $mapping = $mappings->get((string) $entry->participant_external_id);
+                        $licencie = $mapping?->licencie;
+
+                        return [
+                            'rank_position' => $entry->rank_position,
+                            'participant_name' => $entry->participant_name,
+                            'participant_external_id' => $entry->participant_external_id,
+                            'participant_url' => $entry->participant_url,
+                            'points' => $entry->points,
+                            'played' => $entry->played,
+                            'wins' => $entry->wins,
+                            'losses' => $entry->losses,
+                            'ties' => $entry->ties,
+                            'matching' => [
+                                'method' => $mapping?->matching_method,
+                                'confidence_score' => $mapping?->confidence_score,
+                                'is_confirmed' => (bool) $mapping?->is_confirmed,
+                            ],
+                            'licencie' => $licencie ? [
+                                'id' => $licencie->id,
+                                'licence' => $licencie->licence ?? null,
+                                'nom' => $licencie->nom ?? null,
+                                'prenom' => $licencie->prenom ?? null,
+                            ] : null,
+                        ];
+                    })->values();
+                
+                return [
+                    'ranking' => [
+                        'id' => $ranking->id,
+                        'name' => $ranking->name,
+                        'cuescore_id' => $ranking->cuescore_id,
+                        'url' => $ranking->url,
+                        'source_type' => $ranking->source_type,
+                        'discipline' => $ranking->discipline,
+                        'scope' => $ranking->scope,
+                        'ranking_type' => $ranking->ranking_type,
+                        'team_category' => $ranking->team_category,
+                        'season' => $ranking->season,
+                    ],
+                    'fetch' => [
+                        'id' => $activeFetch->id,
+                        'status' => $activeFetch->status,
+                        'fetched_at' => $activeFetch->fetched_at?->toIso8601String(),
+                        'records_count' => $activeFetch->records_count,
+                    ],
+                    'count' => $rankingData->count(),
+                    'data' => $rankingData,
+                ];
+            }
+
+            $entries = $ranking->entries()
+                ->where('cuescore_ranking_fetch_id', $activeFetch->id)
+                ->where('entry_type', 'team')
+                ->orderBy('rank_position')
+                ->get();
+            
+            $hasClubTeam = $entries->contains(function ($entry) use ($rules) {
+                return $this->teamMatchesClubRules($entry->team_name, $rules);
+            });
+
+            $rankingData = collect();
+
+            if ($hasClubTeam) {
+                $rankingData = $entries->map(function ($entry) use ($rules) {
+                    return [
+                        'rank_position' => $entry->rank_position,
+                        'team_name' => $entry->team_name,
+                        'team_external_id' => $entry->team_external_id,
+                        'team_url' => $entry->team_url,
+                        'points' => $entry->points,
+                        'played' => $entry->played,
+                        'wins' => $entry->wins,
+                        'losses' => $entry->losses,
+                        'ties' => $entry->ties,
+                        'is_club_team' => $this->teamMatchesClubRules($entry->team_name, $rules),
+                        'additional_data' => $entry->additional_data,
+                    ];
+                })->values();
+            }
+
+            return [
+                'ranking' => [
+                    'id' => $ranking->id,
+                    'name' => $ranking->name,
+                    'cuescore_id' => $ranking->cuescore_id,
+                    'url' => $ranking->url,
+                    'source_type' => $ranking->source_type,
+                    'discipline' => $ranking->discipline,
+                    'scope' => $ranking->scope,
+                    'ranking_type' => $ranking->ranking_type,
+                    'team_category' => $ranking->team_category,
+                    'season' => $ranking->season,
+                ],
+                'fetch' => [
+                    'id' => $activeFetch->id,
+                    'status' => $activeFetch->status,
+                    'fetched_at' => $activeFetch->fetched_at?->toIso8601String(),
+                    'records_count' => $activeFetch->records_count,
+                ],
+                'count' => $rankingData->count(),
+                'club_team_present' => $hasClubTeam,
+                'data' => $rankingData,
+            ];
+        })->values();
+
+        return response()->json([
+            'count' => $data->count(),
+            'data' => $data,
+        ]);
+    }
+
+    private function teamMatchesClubRules(?string $teamName, $rules): bool
+    {
+        $teamName = mb_strtolower((string) $teamName);
+
+        foreach ($rules as $rule) {
+            $value = mb_strtolower((string) $rule->matching_value);
+
+            if ($value === '') {
+                continue;
+            }
+
+            if ($rule->matching_mode === 'contains' && str_contains($teamName, $value)) {
+                return true;
+            }
+
+            if ($rule->matching_mode === 'equals' && $teamName === $value) {
+                return true;
+            }
+
+            if ($rule->matching_mode === 'starts_with' && str_starts_with($teamName, $value)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

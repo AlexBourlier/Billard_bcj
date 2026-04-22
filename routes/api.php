@@ -51,4 +51,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/cuescore/rankings/{ranking}', [CueScoreController::class, 'show']);
     Route::get('/cuescore/rankings/{ranking}/club', [CueScoreController::class, 'club']);
     Route::get('/cuescore/rankings/{ranking}/teams', [CueScoreController::class, 'teams']);
+
+    // Routes agrégées pour les classements CueScore (ex: classement + club + teams)
+    Route::get('/cuescore/club', [CueScoreController::class, 'clubOverview']);
 });
