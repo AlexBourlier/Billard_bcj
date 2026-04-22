@@ -91,7 +91,8 @@ class Calendar extends Model
 
     public function events(): HasMany
     {
-        return $this->hasMany(CalendarEvent::class, 'calendar_id');
+        return $this->hasMany(CalendarEvent::class, 'calendar_id')
+            ->orderBy('date_debut', 'asc');
     }
 
     public function upcomingEvents(): HasMany

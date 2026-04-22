@@ -4,7 +4,8 @@ use App\Http\Controllers\Api\CaramboleSyncController;
 use App\Http\Controllers\Api\LicenciesController;
 use App\Http\Controllers\Api\LicenseImportBatchController;
 use App\Http\Controllers\Api\CueScoreController;
-use App\Http\Controllers\API\PostController;
+use App\Http\Controllers\Api\CalendarController;
+use App\Http\Controllers\Api\PostController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use PharIo\Manifest\License;
@@ -58,6 +59,11 @@ Route::prefix('v1')->group(function () {
         Route::get('/{discipline}/{scope}/{rankingType}', [CueScoreController::class, 'byDisciplineScopeAndType']);
     });
 
-
+    // Routes pour les calendriers de tournois
+    Route::prefix('/calendrier')->group(function () {
+       Route::get('/', [CalendarController::class, 'index']);
+       Route::get('/{discipline}', [CalendarController::class, 'byDiscipline']);
+       Route::get('/{discipline}/{scope}', [CalendarController::class, 'byDisciplineAndScope']); 
+    });
     
 });
