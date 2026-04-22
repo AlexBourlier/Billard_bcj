@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CalendarEventResource;
+use App\Http\Resources\CalendarResource;
 use App\Models\Calendar;
 use Illuminate\Http\JsonResponse;
 
@@ -17,7 +19,7 @@ class CalendarController extends Controller
 
         return response()->json([
             'count' => $calendars->count(),
-            'data' => $calendars,
+            'data' => CalendarResource::collection($calendars),
         ]);
     }
 
@@ -29,13 +31,13 @@ class CalendarController extends Controller
             ->active()
             ->byDiscipline($discipline)
             ->ordered()
-            ->with(['events.links'])
+            ->withCount('events')
             ->get();
 
         return response()->json([
             'discipline' => $discipline,
             'count' => $calendars->count(),
-            'data' => $calendars,
+            'data' => CalendarResource::collection($calendars),
         ]);
     }
 
@@ -52,20 +54,9 @@ class CalendarController extends Controller
             ->firstOrFail();
 
         return response()->json([
-            'calendar' => $calendar->only([
-                'id',
-                'discipline',
-                'scope',
-                'name',
-                'slug',
-                'source_type',
-                'is_active',
-                'display_name',
-                'created_at',
-                'updated_at',
-            ]),
+            'calendar' => new CalendarResource($calendar),
             'count' => $calendar->events->count(),
-            'data' => $calendar->events,
+            'data' => CalendarEventResource::collection($calendar->events),
         ]);
     }
 
