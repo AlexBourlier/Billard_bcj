@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Document;
+use App\Http\Resources\DocumentResource;
 use Illuminate\Http\JsonResponse;
 
 class DocumentController extends Controller
@@ -14,7 +15,7 @@ class DocumentController extends Controller
 
         return response()->json([
             'count' => $documents->count(),
-            'data' => $documents,
+            'data' => DocumentResource::collection($documents),
             'error' => null,
         ]);
     }
@@ -37,7 +38,7 @@ class DocumentController extends Controller
         return response()->json([
             'discipline' => $discipline,
             'count' => $documents->count(),
-            'data' => $documents,
+            'data' => DocumentResource::collection($documents),
             'error' => null,
         ]);
     }
@@ -67,7 +68,7 @@ class DocumentController extends Controller
 
         return response()->json([
             'discipline' => $discipline,
-            'data' => $document,
+            'data' => new DocumentResource($document),
             'error' => null,
         ]);
     }
