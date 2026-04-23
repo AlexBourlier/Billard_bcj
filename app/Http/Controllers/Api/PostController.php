@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Post;
@@ -15,28 +15,43 @@ class PostController extends Controller
     {
         $posts = Post::all();
 
-        return response()->json($posts);
+        return response()->json([
+            'count' => $posts->count(),
+            'data' => $posts,
+            'error' => null,
+        ]);
     }
 
     public function getPostsByDiscipline($discipline)
     {
         $posts = Post::where('discipline', $discipline)->get();
 
-        return response()->json($posts);
+        return response()->json([
+            'count' => $posts->count(),
+            'data' => $posts,
+            'error' => null,
+        ]);
     }
 
     public function getPostBySlug($slug)
     {
         $post = Post::where('slug', $slug)->firstOrFail();
 
-        return response()->json($post);
+        return response()->json([
+            'data' => $post,
+            'error' => null,
+        ]);
     }
 
     public function getPostIsFavoris()
     {
         $posts = Post::where('favoris', true)->get();
 
-        return response()->json($posts);
+        return response()->json([
+            'count' => $posts->count(),
+            'data' => $posts,
+            'error' => null,
+        ]);
     }
 
     public function getPostByDecade($year)

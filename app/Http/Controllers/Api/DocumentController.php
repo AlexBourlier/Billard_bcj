@@ -1,0 +1,86 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Models\Document;
+use Illuminate\Http\JsonResponse;
+
+class DocumentController extends Controller
+{
+    public function index(): JsonResponse
+    {
+        $documents = Document::query()->get();
+
+        return response()->json([
+            'count' => $documents->count(),
+            'data' => $documents,
+            'error' => null,
+        ]);
+    }
+
+    public function byDiscipline(string $discipline): JsonResponse
+    {
+        $disciplineId = $this->getDisciplineId($discipline);
+
+        if ($disciplineId === null) {
+            return response()->json([
+                'message' => 'Discipline not found',
+                'error' => 'discipline_not_found',
+            ], 404);
+        }
+
+        $documents = Document::query()
+            ->where('discipline', $disciplineId)
+            ->get();
+
+        return response()->json([
+            'discipline' => $discipline,
+            'count' => $documents->count(),
+            'data' => $documents,
+            'error' => null,
+        ]);
+    }
+
+    public function show(string $discipline, int $id): JsonResponse
+    {
+        $disciplineId = $this->getDisciplineId($discipline);
+
+        if ($disciplineId === null) {
+            return response()->json([
+                'message' => 'Discipline not found',
+                'error' => 'discipline_not_found',
+            ], 404);
+        }
+
+        $document = Document::query()
+            ->where('discipline', $disciplineId)
+            ->where('id', $id)
+            ->first();
+
+        if (!$document) {
+            return response()->json([
+                'message' => 'Document not found',
+                'error' => 'document_not_found',
+            ], 404);
+        }
+
+        return response()->json([
+            'discipline' => $discipline,
+            'data' => $document,
+            'error' => null,
+        ]);
+    }
+
+    private function getDisciplineId(string $discipline): ?int
+    {
+        $mapping = [
+            'blackball' => 1,
+            'carambole' => 2,
+            'snooker' => 3,
+            'americain' => 4,
+        ];
+
+        return $mapping[$discipline] ?? null;
+    }
+}
