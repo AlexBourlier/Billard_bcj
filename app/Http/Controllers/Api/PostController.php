@@ -3,119 +3,150 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PostResource;
 use App\Models\Post;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class PostController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): JsonResponse
     {
-        $posts = Post::all();
+        $posts = Post::query()
+            ->orderByDesc('created_at')
+            ->paginate($this->getPerPage());
 
-        return response()->json([
-            'count' => $posts->count(),
-            'data' => $posts,
-            'error' => null,
+        return $this->paginatedResponse($posts);
+    }
+
+    public function show(int $id): JsonResponse
+    {
+        $post = Post::query()->findOrFail($id);
+
+        return $this->singleResponse($post);
+    }
+
+    public function getPostsByDiscipline(string $discipline): JsonResponse
+    {
+        $disciplineId = $this->getDisciplineId($discipline);
+
+        if ($disciplineId === null) {
+            return response()->json([
+                'message' => 'Discipline not found',
+                'error' => 'discipline_not_found',
+            ], 404);
+        }
+
+        $posts = Post::query()
+            ->where('discipline', $disciplineId)
+            ->orderByDesc('created_at')
+            ->paginate($this->getPerPage());
+
+        return $this->paginatedResponse($posts, [
+            'discipline' => $discipline,
         ]);
     }
 
-    public function getPostsByDiscipline($discipline)
+    public function getPostBySlug(string $slug): JsonResponse
     {
-        $posts = Post::where('discipline', $discipline)->get();
+        $post = Post::query()
+            ->where('slug', $slug)
+            ->firstOrFail();
 
-        return response()->json([
-            'count' => $posts->count(),
-            'data' => $posts,
-            'error' => null,
-        ]);
+        return $this->singleResponse($post);
     }
 
-    public function getPostBySlug($slug)
+    public function getPostIsFavoris(): JsonResponse
     {
-        $post = Post::where('slug', $slug)->firstOrFail();
+        $posts = Post::query()
+            ->where('favoris', true)
+            ->orderByDesc('created_at')
+            ->paginate($this->getPerPage());
 
-        return response()->json([
-            'data' => $post,
-            'error' => null,
-        ]);
+        return $this->paginatedResponse($posts);
     }
 
-    public function getPostIsFavoris()
+    public function getPostByDecade(int $year): JsonResponse
     {
-        $posts = Post::where('favoris', true)->get();
-
-        return response()->json([
-            'count' => $posts->count(),
-            'data' => $posts,
-            'error' => null,
-        ]);
-    }
-
-    public function getPostByDecade($year)
-    {
-        $startDecade = floor($year / 10) * 10;
+        $startDecade = (int) floor($year / 10) * 10;
         $endDecade = $startDecade + 9;
-        $posts = Post::whereBetween('year', [$startDecade, $endDecade])->orderBy('year', 'ASC')->get();
 
-        return response()->json([
-            'decade' => "$startDecade-$endDecade",
-            'posts' => $posts
+        $posts = Post::query()
+            ->whereBetween('year', [$startDecade, $endDecade])
+            ->orderBy('year')
+            ->orderByDesc('created_at')
+            ->paginate($this->getPerPage());
+
+        return $this->paginatedResponse($posts, [
+            'decade' => "{$startDecade}-{$endDecade}",
         ]);
     }
 
-    public function getPostByYear($year)
+    public function getPostByYear(int $year): JsonResponse
     {
-        $posts = Post::where('year', $year)->orderBy('year', 'ASC')->get();
+        $posts = Post::query()
+            ->where('year', $year)
+            ->orderBy('year')
+            ->orderByDesc('created_at')
+            ->paginate($this->getPerPage());
 
-        return response()->json([
+        return $this->paginatedResponse($posts, [
             'year' => $year,
-            'posts' => $posts
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    private function getPerPage(): int
     {
-        //
+        $perPage = (int) request('per_page', 10);
+
+        if ($perPage < 1) {
+            return 10;
+        }
+
+        return min($perPage, 100);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show($id)
+    private function singleResponse(Post $post, array $extra = []): JsonResponse
     {
-        // Afficher le post par son id
-        $post = Post::findOrFail($id);
-
-        return response()->json($post);
+        return response()->json(array_merge($extra, [
+            'data' => new PostResource($post),
+            'error' => null,
+        ]));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
+    private function getDisciplineId(string $discipline): ?int
     {
-        $post = Post::findOrFail($id);
+        $mapping = [
+            'blackball' => 1,
+            'carambole' => 2,
+            'snooker' => 3,
+            'americain' => 4,
+        ];
 
-        // Update the post with the request data
-        $post->update($request->all());
-
-        return response()->json($post);
+        return $mapping[$discipline] ?? null;
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
+    private function paginatedResponse(LengthAwarePaginator $posts, array $extra = []): JsonResponse
     {
-        $post = Post::findOrFail($id);
-        $post->delete();
-
-        return response()->json(null, 204);
+        return response()->json(array_merge($extra, [
+            'count' => $posts->total(),
+            'data' => PostResource::collection($posts->items()),
+            'meta' => [
+                'current_page' => $posts->currentPage(),
+                'last_page' => $posts->lastPage(),
+                'per_page' => $posts->perPage(),
+                'from' => $posts->firstItem(),
+                'to' => $posts->lastItem(),
+                'total' => $posts->total(),
+            ],
+            'links' => [
+                'first' => $posts->url(1),
+                'last' => $posts->url($posts->lastPage()),
+                'prev' => $posts->previousPageUrl(),
+                'next' => $posts->nextPageUrl(),
+            ],
+            'error' => null,
+        ]));
     }
 }
