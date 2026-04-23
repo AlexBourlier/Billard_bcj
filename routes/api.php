@@ -1,10 +1,11 @@
 <?php
 
+use App\Http\Controllers\Api\CalendarController;
 use App\Http\Controllers\Api\CaramboleSyncController;
+use App\Http\Controllers\Api\CueScoreController;
+use App\Http\Controllers\Api\DocumentController;
 use App\Http\Controllers\Api\LicenciesController;
 use App\Http\Controllers\Api\LicenseImportBatchController;
-use App\Http\Controllers\Api\CueScoreController;
-use App\Http\Controllers\Api\CalendarController;
 use App\Http\Controllers\Api\PostController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -64,6 +65,13 @@ Route::prefix('v1')->group(function () {
        Route::get('/', [CalendarController::class, 'index']);
        Route::get('/{discipline}', [CalendarController::class, 'byDiscipline']);
        Route::get('/{discipline}/{scope}', [CalendarController::class, 'byDisciplineAndScope']); 
+    });
+
+    // Routes pour les documents liés aux différentes disciplines
+    Route::prefix('/documents')->group(function () {
+        Route::get('/', [DocumentController::class, 'index']);
+        Route::get('/{discipline}', [DocumentController::class, 'byDiscipline']);
+        Route::get('/{discipline}/{id}', [DocumentController::class, 'show']);
     });
     
 });
