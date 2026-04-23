@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\CueScoreController;
 use App\Http\Controllers\Api\DocumentController;
 use App\Http\Controllers\Api\LicenciesController;
 use App\Http\Controllers\Api\LicenseImportBatchController;
+use App\Http\Controllers\Api\PartnerController;
 use App\Http\Controllers\Api\PostController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -32,13 +33,21 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/carambole/sync-test', \App\Http\Controllers\Api\CaramboleSyncController::class);
 
 Route::prefix('v1')->group(function () {
-    Route::get('/posts', [PostController::class, 'index']);
-    Route::get('/post/{id}', [PostController::class, 'show']);
-    Route::get('/posts/discipline/{discipline}', [PostController::class, 'getPostsByDiscipline']);
-    Route::get('/post/slug/{slug}', [PostController::class, 'getPostBySlug']);
-    Route::get('/posts/favoris', [PostController::class, 'getPostIsFavoris']);
-    Route::get('/posts/decade/{year}', [PostController::class, 'getPostByDecade']);
-    Route::get('/posts/year/{year}', [PostController::class, 'getPostByYear']);
+
+    // Route pour les partenaires
+    Route::get('/partenaires', [PartnerController::class, 'index']);
+
+    Route::prefix('/posts')->group(function () {
+        Route::get('/', [PostController::class, 'index']);
+        Route::get('/{id}', [PostController::class, 'show']);
+        Route::get('/discipline/{discipline}', [PostController::class, 'getPostsByDiscipline']);
+        Route::get('/slug/{slug}', [PostController::class, 'getPostBySlug']);
+        Route::get('/favoris', [PostController::class, 'getPostIsFavoris']);
+        Route::get('/decade/{year}', [PostController::class, 'getPostByDecade']);
+        Route::get('/year/{year}', [PostController::class, 'getPostByYear']);
+    });
+    
+    
     Route::get('/licencies', [LicenciesController::class, 'index']);
     Route::get('/licencies/search/{name}', [LicenciesController::class, 'searchByName']);
 
