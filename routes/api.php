@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\CalendarController;
 use App\Http\Controllers\Api\CaramboleSyncController;
 use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\CueScoreController;
+use App\Http\Controllers\Api\DisciplineController;
 use App\Http\Controllers\Api\DocumentController;
 use App\Http\Controllers\Api\LicenciesController;
 use App\Http\Controllers\Api\LicenseImportBatchController;
@@ -93,6 +94,11 @@ Route::prefix('v1')->group(function () {
     // Routes pour les contacts
     Route::prefix('/contact')->group(function () {
         Route::get('/', [ContactController::class, 'index']);
+    });
+
+    Route::prefix('/disciplines')->group(function () {
+        Route::get('/{discipline}', [DisciplineController::class, 'show']);
+        Route::get('/{discipline}/ranking-preview', [DisciplineController::class, 'rankingsPreview']);
     });
     
 });
