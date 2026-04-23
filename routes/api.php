@@ -39,6 +39,7 @@ Route::prefix('v1')->group(function () {
     // Route pour les informations publiques du site
     Route::prefix('/public')->group(function () {
         Route::get('/site', [PublicController::class, 'site']);
+        Route::get('/home', [PublicController::class, 'home']);
     });
     // Route pour les partenaires
     Route::get('/partenaires', [PartnerController::class, 'index']);
