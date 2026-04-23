@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\LicenciesController;
 use App\Http\Controllers\Api\LicenseImportBatchController;
 use App\Http\Controllers\Api\PartnerController;
 use App\Http\Controllers\Api\PostController;
+use App\Http\Controllers\Api\PublicController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use PharIo\Manifest\License;
@@ -34,6 +35,10 @@ Route::post('/carambole/sync-test', \App\Http\Controllers\Api\CaramboleSyncContr
 
 Route::prefix('v1')->group(function () {
 
+    // Route pour les informations publiques du site
+    Route::prefix('/public')->group(function () {
+        Route::get('/site', [PublicController::class, 'site']);
+    });
     // Route pour les partenaires
     Route::get('/partenaires', [PartnerController::class, 'index']);
 
