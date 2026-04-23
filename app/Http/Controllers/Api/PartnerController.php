@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\PartnerResource;
 use App\Models\Partenaire;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class PartnerController extends Controller
 {

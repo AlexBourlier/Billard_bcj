@@ -18,6 +18,7 @@ class PartnerResource extends JsonResource
             'id' => $this->id,
             'name' => $this->titre,
             'logo' => $this->img,
+            'logo_url' => asset($this->img),
             'website_url' => $this->url,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
