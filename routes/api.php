@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\CalendarController;
 use App\Http\Controllers\Api\CaramboleSyncController;
+use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\CueScoreController;
 use App\Http\Controllers\Api\DocumentController;
 use App\Http\Controllers\Api\LicenciesController;
@@ -86,6 +87,11 @@ Route::prefix('v1')->group(function () {
         Route::get('/', [DocumentController::class, 'index']);
         Route::get('/{discipline}', [DocumentController::class, 'byDiscipline']);
         Route::get('/{discipline}/{id}', [DocumentController::class, 'show']);
+    });
+
+    // Routes pour les contacts
+    Route::prefix('/contact')->group(function () {
+        Route::get('/', [ContactController::class, 'index']);
     });
     
 });
