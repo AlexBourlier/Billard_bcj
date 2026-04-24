@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
+use App\Support\DisciplineMapper;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
-use App\Support\DisciplineMapper;
 
 class PostController extends Controller
 {
@@ -33,8 +33,13 @@ class PostController extends Controller
 
         if ($disciplineId === null) {
             return response()->json([
-                'message' => 'Discipline not found',
-                'error' => 'discipline_not_found',
+                'data' => null,
+                'meta' => [],
+                'links' => [],
+                'error' => [
+                    'code' => 'discipline_not_found',
+                    'message' => 'Discipline not found',
+                ],
             ], 404);
         }
 
@@ -64,7 +69,9 @@ class PostController extends Controller
             ->orderByDesc('created_at')
             ->paginate($this->getPerPage());
 
-        return $this->paginatedResponse($posts);
+        return $this->paginatedResponse($posts, [
+            'favoris' => true,
+        ]);
     }
 
     public function getPostByDecade(int $year): JsonResponse
@@ -80,6 +87,8 @@ class PostController extends Controller
 
         return $this->paginatedResponse($posts, [
             'decade' => "{$startDecade}-{$endDecade}",
+            'start_year' => $startDecade,
+            'end_year' => $endDecade,
         ]);
     }
 
@@ -107,28 +116,29 @@ class PostController extends Controller
         return min($perPage, 100);
     }
 
-    private function singleResponse(Post $post, array $extra = []): JsonResponse
+    private function singleResponse(Post $post, array $meta = []): JsonResponse
     {
-        return response()->json(array_merge($extra, [
+        return response()->json([
             'data' => new PostResource($post),
+            'meta' => $meta,
+            'links' => [],
             'error' => null,
-        ]));
+        ]);
     }
 
-
-    private function paginatedResponse(LengthAwarePaginator $posts, array $extra = []): JsonResponse
+    private function paginatedResponse(LengthAwarePaginator $posts, array $meta = []): JsonResponse
     {
-        return response()->json(array_merge($extra, [
-            'count' => $posts->total(),
+        return response()->json([
             'data' => PostResource::collection($posts->items()),
-            'meta' => [
+            'meta' => array_merge($meta, [
+                'count' => $posts->total(),
                 'current_page' => $posts->currentPage(),
                 'last_page' => $posts->lastPage(),
                 'per_page' => $posts->perPage(),
                 'from' => $posts->firstItem(),
                 'to' => $posts->lastItem(),
                 'total' => $posts->total(),
-            ],
+            ]),
             'links' => [
                 'first' => $posts->url(1),
                 'last' => $posts->url($posts->lastPage()),
@@ -136,6 +146,6 @@ class PostController extends Controller
                 'next' => $posts->nextPageUrl(),
             ],
             'error' => null,
-        ]));
+        ]);
     }
 }

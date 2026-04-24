@@ -27,8 +27,12 @@ class CueScoreController extends Controller
         $data = $rankings->map(fn (CueScoreRanking $ranking) => $this->serializeRanking($ranking));
 
         return response()->json([
-            'count' => $data->count(),
             'data' => $data,
+            'meta' => [
+                'count' => $data->count(),
+            ],
+            'links' => [],
+            'error' => null,
         ]);
     }
 
@@ -43,6 +47,9 @@ class CueScoreController extends Controller
                     'active_fetch' => $this->serializeFetch($activeFetch),
                 ]
             ),
+            'meta' => [],
+            'links' => [],
+            'error' => null,
         ]);
     }
 
@@ -54,17 +61,21 @@ class CueScoreController extends Controller
             return $this->emptyRankingResponse($ranking, 'Aucun fetch actif trouvé pour ce classement.');
         }
 
-        $data = $ranking->ranking_type === 'team'
+        $rankingData = $ranking->ranking_type === 'team'
             ? $this->clubRankingService->buildTeamRankingData($ranking, $activeFetch->id)
             : $this->clubRankingService->buildIndividualRankingData($ranking, $activeFetch->id);
 
         return response()->json([
-            'count' => $data['data']->count(),
-            'data' => $data['data']->values(),
+            'data' => $rankingData['data']->values(),
             'meta' => array_merge(
+                [
+                    'count' => $rankingData['data']->count(),
+                ],
                 $this->buildRankingMeta($ranking, $activeFetch->id),
-                $data['meta']
+                $rankingData['meta']
             ),
+            'links' => [],
+            'error' => null,
         ]);
     }
 
@@ -76,15 +87,19 @@ class CueScoreController extends Controller
             return $this->emptyRankingResponse($ranking, 'Aucun fetch actif trouvé pour ce classement.');
         }
 
-        $data = $this->clubRankingService->buildTeamRankingData($ranking, $activeFetch->id);
+        $rankingData = $this->clubRankingService->buildTeamRankingData($ranking, $activeFetch->id);
 
         return response()->json([
-            'count' => $data['data']->count(),
-            'data' => $data['data']->values(),
+            'data' => $rankingData['data']->values(),
             'meta' => array_merge(
+                [
+                    'count' => $rankingData['data']->count(),
+                ],
                 $this->buildRankingMeta($ranking, $activeFetch->id),
-                $data['meta']
+                $rankingData['meta']
             ),
+            'links' => [],
+            'error' => null,
         ]);
     }
 
@@ -186,13 +201,15 @@ class CueScoreController extends Controller
     private function emptyRankingResponse(CueScoreRanking $ranking, string $message): JsonResponse
     {
         return response()->json([
-            'count' => 0,
             'data' => [],
             'meta' => [
+                'count' => 0,
                 'ranking_id' => $ranking->id,
                 'ranking_name' => $ranking->name,
                 'message' => $message,
             ],
+            'links' => [],
+            'error' => null,
         ]);
     }
 
@@ -243,9 +260,13 @@ class CueScoreController extends Controller
         })->values();
 
         return response()->json([
-            'count' => $data->count(),
-            'filters' => $filters,
             'data' => $data,
+            'meta' => [
+                'count' => $data->count(),
+                'filters' => $filters,
+            ],
+            'links' => [],
+            'error' => null,
         ]);
     }
 }

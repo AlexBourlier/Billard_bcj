@@ -18,8 +18,12 @@ class CalendarController extends Controller
             ->get();
 
         return response()->json([
-            'count' => $calendars->count(),
             'data' => CalendarResource::collection($calendars),
+            'meta' => [
+                'count' => $calendars->count(),
+            ],
+            'links' => [],
+            'error' => null,
         ]);
     }
 
@@ -35,9 +39,13 @@ class CalendarController extends Controller
             ->get();
 
         return response()->json([
-            'discipline' => $discipline,
-            'count' => $calendars->count(),
             'data' => CalendarResource::collection($calendars),
+            'meta' => [
+                'discipline' => $discipline,
+                'count' => $calendars->count(),
+            ],
+            'links' => [],
+            'error' => null,
         ]);
     }
 
@@ -54,9 +62,17 @@ class CalendarController extends Controller
             ->firstOrFail();
 
         return response()->json([
-            'calendar' => new CalendarResource($calendar),
-            'count' => $calendar->events->count(),
-            'data' => CalendarEventResource::collection($calendar->events),
+            'data' => [
+                'calendar' => new CalendarResource($calendar),
+                'events' => CalendarEventResource::collection($calendar->events),
+            ],
+            'meta' => [
+                'discipline' => $discipline,
+                'scope' => $scope,
+                'count' => $calendar->events->count(),
+            ],
+            'links' => [],
+            'error' => null,
         ]);
     }
 

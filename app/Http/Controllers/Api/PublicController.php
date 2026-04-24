@@ -29,6 +29,10 @@ class PublicController extends Controller
                 'site_settings' => $siteSettings ? new SiteSettingsResource($siteSettings) : null,
                 'menus' => MenuResource::collection($menus),
             ],
+            'meta' => [
+                'menus_count' => $menus->count(),
+            ],
+            'links' => [],
             'error' => null,
         ]);
     }
@@ -46,25 +50,30 @@ class PublicController extends Controller
             ->orderBy('id')
             ->get();
 
-        $featuredPosts = Post::query()
+        $featuredPost = Post::query()
             ->where('favoris', true)
             ->orderByDesc('created_at')
             ->first();
 
-        if (!$featuredPosts) {
-            $featuredPosts = Post::query()
+        if (!$featuredPost) {
+            $featuredPost = Post::query()
                 ->orderByDesc('created_at')
                 ->first();
         }
-
 
         return response()->json([
             'data' => [
                 'site_settings' => $siteSettings ? new SiteSettingsResource($siteSettings) : null,
                 'menus' => MenuResource::collection($menus),
                 'partners' => PartnerResource::collection($partners),
-                'featured_posts' => $featuredPosts ? new PostResource($featuredPosts) : null,
+                'featured_post' => $featuredPost ? new PostResource($featuredPost) : null,
             ],
+            'meta' => [
+                'menus_count' => $menus->count(),
+                'partners_count' => $partners->count(),
+                'has_featured_post' => $featuredPost !== null,
+            ],
+            'links' => [],
             'error' => null,
         ]);
     }

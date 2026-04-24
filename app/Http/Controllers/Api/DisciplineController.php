@@ -25,10 +25,7 @@ class DisciplineController extends Controller
     public function show(string $discipline): JsonResponse
     {
         if (!DisciplineMapper::isValidSlug($discipline)) {
-            return response()->json([
-                'message' => 'Discipline not found',
-                'error' => 'discipline_not_found',
-            ], 404);
+            return $this->disciplineNotFoundResponse();
         }
 
         $disciplineId = DisciplineMapper::idFromSlug($discipline);
@@ -64,7 +61,6 @@ class DisciplineController extends Controller
         }
 
         return response()->json([
-            'discipline' => $discipline,
             'data' => [
                 'posts' => PostResource::collection($posts),
                 'calendar' => CalendarEventResource::collection($calendarEvents),
@@ -72,11 +68,13 @@ class DisciplineController extends Controller
                 'rankings' => $rankings,
             ],
             'meta' => [
+                'discipline' => $discipline,
                 'posts_count' => $posts->count(),
                 'calendar_count' => $calendarEvents->count(),
                 'documents_count' => $documents->count(),
                 'rankings_count' => $rankings === null ? null : $rankings->count(),
             ],
+            'links' => [],
             'error' => null,
         ]);
     }
@@ -84,16 +82,17 @@ class DisciplineController extends Controller
     public function rankingsPreview(string $discipline): JsonResponse
     {
         if (!DisciplineMapper::isValidSlug($discipline)) {
-            return response()->json([
-                'message' => 'Discipline not found',
-                'error' => 'discipline_not_found',
-            ], 404);
+            return $this->disciplineNotFoundResponse();
         }
 
         if ($discipline === 'carambole') {
             return response()->json([
-                'discipline' => $discipline,
                 'data' => null,
+                'meta' => [
+                    'discipline' => $discipline,
+                    'rankings_supported' => false,
+                ],
+                'links' => [],
                 'error' => null,
             ]);
         }
@@ -157,8 +156,14 @@ class DisciplineController extends Controller
             });
 
         return response()->json([
-            'discipline' => $discipline,
             'data' => $grouped,
+            'meta' => [
+                'discipline' => $discipline,
+                'count' => $grouped->flatten(1)->count(),
+                'limit' => $this->getPreviewLimit(),
+                'rankings_supported' => true,
+            ],
+            'links' => [],
             'error' => null,
         ]);
     }
@@ -172,5 +177,18 @@ class DisciplineController extends Controller
         }
 
         return min($limit, 10);
+    }
+
+    private function disciplineNotFoundResponse(): JsonResponse
+    {
+        return response()->json([
+            'data' => null,
+            'meta' => [],
+            'links' => [],
+            'error' => [
+                'code' => 'discipline_not_found',
+                'message' => 'Discipline not found',
+            ],
+        ], 404);
     }
 }
