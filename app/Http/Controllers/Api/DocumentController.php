@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Document;
 use App\Http\Resources\DocumentResource;
 use Illuminate\Http\JsonResponse;
+use App\Support\DisciplineMapper;
 
 class DocumentController extends Controller
 {
@@ -22,7 +23,7 @@ class DocumentController extends Controller
 
     public function byDiscipline(string $discipline): JsonResponse
     {
-        $disciplineId = $this->getDisciplineId($discipline);
+        $disciplineId = DisciplineMapper::idFromSlug($discipline);
 
         if ($disciplineId === null) {
             return response()->json([
@@ -45,7 +46,7 @@ class DocumentController extends Controller
 
     public function show(string $discipline, int $id): JsonResponse
     {
-        $disciplineId = $this->getDisciplineId($discipline);
+        $disciplineId = DisciplineMapper::idFromSlug($discipline);
 
         if ($disciplineId === null) {
             return response()->json([
@@ -71,17 +72,5 @@ class DocumentController extends Controller
             'data' => new DocumentResource($document),
             'error' => null,
         ]);
-    }
-
-    private function getDisciplineId(string $discipline): ?int
-    {
-        $mapping = [
-            'blackball' => 1,
-            'carambole' => 2,
-            'snooker' => 3,
-            'americain' => 4,
-        ];
-
-        return $mapping[$discipline] ?? null;
     }
 }

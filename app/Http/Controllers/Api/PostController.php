@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use App\Support\DisciplineMapper;
 
 class PostController extends Controller
 {
@@ -29,7 +29,7 @@ class PostController extends Controller
 
     public function getPostsByDiscipline(string $discipline): JsonResponse
     {
-        $disciplineId = $this->getDisciplineId($discipline);
+        $disciplineId = DisciplineMapper::idFromSlug($discipline);
 
         if ($disciplineId === null) {
             return response()->json([
@@ -115,17 +115,6 @@ class PostController extends Controller
         ]));
     }
 
-    private function getDisciplineId(string $discipline): ?int
-    {
-        $mapping = [
-            'blackball' => 1,
-            'carambole' => 2,
-            'snooker' => 3,
-            'americain' => 4,
-        ];
-
-        return $mapping[$discipline] ?? null;
-    }
 
     private function paginatedResponse(LengthAwarePaginator $posts, array $extra = []): JsonResponse
     {

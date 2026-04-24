@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Support\DisciplineMapper;
 
 class PostResource extends JsonResource
 {
@@ -20,7 +21,7 @@ class PostResource extends JsonResource
             'slug' => $this->slug,
             'excerpt' => $this->excerpt,
             'content' => $this->content,
-            'discipline' => $this->getDisciplineSlug(),
+            'discipline' => DisciplineMapper::slugFromId($this->discipline),
             'discipline_id' => $this->discipline,
             'year' => $this->year,
             'favoris' => (bool) $this->favoris,
@@ -30,16 +31,5 @@ class PostResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
-    }
-
-    private function getDisciplineSlug(): ?string
-    {
-        return match ((int) $this->discipline) {
-            1 => 'blackball',
-            2 => 'carambole',
-            3 => 'snooker',
-            4 => 'americain',
-            default => null,
-        };
     }
 }
