@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Support\DisciplineMapper;
 
 class DocumentResource extends JsonResource
 {
@@ -16,7 +17,7 @@ class DocumentResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'discipline' => $this->getDisciplineSlug(),
+            'discipline' => DisciplineMapper::slugFromId($this->discipline),
             'discipline_id' => $this->discipline,
             'title' => $this->title,
             'file' => $this->file,
@@ -26,14 +27,4 @@ class DocumentResource extends JsonResource
         ];
     }
 
-    private function getDisciplineSlug(): ?string
-    {
-        return match ((int) $this->discipline) {
-            1 => 'blackball',
-            2 => 'carambole',
-            3 => 'snooker',
-            4 => 'americain',
-            default => null,
-        };
-    }
 }

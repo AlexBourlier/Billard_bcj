@@ -33,7 +33,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Route::post('carambole/sync', CaramboleSyncController::class)->middleware('auth:sanctum');
 
 // routes/api.php (temporaire pour debug)
-Route::post('/carambole/sync-test', \App\Http\Controllers\Api\CaramboleSyncController::class);
+// Route::post('/carambole/sync-test', \App\Http\Controllers\Api\CaramboleSyncController::class);
 
 Route::prefix('v1')->group(function () {
 
@@ -47,12 +47,12 @@ Route::prefix('v1')->group(function () {
 
     Route::prefix('/posts')->group(function () {
         Route::get('/', [PostController::class, 'index']);
-        Route::get('/{id}', [PostController::class, 'show']);
+        Route::get('/favoris', [PostController::class, 'getPostIsFavoris']);
         Route::get('/discipline/{discipline}', [PostController::class, 'getPostsByDiscipline']);
         Route::get('/slug/{slug}', [PostController::class, 'getPostBySlug']);
-        Route::get('/favoris', [PostController::class, 'getPostIsFavoris']);
         Route::get('/decade/{year}', [PostController::class, 'getPostByDecade']);
         Route::get('/year/{year}', [PostController::class, 'getPostByYear']);
+        Route::get('/{id}', [PostController::class, 'show'])->whereNumber('id');
     });
     
     
@@ -60,11 +60,13 @@ Route::prefix('v1')->group(function () {
     Route::get('/licencies/search/{name}', [LicenciesController::class, 'searchByName']);
 
     // Routes batches
-    Route::get('/license-import/batches', [LicenseImportBatchController::class, 'index']);
-    Route::get('/license-import/batches/{batch}', [LicenseImportBatchController::class, 'show']);
-    Route::get('/license-import/batches/{batch}/report', [LicenseImportBatchController::class, 'report']);
-    Route::get('/license-import/batches/{batch}/diff', [LicenseImportBatchController::class, 'diff']);
-
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/license-import/batches', [LicenseImportBatchController::class, 'index']);
+        Route::get('/license-import/batches/{batch}', [LicenseImportBatchController::class, 'show']);
+        Route::get('/license-import/batches/{batch}/report', [LicenseImportBatchController::class, 'report']);
+        Route::get('/license-import/batches/{batch}/diff', [LicenseImportBatchController::class, 'diff']);
+    });
+    
     // routes pour les classements CueScore
     Route::prefix('/cuescore')->group(function () {
         Route::get('/rankings', [CueScoreController::class, 'index']);
@@ -98,7 +100,7 @@ Route::prefix('v1')->group(function () {
 
     Route::prefix('/disciplines')->group(function () {
         Route::get('/{discipline}', [DisciplineController::class, 'show']);
-        Route::get('/{discipline}/ranking-preview', [DisciplineController::class, 'rankingsPreview']);
+        Route::get('/{discipline}/rankings-preview', [DisciplineController::class, 'rankingsPreview']);
     });
     
 });

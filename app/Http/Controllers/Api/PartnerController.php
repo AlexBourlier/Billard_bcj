@@ -9,14 +9,16 @@ use Illuminate\Http\JsonResponse;
 
 class PartnerController extends Controller
 {
-    //
     public function index(): JsonResponse
     {
         $partners = Partenaire::all();
 
         return response()->json([
-            'count' => $partners->count(),
             'data' => PartnerResource::collection($partners),
+            'meta' => [
+                'count' => $partners->count(),
+            ],
+            'links' => [],
             'error' => null,
         ]);
     }
