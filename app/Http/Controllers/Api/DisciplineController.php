@@ -18,9 +18,20 @@ use Illuminate\Support\Collection;
 use App\Support\CacheKeys;
 use Illuminate\Support\Facades\Cache;
 
+/**
+ * Contrôleur API dédié aux pages disciplines.
+ *
+ * Expose les données nécessaires au front public pour une discipline :
+ * - articles
+ * - documents
+ * - événements calendrier
+ * - classements CueScore
+ *
+ * Les réponses respectent le format standard :
+ * data / meta / links / error
+ */
 class DisciplineController extends Controller
 {
-
     private const PREVIEW_LIMIT_MIN = 1;
     private const PREVIEW_LIMIT_MAX = 10;
     private const PREVIEW_LIMIT_DEFAULT = 5;
@@ -31,6 +42,21 @@ class DisciplineController extends Controller
     ) {
     }
 
+    /**
+     * Retourne les données publiques d’une discipline.
+     *
+     * La réponse est mise en cache pendant 10 minutes.
+     *
+     * Contenu retourné :
+     * - posts
+     * - événements calendrier
+     * - documents
+     * - classements actifs, sauf pour la carambole
+     *
+     * @param string $discipline Slug de la discipline
+     *
+     * @return JsonResponse
+     */
     public function show(string $discipline): JsonResponse
     {
         if (!DisciplineMapper::isValidSlug($discipline)) {
@@ -96,6 +122,20 @@ class DisciplineController extends Controller
         return response()->json($response);
     }
 
+    /**
+     * Retourne un aperçu des classements CueScore pour une discipline.
+     *
+     * La réponse est mise en cache pendant 5 minutes.
+     *
+     * Le paramètre query `limit` contrôle le nombre d’entrées individuelles
+     * retournées par classement. Il est borné entre 1 et 10.
+     *
+     * La construction de la réponse est déléguée à CueScoreRankingsPreviewBuilder.
+     *
+     * @param string $discipline Slug de la discipline
+     *
+     * @return JsonResponse
+     */
     public function rankingsPreview(string $discipline): JsonResponse
     {
         if (!DisciplineMapper::isValidSlug($discipline)) {
@@ -113,6 +153,16 @@ class DisciplineController extends Controller
         return response()->json($response);
     }
 
+    /**
+     * Résout et sécurise la limite d’entrées retournées par classement.
+     *
+     * Règles :
+     * - valeur par défaut : 5
+     * - minimum : 1
+     * - maximum : 10
+     *
+     * @return int
+     */
     private function getPreviewLimit(): int
     {
         return max(
@@ -121,6 +171,11 @@ class DisciplineController extends Controller
         );
     }
 
+    /**
+     * Retourne une réponse JSON standardisée lorsqu’une discipline est invalide.
+     *
+     * @return JsonResponse
+     */
     private function disciplineNotFoundResponse(): JsonResponse
     {
         return response()->json([
