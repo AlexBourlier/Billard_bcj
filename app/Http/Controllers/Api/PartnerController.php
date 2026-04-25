@@ -9,6 +9,11 @@ use Illuminate\Http\JsonResponse;
 
 class PartnerController extends Controller
 {
+    /**
+     * Retourne la liste de tous les partenaires.
+     *
+     * @return JsonResponse
+     */
     public function index(): JsonResponse
     {
         $partners = Partenaire::all();
