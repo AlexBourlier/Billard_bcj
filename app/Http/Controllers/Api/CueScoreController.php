@@ -9,6 +9,18 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+/**
+ * Contrôleur API pour l'exposition des classements CueScore.
+ *
+ * Permet de :
+ * - lister les classements disponibles
+ * - consulter un classement
+ * - récupérer les données club (individuelles ou équipes)
+ * - construire des vues agrégées filtrées
+ *
+ * Les réponses respectent le format standard :
+ * data / meta / links / error
+ */
 class CueScoreController extends Controller
 {
     public function __construct(
@@ -16,6 +28,19 @@ class CueScoreController extends Controller
     ) {
     }
 
+    /**
+     * Liste les classements CueScore avec filtres optionnels.
+     *
+     * Filtres disponibles :
+     * - discipline
+     * - scope
+     * - ranking_type
+     * - team_category
+     * - is_active
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function index(Request $request): JsonResponse
     {
         $rankings = $this->applyRankingFilters(
@@ -36,6 +61,12 @@ class CueScoreController extends Controller
         ]);
     }
 
+    /**
+     * Retourne les informations d’un classement avec son fetch actif.
+     *
+     * @param CueScoreRanking $ranking
+     * @return JsonResponse
+     */
     public function show(CueScoreRanking $ranking): JsonResponse
     {
         $activeFetch = $this->clubRankingService->getActiveFetch($ranking);
@@ -53,6 +84,14 @@ class CueScoreController extends Controller
         ]);
     }
 
+    /**
+     * Retourne les données club d’un classement (individuel ou équipe).
+     *
+     * Si aucun fetch actif n’est disponible, retourne une réponse vide.
+     *
+     * @param CueScoreRanking $ranking
+     * @return JsonResponse
+     */
     public function club(CueScoreRanking $ranking): JsonResponse
     {
         $activeFetch = $this->clubRankingService->getActiveFetch($ranking);
@@ -79,6 +118,12 @@ class CueScoreController extends Controller
         ]);
     }
 
+    /**
+     * Retourne uniquement les classements équipes pour un ranking.
+     *
+     * @param CueScoreRanking $ranking
+     * @return JsonResponse
+     */
     public function teams(CueScoreRanking $ranking): JsonResponse
     {
         $activeFetch = $this->clubRankingService->getActiveFetch($ranking);
@@ -103,6 +148,12 @@ class CueScoreController extends Controller
         ]);
     }
 
+    /**
+     * Vue agrégée des classements club basée sur des filtres query.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function clubOverview(Request $request): JsonResponse
     {
         return $this->clubOverviewFromFilters([
@@ -112,6 +163,14 @@ class CueScoreController extends Controller
         ]);
     }
 
+    /**
+     * Vue agrégée des classements club via paramètres d’URL.
+     *
+     * @param string $discipline
+     * @param string $scope
+     * @param string $rankingType
+     * @return JsonResponse
+     */
     public function byDisciplineScopeAndType(string $discipline, string $scope, string $rankingType): JsonResponse
     {
         return $this->clubOverviewFromFilters([
@@ -121,6 +180,14 @@ class CueScoreController extends Controller
         ]);
     }
 
+    /**
+     * Applique les filtres sur une requête de classement.
+     *
+     * @param Builder $query
+     * @param Request $request
+     * @param bool $forceActive
+     * @return Builder
+     */
     private function applyRankingFilters(Builder $query, Request $request, bool $forceActive): Builder
     {
         if ($forceActive) {
@@ -151,6 +218,12 @@ class CueScoreController extends Controller
         return $query;
     }
 
+    /**
+     * Sérialise un modèle CueScoreRanking.
+     *
+     * @param CueScoreRanking $ranking
+     * @return array
+     */
     private function serializeRanking(CueScoreRanking $ranking): array
     {
         return [
@@ -169,6 +242,12 @@ class CueScoreController extends Controller
         ];
     }
 
+    /**
+     * Sérialise un fetch actif CueScore.
+     *
+     * @param mixed $fetch
+     * @return array|null
+     */
     private function serializeFetch($fetch): ?array
     {
         if ($fetch === null) {
@@ -185,6 +264,13 @@ class CueScoreController extends Controller
         ];
     }
 
+    /**
+     * Construit les métadonnées d’un classement.
+     *
+     * @param CueScoreRanking $ranking
+     * @param int $fetchId
+     * @return array
+     */
     private function buildRankingMeta(CueScoreRanking $ranking, int $fetchId): array
     {
         return [
@@ -198,6 +284,13 @@ class CueScoreController extends Controller
         ];
     }
 
+    /**
+     * Retourne une réponse vide pour un classement sans données.
+     *
+     * @param CueScoreRanking $ranking
+     * @param string $message
+     * @return JsonResponse
+     */
     private function emptyRankingResponse(CueScoreRanking $ranking, string $message): JsonResponse
     {
         return response()->json([
@@ -213,6 +306,12 @@ class CueScoreController extends Controller
         ]);
     }
 
+    /**
+     * Construit une vue agrégée des classements avec filtres.
+     *
+     * @param array $filters
+     * @return JsonResponse
+     */
     private function clubOverviewFromFilters(array $filters): JsonResponse
     {
         $query = CueScoreRanking::query()
