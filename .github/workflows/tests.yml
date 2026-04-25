@@ -11,7 +11,32 @@ on:
 
 jobs:
   tests:
+    name: ${{ matrix.name }}
     runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Unit tests
+            command: php artisan test tests/Unit
+
+          - name: Integration tests
+            command: php artisan test tests/Integration
+
+          - name: API cache tests
+            command: |
+              php artisan test tests/Feature/ApiCacheTest.php
+              php artisan test tests/Feature/ApiCacheInvalidatorTest.php
+              php artisan test tests/Feature/ApiCacheWithCueScoreInvalidationTest.php
+
+          - name: CueScore API tests
+            command: php artisan test tests/Feature/CueScoreRankingsPreviewApiTest.php
+
+          - name: Other feature tests
+            command: |
+              php artisan test tests/Feature/Domain
+              php artisan test tests/Feature/Import
 
     steps:
       - name: Checkout code
@@ -51,4 +76,4 @@ jobs:
           DB_DATABASE: ":memory:"
           TELESCOPE_ENABLED: "false"
           PULSE_ENABLED: "false"
-        run: php artisan test
+        run: ${{ matrix.command }}
