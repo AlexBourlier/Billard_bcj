@@ -9,8 +9,25 @@ use App\Support\DisciplineMapper;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
 
+/**
+ * Contrôleur API pour la gestion des articles (posts).
+ *
+ * Permet de :
+ * - lister les articles (pagination)
+ * - récupérer un article
+ * - filtrer par discipline, année, décennie
+ * - récupérer les favoris
+ *
+ * Les réponses respectent le format standard :
+ * data / meta / links / error
+ */
 class PostController extends Controller
 {
+    /**
+     * Retourne la liste paginée des articles.
+     *
+     * @return JsonResponse
+     */
     public function index(): JsonResponse
     {
         $posts = Post::query()
@@ -20,6 +37,12 @@ class PostController extends Controller
         return $this->paginatedResponse($posts);
     }
 
+    /**
+     * Retourne un article par son identifiant.
+     *
+     * @param int $id
+     * @return JsonResponse
+     */
     public function show(int $id): JsonResponse
     {
         $post = Post::query()->findOrFail($id);
@@ -27,6 +50,12 @@ class PostController extends Controller
         return $this->singleResponse($post);
     }
 
+    /**
+     * Retourne les articles d'une discipline donnée.
+     *
+     * @param string $discipline Slug de la discipline
+     * @return JsonResponse
+     */
     public function getPostsByDiscipline(string $discipline): JsonResponse
     {
         $disciplineId = DisciplineMapper::idFromSlug($discipline);
@@ -53,6 +82,12 @@ class PostController extends Controller
         ]);
     }
 
+    /**
+     * Retourne un article via son slug.
+     *
+     * @param string $slug
+     * @return JsonResponse
+     */
     public function getPostBySlug(string $slug): JsonResponse
     {
         $post = Post::query()
@@ -62,6 +97,11 @@ class PostController extends Controller
         return $this->singleResponse($post);
     }
 
+    /**
+     * Retourne les articles marqués comme favoris.
+     *
+     * @return JsonResponse
+     */
     public function getPostIsFavoris(): JsonResponse
     {
         $posts = Post::query()
@@ -74,6 +114,15 @@ class PostController extends Controller
         ]);
     }
 
+    /**
+     * Retourne les articles d'une décennie donnée.
+     *
+     * Exemple :
+     * - 2023 → décennie 2020-2029
+     *
+     * @param int $year
+     * @return JsonResponse
+     */
     public function getPostByDecade(int $year): JsonResponse
     {
         $startDecade = (int) floor($year / 10) * 10;
@@ -92,6 +141,12 @@ class PostController extends Controller
         ]);
     }
 
+    /**
+     * Retourne les articles d'une année donnée.
+     *
+     * @param int $year
+     * @return JsonResponse
+     */
     public function getPostByYear(int $year): JsonResponse
     {
         $posts = Post::query()
@@ -105,6 +160,16 @@ class PostController extends Controller
         ]);
     }
 
+    /**
+     * Détermine le nombre d’éléments par page.
+     *
+     * Règles :
+     * - défaut : 10
+     * - minimum : 1
+     * - maximum : 100
+     *
+     * @return int
+     */
     private function getPerPage(): int
     {
         $perPage = (int) request('per_page', 10);
@@ -116,6 +181,13 @@ class PostController extends Controller
         return min($perPage, 100);
     }
 
+    /**
+     * Retourne une réponse JSON pour un article unique.
+     *
+     * @param Post $post
+     * @param array $meta
+     * @return JsonResponse
+     */
     private function singleResponse(Post $post, array $meta = []): JsonResponse
     {
         return response()->json([
@@ -126,6 +198,17 @@ class PostController extends Controller
         ]);
     }
 
+    /**
+     * Retourne une réponse JSON paginée.
+     *
+     * Inclut :
+     * - données transformées via PostResource
+     * - pagination complète
+     *
+     * @param LengthAwarePaginator $posts
+     * @param array $meta
+     * @return JsonResponse
+     */
     private function paginatedResponse(LengthAwarePaginator $posts, array $meta = []): JsonResponse
     {
         return response()->json([
