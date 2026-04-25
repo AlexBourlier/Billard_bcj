@@ -5,6 +5,7 @@ namespace App\Services\CueScore;
 use App\Models\CueScoreRanking;
 use App\Models\CueScoreRankingEntry;
 use App\Models\CueScoreRankingFetch;
+use App\Support\ApiCacheInvalidator;
 use Illuminate\Support\Facades\DB;
 
 class CueScoreRankingImporter
@@ -12,6 +13,7 @@ class CueScoreRankingImporter
     public function __construct(
         private readonly CueScoreApiClient $client,
         private readonly CueScoreEntryParser $parser,
+        private readonly ApiCacheInvalidator $cacheInvalidator,
     ) {
     }
 
@@ -62,6 +64,10 @@ class CueScoreRankingImporter
                     'cuescore_ranking_fetch_id' => $fetch->id,
                     ...$entry,
                 ]);
+            }
+
+            if ($fetch->is_active) {
+                $this->cacheInvalidator->disciplinePage($ranking->discipline);
             }
 
             return $fetch;
