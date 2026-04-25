@@ -8,6 +8,17 @@ use App\Models\LicenseImportBatch;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+/**
+ * Contrôleur API pour la consultation des lots d'import de licences.
+ *
+ * Permet de :
+ * - lister les imports avec filtres et pagination
+ * - consulter le rapport complet d’un batch
+ * - consulter le diff de projection vers la table des licenciés
+ *
+ * Les réponses respectent le format standard :
+ * data / meta / links / error
+ */
 class LicenseImportBatchController extends Controller
 {
     public function __construct(
@@ -16,6 +27,21 @@ class LicenseImportBatchController extends Controller
         // $this->middleware('auth:api');
     }
 
+    /**
+     * Retourne la liste paginée des batchs d'import de licences.
+     *
+     * Filtres disponibles :
+     * - source
+     * - status
+     * - is_active
+     * - trigger_type
+     * - from
+     * - to
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
     public function index(Request $request): JsonResponse
     {
         $query = LicenseImportBatch::query()->latestFirst();
@@ -102,6 +128,15 @@ class LicenseImportBatchController extends Controller
         ]);
     }
 
+    /**
+     * Retourne le rapport complet d’un batch d’import.
+     *
+     * Le rapport est construit par le service métier TelematBatchReportBuilder.
+     *
+     * @param LicenseImportBatch $batch
+     *
+     * @return JsonResponse
+     */
     public function show(LicenseImportBatch $batch): JsonResponse
     {
         return response()->json([
@@ -114,6 +149,15 @@ class LicenseImportBatchController extends Controller
         ]);
     }
 
+    /**
+     * Retourne le rapport complet d’un batch d’import.
+     *
+     * Alias explicite de show() pour les routes orientées rapport.
+     *
+     * @param LicenseImportBatch $batch
+     *
+     * @return JsonResponse
+     */
     public function report(LicenseImportBatch $batch): JsonResponse
     {
         return response()->json([
@@ -126,6 +170,17 @@ class LicenseImportBatchController extends Controller
         ]);
     }
 
+    /**
+     * Retourne uniquement le diff de projection d’un batch.
+     *
+     * Le diff permet de visualiser les insertions, mises à jour,
+     * suppressions et lignes inchangées produites par la projection
+     * vers la table des licenciés.
+     *
+     * @param LicenseImportBatch $batch
+     *
+     * @return JsonResponse
+     */
     public function diff(LicenseImportBatch $batch): JsonResponse
     {
         $report = $this->reportBuilder->build($batch);
