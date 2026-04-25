@@ -24,9 +24,33 @@ use Illuminate\Pagination\LengthAwarePaginator;
 class PostController extends Controller
 {
     /**
-     * Retourne la liste paginée des articles.
+     * Liste des articles
      *
-     * @return JsonResponse
+     * Retourne la liste paginée des articles, triés du plus récent au plus ancien.
+     *
+     * @group Articles
+     *
+     * @queryParam per_page integer Nombre d’articles par page. Min: 1. Max: 100. Default: 10. Exemple : 10
+     *
+     * @response 200 {
+     *   "data": [],
+     *   "meta": {
+     *     "count": 25,
+     *     "current_page": 1,
+     *     "last_page": 3,
+     *     "per_page": 10,
+     *     "from": 1,
+     *     "to": 10,
+     *     "total": 25
+     *   },
+     *   "links": {
+     *     "first": "http://127.0.0.1:8000/api/v1/posts?page=1",
+     *     "last": "http://127.0.0.1:8000/api/v1/posts?page=3",
+     *     "prev": null,
+     *     "next": "http://127.0.0.1:8000/api/v1/posts?page=2"
+     *   },
+     *   "error": null
+     * }
      */
     public function index(): JsonResponse
     {
@@ -38,10 +62,35 @@ class PostController extends Controller
     }
 
     /**
-     * Retourne un article par son identifiant.
+     * Détail d’un article
      *
-     * @param int $id
-     * @return JsonResponse
+     * Retourne un article à partir de son identifiant.
+     *
+     * @group Articles
+     *
+     * @urlParam id integer required Identifiant de l’article. Exemple : 1
+     *
+     * @response 200 {
+     *   "data": {
+     *     "id": 1,
+     *     "title": "Titre de l'article",
+     *     "slug": "titre-de-l-article",
+     *     "excerpt": "Résumé de l'article...",
+     *     "content": "<p>Contenu HTML de l'article</p>",
+     *     "discipline": "blackball",
+     *     "discipline_id": 1,
+     *     "year": 2026,
+     *     "favoris": true,
+     *     "image": null,
+     *     "image_url": null,
+     *     "video": null,
+     *     "created_at": "2026-02-02T08:11:13.000000Z",
+     *     "updated_at": "2026-02-02T08:31:49.000000Z"
+     *   },
+     *   "meta": [],
+     *   "links": [],
+     *   "error": null
+     * }
      */
     public function show(int $id): JsonResponse
     {
@@ -51,10 +100,40 @@ class PostController extends Controller
     }
 
     /**
-     * Retourne les articles d'une discipline donnée.
+     * Articles par discipline
      *
-     * @param string $discipline Slug de la discipline
-     * @return JsonResponse
+     * Retourne la liste paginée des articles associés à une discipline.
+     *
+     * @group Articles
+     *
+     * @urlParam discipline string required Slug de la discipline. Exemple : blackball
+     * @queryParam per_page integer Nombre d’articles par page. Min: 1. Max: 100. Default: 10. Exemple : 10
+     *
+     * @response 200 {
+     *   "data": [],
+     *   "meta": {
+     *     "discipline": "blackball",
+     *     "count": 12,
+     *     "current_page": 1,
+     *     "last_page": 2,
+     *     "per_page": 10,
+     *     "from": 1,
+     *     "to": 10,
+     *     "total": 12
+     *   },
+     *   "links": [],
+     *   "error": null
+     * }
+     *
+     * @response 404 {
+     *   "data": null,
+     *   "meta": [],
+     *   "links": [],
+     *   "error": {
+     *     "code": "discipline_not_found",
+     *     "message": "Discipline not found"
+     *   }
+     * }
      */
     public function getPostsByDiscipline(string $discipline): JsonResponse
     {
@@ -83,10 +162,35 @@ class PostController extends Controller
     }
 
     /**
-     * Retourne un article via son slug.
+     * Article par slug
      *
-     * @param string $slug
-     * @return JsonResponse
+     * Retourne un article à partir de son slug.
+     *
+     * @group Articles
+     *
+     * @urlParam slug string required Slug de l’article. Exemple : titre-de-l-article
+     *
+     * @response 200 {
+     *   "data": {
+     *     "id": 1,
+     *     "title": "Titre de l'article",
+     *     "slug": "titre-de-l-article",
+     *     "excerpt": "Résumé de l'article...",
+     *     "content": "<p>Contenu HTML de l'article</p>",
+     *     "discipline": "blackball",
+     *     "discipline_id": 1,
+     *     "year": 2026,
+     *     "favoris": false,
+     *     "image": null,
+     *     "image_url": null,
+     *     "video": null,
+     *     "created_at": "2026-02-02T08:11:13.000000Z",
+     *     "updated_at": "2026-02-02T08:31:49.000000Z"
+     *   },
+     *   "meta": [],
+     *   "links": [],
+     *   "error": null
+     * }
      */
     public function getPostBySlug(string $slug): JsonResponse
     {
@@ -98,9 +202,29 @@ class PostController extends Controller
     }
 
     /**
+     * Articles favoris
+     *
      * Retourne les articles marqués comme favoris.
      *
-     * @return JsonResponse
+     * @group Articles
+     *
+     * @queryParam per_page integer Nombre d’articles par page. Min: 1. Max: 100. Default: 10. Exemple : 10
+     *
+     * @response 200 {
+     *   "data": [],
+     *   "meta": {
+     *     "favoris": true,
+     *     "count": 3,
+     *     "current_page": 1,
+     *     "last_page": 1,
+     *     "per_page": 10,
+     *     "from": 1,
+     *     "to": 3,
+     *     "total": 3
+     *   },
+     *   "links": [],
+     *   "error": null
+     * }
      */
     public function getPostIsFavoris(): JsonResponse
     {
@@ -115,13 +239,34 @@ class PostController extends Controller
     }
 
     /**
-     * Retourne les articles d'une décennie donnée.
+     * Articles par décennie
      *
-     * Exemple :
-     * - 2023 → décennie 2020-2029
+     * Retourne les articles appartenant à la décennie calculée depuis l’année fournie.
      *
-     * @param int $year
-     * @return JsonResponse
+     * Exemple : 2023 retourne les articles de 2020 à 2029.
+     *
+     * @group Articles
+     *
+     * @urlParam year integer required Année utilisée pour calculer la décennie. Exemple : 2023
+     * @queryParam per_page integer Nombre d’articles par page. Min: 1. Max: 100. Default: 10. Exemple : 10
+     *
+     * @response 200 {
+     *   "data": [],
+     *   "meta": {
+     *     "decade": "2020-2029",
+     *     "start_year": 2020,
+     *     "end_year": 2029,
+     *     "count": 8,
+     *     "current_page": 1,
+     *     "last_page": 1,
+     *     "per_page": 10,
+     *     "from": 1,
+     *     "to": 8,
+     *     "total": 8
+     *   },
+     *   "links": [],
+     *   "error": null
+     * }
      */
     public function getPostByDecade(int $year): JsonResponse
     {
@@ -142,10 +287,30 @@ class PostController extends Controller
     }
 
     /**
-     * Retourne les articles d'une année donnée.
+     * Articles par année
      *
-     * @param int $year
-     * @return JsonResponse
+     * Retourne les articles associés à une année donnée.
+     *
+     * @group Articles
+     *
+     * @urlParam year integer required Année des articles. Exemple : 2026
+     * @queryParam per_page integer Nombre d’articles par page. Min: 1. Max: 100. Default: 10. Exemple : 10
+     *
+     * @response 200 {
+     *   "data": [],
+     *   "meta": {
+     *     "year": 2026,
+     *     "count": 5,
+     *     "current_page": 1,
+     *     "last_page": 1,
+     *     "per_page": 10,
+     *     "from": 1,
+     *     "to": 5,
+     *     "total": 5
+     *   },
+     *   "links": [],
+     *   "error": null
+     * }
      */
     public function getPostByYear(int $year): JsonResponse
     {

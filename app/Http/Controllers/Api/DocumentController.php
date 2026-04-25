@@ -22,9 +22,30 @@ use Illuminate\Http\JsonResponse;
 class DocumentController extends Controller
 {
     /**
-     * Retourne la liste de tous les documents.
+     * Liste des documents
      *
-     * @return JsonResponse
+     * Retourne la liste de tous les documents publics.
+     *
+     * @group Documents
+     *
+     * @response 200 {
+     *   "data": [
+     *     {
+     *       "id": 1,
+     *       "title": "Règlement intérieur",
+     *       "file": "documents/reglement.pdf",
+     *       "file_url": "https://example.com/documents/reglement.pdf",
+     *       "discipline": "blackball",
+     *       "created_at": "2025-01-01T10:00:00.000000Z",
+     *       "updated_at": "2025-01-02T10:00:00.000000Z"
+     *     }
+     *   ],
+     *   "meta": {
+     *     "count": 1
+     *   },
+     *   "links": [],
+     *   "error": null
+     * }
      */
     public function index(): JsonResponse
     {
@@ -41,11 +62,43 @@ class DocumentController extends Controller
     }
 
     /**
-     * Retourne les documents pour une discipline donnée.
+     * Documents par discipline
      *
-     * @param string $discipline Slug de la discipline
+     * Retourne les documents associés à une discipline donnée.
      *
-     * @return JsonResponse
+     * @group Documents
+     *
+     * @urlParam discipline string required Slug de la discipline. Exemple : blackball
+     *
+     * @response 200 {
+     *   "data": [
+     *     {
+     *       "id": 1,
+     *       "title": "Règlement intérieur",
+     *       "file": "documents/reglement.pdf",
+     *       "file_url": "https://example.com/documents/reglement.pdf",
+     *       "discipline": "blackball",
+     *       "created_at": "2025-01-01T10:00:00.000000Z",
+     *       "updated_at": "2025-01-02T10:00:00.000000Z"
+     *     }
+     *   ],
+     *   "meta": {
+     *     "discipline": "blackball",
+     *     "count": 1
+     *   },
+     *   "links": [],
+     *   "error": null
+     * }
+     *
+     * @response 404 {
+     *   "data": null,
+     *   "meta": [],
+     *   "links": [],
+     *   "error": {
+     *     "code": "discipline_not_found",
+     *     "message": "Discipline not found"
+     *   }
+     * }
      */
     public function byDiscipline(string $discipline): JsonResponse
     {
@@ -71,14 +124,55 @@ class DocumentController extends Controller
     }
 
     /**
-     * Retourne un document spécifique pour une discipline.
+     * Détail d’un document
      *
-     * Si le document n'existe pas, retourne une erreur 404.
+     * Retourne un document spécifique pour une discipline donnée.
      *
-     * @param string $discipline Slug de la discipline
-     * @param int $id Identifiant du document
+     * @group Documents
      *
-     * @return JsonResponse
+     * @urlParam discipline string required Slug de la discipline. Exemple : blackball
+     * @urlParam id integer required Identifiant du document. Exemple : 1
+     *
+     * @response 200 {
+     *   "data": {
+     *     "id": 1,
+     *     "title": "Règlement intérieur",
+     *     "file": "documents/reglement.pdf",
+     *     "file_url": "https://example.com/documents/reglement.pdf",
+     *     "discipline": "blackball",
+     *     "created_at": "2025-01-01T10:00:00.000000Z",
+     *     "updated_at": "2025-01-02T10:00:00.000000Z"
+     *   },
+     *   "meta": {
+     *     "discipline": "blackball",
+     *     "document_id": 1
+     *   },
+     *   "links": [],
+     *   "error": null
+     * }
+     *
+     * @response 404 {
+     *   "data": null,
+     *   "meta": {
+     *     "discipline": "blackball",
+     *     "document_id": 1
+     *   },
+     *   "links": [],
+     *   "error": {
+     *     "code": "document_not_found",
+     *     "message": "Document not found"
+     *   }
+     * }
+     *
+     * @response 404 {
+     *   "data": null,
+     *   "meta": [],
+     *   "links": [],
+     *   "error": {
+     *     "code": "discipline_not_found",
+     *     "message": "Discipline not found"
+     *   }
+     * }
      */
     public function show(string $discipline, int $id): JsonResponse
     {

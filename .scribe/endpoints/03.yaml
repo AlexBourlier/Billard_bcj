@@ -1,0 +1,632 @@
+name: CueScore
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/cuescore/rankings
+    metadata:
+      custom: []
+      groupName: CueScore
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Liste des classements CueScore'
+      description: 'Retourne les classements CueScore disponibles avec filtres optionnels.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      discipline:
+        custom: []
+        name: discipline
+        description: 'Filtrer par discipline. Exemple : blackball'
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      scope:
+        custom: []
+        name: scope
+        description: 'Filtrer par scope. Exemple : national'
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      ranking_type:
+        custom: []
+        name: ranking_type
+        description: 'Filtrer par type de classement. Exemple : individual'
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      team_category:
+        custom: []
+        name: team_category
+        description: 'Filtrer par catégorie équipe. Exemple : DN1'
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      is_active:
+        custom: []
+        name: is_active
+        description: 'Filtrer les classements actifs/inactifs. Exemple : true'
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanQueryParameters:
+      discipline: architecto
+      scope: architecto
+      ranking_type: architecto
+      team_category: architecto
+      is_active: false
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "data": [
+              {
+                "id": 1,
+                "name": "FFB - Blackball - TN - Master",
+                "cuescore_id": "123456",
+                "url": "https://cuescore.com/ranking/example",
+                "source_type": "ranking",
+                "discipline": "blackball",
+                "scope": "national",
+                "ranking_type": "individual",
+                "team_category": null,
+                "season": "2025-2026",
+                "is_active": true,
+                "sort_order": 1
+              }
+            ],
+            "meta": {
+              "count": 1
+            },
+            "links": [],
+            "error": null
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/cuescore/club
+    metadata:
+      custom: []
+      groupName: CueScore
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Vue club des classements CueScore'
+      description: 'Retourne une vue agrégée des classements club selon des filtres optionnels.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      discipline:
+        custom: []
+        name: discipline
+        description: 'Filtrer par discipline. Exemple : blackball'
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      scope:
+        custom: []
+        name: scope
+        description: 'Filtrer par scope. Exemple : national'
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      ranking_type:
+        custom: []
+        name: ranking_type
+        description: 'Filtrer par type de classement. Exemple : individual'
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanQueryParameters:
+      discipline: architecto
+      scope: architecto
+      ranking_type: architecto
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "data": [
+              {
+                "ranking": {
+                  "id": 1,
+                  "name": "FFB - Blackball - TN - Master",
+                  "cuescore_id": "123456",
+                  "url": "https://cuescore.com/ranking/example",
+                  "source_type": "ranking",
+                  "discipline": "blackball",
+                  "scope": "national",
+                  "ranking_type": "individual",
+                  "team_category": null,
+                  "season": "2025-2026",
+                  "is_active": true,
+                  "sort_order": 1
+                },
+                "fetch": {
+                  "id": 10,
+                  "status": "success",
+                  "fetched_at": "2026-04-25T10:00:00+00:00",
+                  "http_status": 200,
+                  "records_count": 120,
+                  "is_active": true
+                },
+                "count": 1,
+                "data": []
+              }
+            ],
+            "meta": {
+              "count": 1,
+              "filters": {
+                "discipline": "blackball",
+                "scope": "national",
+                "ranking_type": "individual"
+              }
+            },
+            "links": [],
+            "error": null
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/cuescore/rankings/{ranking_id}'
+    metadata:
+      custom: []
+      groupName: CueScore
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Détail d’un classement CueScore'
+      description: 'Retourne les informations d’un classement CueScore avec son fetch actif.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      ranking_id:
+        custom: []
+        name: ranking_id
+        description: 'The ID of the ranking.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      ranking:
+        custom: []
+        name: ranking
+        description: 'Identifiant du classement CueScore local. Exemple : 1'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      ranking_id: 1
+      ranking: 16
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "data": {
+              "id": 1,
+              "name": "FFB - Blackball - TN - Master",
+              "cuescore_id": "123456",
+              "url": "https://cuescore.com/ranking/example",
+              "source_type": "ranking",
+              "discipline": "blackball",
+              "scope": "national",
+              "ranking_type": "individual",
+              "team_category": null,
+              "season": "2025-2026",
+              "is_active": true,
+              "sort_order": 1,
+              "active_fetch": {
+                "id": 10,
+                "status": "success",
+                "fetched_at": "2026-04-25T10:00:00+00:00",
+                "http_status": 200,
+                "records_count": 120,
+                "is_active": true
+              }
+            },
+            "meta": [],
+            "links": [],
+            "error": null
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/cuescore/rankings/{ranking_id}/club'
+    metadata:
+      custom: []
+      groupName: CueScore
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Données club d’un classement'
+      description: |-
+        Retourne les données du club pour un classement CueScore.
+
+        Pour un classement individuel, seules les entrées correspondant à des licenciés confirmés sont retournées.
+        Pour un classement équipe, les équipes sont retournées si au moins une équipe du club est détectée.
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      ranking_id:
+        custom: []
+        name: ranking_id
+        description: 'The ID of the ranking.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      ranking:
+        custom: []
+        name: ranking
+        description: 'Identifiant du classement CueScore local. Exemple : 1'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      ranking_id: 1
+      ranking: 16
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "data": [
+              {
+                "rank_position": 1,
+                "participant_name": "John Doe",
+                "participant_external_id": "123456",
+                "participant_url": "https://cuescore.com/player/John+Doe/123456",
+                "points": "1200.00",
+                "played": null,
+                "wins": null,
+                "losses": null,
+                "ties": null,
+                "matching": {
+                  "method": "exact_normalized",
+                  "confidence_score": 100,
+                  "is_confirmed": true
+                },
+                "licencie": {
+                  "id": 1,
+                  "licence": "123456 A",
+                  "nom": "DOE",
+                  "prenom": "JOHN"
+                }
+              }
+            ],
+            "meta": {
+              "count": 1,
+              "ranking_id": 1,
+              "ranking_name": "FFB - Blackball - TN - Master",
+              "fetch_id": 10,
+              "discipline": "blackball",
+              "scope": "national",
+              "ranking_type": "individual",
+              "team_category": null
+            },
+            "links": [],
+            "error": null
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/cuescore/rankings/{ranking_id}/teams'
+    metadata:
+      custom: []
+      groupName: CueScore
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Données équipes d’un classement'
+      description: |-
+        Retourne les données équipes d’un classement CueScore.
+
+        Les équipes appartenant au club sont identifiées via les règles de matching club.
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      ranking_id:
+        custom: []
+        name: ranking_id
+        description: 'The ID of the ranking.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      ranking:
+        custom: []
+        name: ranking
+        description: 'Identifiant du classement CueScore local. Exemple : 1'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      ranking_id: 1
+      ranking: 16
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "data": [
+              {
+                "rank_position": 1,
+                "team_name": "JOUÉ LÈS TOURS 1 DN1",
+                "team_external_id": "123456",
+                "team_url": "https://cuescore.com/team/example",
+                "points": "76.00",
+                "played": 16,
+                "wins": 13,
+                "losses": 1,
+                "ties": 2,
+                "is_club_team": true,
+                "additional_data": {
+                  "frame_wins": 193,
+                  "frame_score": 66,
+                  "frame_losses": 127
+                }
+              }
+            ],
+            "meta": {
+              "count": 1,
+              "ranking_id": 1,
+              "ranking_name": "FFB - Blackball - Equipes - DN1",
+              "fetch_id": 10,
+              "discipline": "blackball",
+              "scope": "national",
+              "ranking_type": "team",
+              "team_category": "DN1",
+              "club_team_present": true
+            },
+            "links": [],
+            "error": null
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/cuescore/{discipline}/{scope}/{rankingType}'
+    metadata:
+      custom: []
+      groupName: CueScore
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Vue club par discipline, scope et type'
+      description: 'Retourne une vue agrégée des classements club à partir des paramètres d’URL.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      discipline:
+        custom: []
+        name: discipline
+        description: 'Slug de la discipline. Exemple : blackball'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      scope:
+        custom: []
+        name: scope
+        description: 'Scope du classement. Exemple : national'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      rankingType:
+        custom: []
+        name: rankingType
+        description: 'Type du classement. Exemple : individual'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      discipline: architecto
+      scope: architecto
+      rankingType: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "data": [
+              {
+                "ranking": {
+                  "id": 1,
+                  "name": "FFB - Blackball - TN - Master",
+                  "discipline": "blackball",
+                  "scope": "national",
+                  "ranking_type": "individual",
+                  "is_active": true
+                },
+                "fetch": {
+                  "id": 10,
+                  "status": "success",
+                  "fetched_at": "2026-04-25T10:00:00+00:00",
+                  "http_status": 200,
+                  "records_count": 120,
+                  "is_active": true
+                },
+                "count": 1,
+                "data": []
+              }
+            ],
+            "meta": {
+              "count": 1,
+              "filters": {
+                "discipline": "blackball",
+                "scope": "national",
+                "ranking_type": "individual"
+              }
+            },
+            "links": [],
+            "error": null
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

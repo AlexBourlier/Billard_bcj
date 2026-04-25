@@ -1,0 +1,256 @@
+name: Calendriers
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/calendrier
+    metadata:
+      custom: []
+      groupName: Calendriers
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Liste des calendriers'
+      description: 'Retourne la liste de tous les calendriers actifs.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "data": [
+              {
+                "id": 1,
+                "discipline": "blackball",
+                "scope": "national",
+                "name": "Calendrier national Blackball",
+                "slug": "blackball-national",
+                "source_type": "ffb",
+                "is_active": true,
+                "created_at": "2025-01-01T10:00:00.000000Z",
+                "updated_at": "2025-01-02T10:00:00.000000Z"
+              }
+            ],
+            "meta": {
+              "count": 1
+            },
+            "links": [],
+            "error": null
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/calendrier/{discipline}'
+    metadata:
+      custom: []
+      groupName: Calendriers
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Calendriers par discipline'
+      description: 'Retourne les calendriers actifs associés à une discipline donnée.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      discipline:
+        custom: []
+        name: discipline
+        description: 'Slug de la discipline. Exemple : blackball'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      discipline: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "data": [
+              {
+                "id": 1,
+                "discipline": "blackball",
+                "scope": "national",
+                "name": "Calendrier national Blackball",
+                "slug": "blackball-national",
+                "source_type": "ffb",
+                "is_active": true,
+                "events_count": 12,
+                "created_at": "2025-01-01T10:00:00.000000Z",
+                "updated_at": "2025-01-02T10:00:00.000000Z"
+              }
+            ],
+            "meta": {
+              "discipline": "blackball",
+              "count": 1
+            },
+            "links": [],
+            "error": null
+          }
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 404
+        content: |-
+          {
+            "message": "Discipline invalide."
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/calendrier/{discipline}/{scope}'
+    metadata:
+      custom: []
+      groupName: Calendriers
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Calendrier par discipline et scope'
+      description: 'Retourne un calendrier spécifique avec la liste de ses événements et leurs liens.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      discipline:
+        custom: []
+        name: discipline
+        description: 'Slug de la discipline. Exemple : blackball'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      scope:
+        custom: []
+        name: scope
+        description: 'Scope du calendrier. Exemple : national'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      discipline: architecto
+      scope: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "data": {
+              "calendar": {
+                "id": 1,
+                "discipline": "blackball",
+                "scope": "national",
+                "name": "Calendrier national Blackball",
+                "slug": "blackball-national",
+                "source_type": "ffb",
+                "is_active": true,
+                "created_at": "2025-01-01T10:00:00.000000Z",
+                "updated_at": "2025-01-02T10:00:00.000000Z"
+              },
+              "events": [
+                {
+                  "id": 1,
+                  "calendar_id": 1,
+                  "external_id": "event-123",
+                  "date_debut": "2026-01-10T09:00:00.000000Z",
+                  "date_fin": "2026-01-10T18:00:00.000000Z",
+                  "date_limite": "2026-01-05T23:59:00.000000Z",
+                  "titre": "Tournoi national",
+                  "lieu": "Joué-lès-Tours",
+                  "club": "BCJ37",
+                  "url": "https://example.com/event",
+                  "status": "published",
+                  "links": [
+                    {
+                      "id": 1,
+                      "category": "inscription",
+                      "label": "S'inscrire",
+                      "url": "https://example.com/register",
+                      "sort_order": 1
+                    }
+                  ]
+                }
+              ]
+            },
+            "meta": {
+              "discipline": "blackball",
+              "scope": "national",
+              "count": 1
+            },
+            "links": [],
+            "error": null
+          }
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 404
+        content: |-
+          {
+            "message": "Discipline invalide."
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

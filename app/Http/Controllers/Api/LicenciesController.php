@@ -9,6 +9,8 @@ use Illuminate\Http\JsonResponse;
 
 /**
  * Contrôleur API pour la gestion des licenciés.
+ * 
+ * @Group Licenciés
  *
  * Permet de :
  * - lister les licenciés
@@ -21,6 +23,7 @@ use Illuminate\Http\JsonResponse;
 class LicenciesController extends Controller
 {
     /**
+     * @group Licenciés
      * Retourne la liste complète des licenciés.
      *
      * @return JsonResponse
@@ -42,6 +45,7 @@ class LicenciesController extends Controller
     /**
      * Recherche des licenciés par nom, prénom ou numéro de licence.
      *
+     * @group Licenciés
      * La recherche est partielle (LIKE %value%).
      * Les résultats sont dédupliqués et limités aux champs utiles.
      *
@@ -75,6 +79,7 @@ class LicenciesController extends Controller
     /**
      * Retourne la liste des identifiants de batch d’import valides.
      *
+     * @group Licenciés
      * Permet d’identifier les imports de licences exploitables.
      *
      * @return JsonResponse

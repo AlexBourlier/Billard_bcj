@@ -29,17 +29,41 @@ class CueScoreController extends Controller
     }
 
     /**
-     * Liste les classements CueScore avec filtres optionnels.
+     * Liste des classements CueScore
      *
-     * Filtres disponibles :
-     * - discipline
-     * - scope
-     * - ranking_type
-     * - team_category
-     * - is_active
+     * Retourne les classements CueScore disponibles avec filtres optionnels.
      *
-     * @param Request $request
-     * @return JsonResponse
+     * @group CueScore
+     *
+     * @queryParam discipline string Filtrer par discipline. Exemple : blackball
+     * @queryParam scope string Filtrer par scope. Exemple : national
+     * @queryParam ranking_type string Filtrer par type de classement. Exemple : individual
+     * @queryParam team_category string Filtrer par catégorie équipe. Exemple : DN1
+     * @queryParam is_active boolean Filtrer les classements actifs/inactifs. Exemple : true
+     *
+     * @response 200 {
+     *   "data": [
+     *     {
+     *       "id": 1,
+     *       "name": "FFB - Blackball - TN - Master",
+     *       "cuescore_id": "123456",
+     *       "url": "https://cuescore.com/ranking/example",
+     *       "source_type": "ranking",
+     *       "discipline": "blackball",
+     *       "scope": "national",
+     *       "ranking_type": "individual",
+     *       "team_category": null,
+     *       "season": "2025-2026",
+     *       "is_active": true,
+     *       "sort_order": 1
+     *     }
+     *   ],
+     *   "meta": {
+     *     "count": 1
+     *   },
+     *   "links": [],
+     *   "error": null
+     * }
      */
     public function index(Request $request): JsonResponse
     {
@@ -62,10 +86,41 @@ class CueScoreController extends Controller
     }
 
     /**
-     * Retourne les informations d’un classement avec son fetch actif.
+     * Détail d’un classement CueScore
      *
-     * @param CueScoreRanking $ranking
-     * @return JsonResponse
+     * Retourne les informations d’un classement CueScore avec son fetch actif.
+     *
+     * @group CueScore
+     *
+     * @urlParam ranking integer required Identifiant du classement CueScore local. Exemple : 1
+     *
+     * @response 200 {
+     *   "data": {
+     *     "id": 1,
+     *     "name": "FFB - Blackball - TN - Master",
+     *     "cuescore_id": "123456",
+     *     "url": "https://cuescore.com/ranking/example",
+     *     "source_type": "ranking",
+     *     "discipline": "blackball",
+     *     "scope": "national",
+     *     "ranking_type": "individual",
+     *     "team_category": null,
+     *     "season": "2025-2026",
+     *     "is_active": true,
+     *     "sort_order": 1,
+     *     "active_fetch": {
+     *       "id": 10,
+     *       "status": "success",
+     *       "fetched_at": "2026-04-25T10:00:00+00:00",
+     *       "http_status": 200,
+     *       "records_count": 120,
+     *       "is_active": true
+     *     }
+     *   },
+     *   "meta": [],
+     *   "links": [],
+     *   "error": null
+     * }
      */
     public function show(CueScoreRanking $ranking): JsonResponse
     {
@@ -85,12 +140,55 @@ class CueScoreController extends Controller
     }
 
     /**
-     * Retourne les données club d’un classement (individuel ou équipe).
+     * Données club d’un classement
      *
-     * Si aucun fetch actif n’est disponible, retourne une réponse vide.
+     * Retourne les données du club pour un classement CueScore.
      *
-     * @param CueScoreRanking $ranking
-     * @return JsonResponse
+     * Pour un classement individuel, seules les entrées correspondant à des licenciés confirmés sont retournées.
+     * Pour un classement équipe, les équipes sont retournées si au moins une équipe du club est détectée.
+     *
+     * @group CueScore
+     *
+     * @urlParam ranking integer required Identifiant du classement CueScore local. Exemple : 1
+     *
+     * @response 200 {
+     *   "data": [
+     *     {
+     *       "rank_position": 1,
+     *       "participant_name": "John Doe",
+     *       "participant_external_id": "123456",
+     *       "participant_url": "https://cuescore.com/player/John+Doe/123456",
+     *       "points": "1200.00",
+     *       "played": null,
+     *       "wins": null,
+     *       "losses": null,
+     *       "ties": null,
+     *       "matching": {
+     *         "method": "exact_normalized",
+     *         "confidence_score": 100,
+     *         "is_confirmed": true
+     *       },
+     *       "licencie": {
+     *         "id": 1,
+     *         "licence": "123456 A",
+     *         "nom": "DOE",
+     *         "prenom": "JOHN"
+     *       }
+     *     }
+     *   ],
+     *   "meta": {
+     *     "count": 1,
+     *     "ranking_id": 1,
+     *     "ranking_name": "FFB - Blackball - TN - Master",
+     *     "fetch_id": 10,
+     *     "discipline": "blackball",
+     *     "scope": "national",
+     *     "ranking_type": "individual",
+     *     "team_category": null
+     *   },
+     *   "links": [],
+     *   "error": null
+     * }
      */
     public function club(CueScoreRanking $ranking): JsonResponse
     {
@@ -119,10 +217,50 @@ class CueScoreController extends Controller
     }
 
     /**
-     * Retourne uniquement les classements équipes pour un ranking.
+     * Données équipes d’un classement
      *
-     * @param CueScoreRanking $ranking
-     * @return JsonResponse
+     * Retourne les données équipes d’un classement CueScore.
+     *
+     * Les équipes appartenant au club sont identifiées via les règles de matching club.
+     *
+     * @group CueScore
+     *
+     * @urlParam ranking integer required Identifiant du classement CueScore local. Exemple : 1
+     *
+     * @response 200 {
+     *   "data": [
+     *     {
+     *       "rank_position": 1,
+     *       "team_name": "JOUÉ LÈS TOURS 1 DN1",
+     *       "team_external_id": "123456",
+     *       "team_url": "https://cuescore.com/team/example",
+     *       "points": "76.00",
+     *       "played": 16,
+     *       "wins": 13,
+     *       "losses": 1,
+     *       "ties": 2,
+     *       "is_club_team": true,
+     *       "additional_data": {
+     *         "frame_wins": 193,
+     *         "frame_score": 66,
+     *         "frame_losses": 127
+     *       }
+     *     }
+     *   ],
+     *   "meta": {
+     *     "count": 1,
+     *     "ranking_id": 1,
+     *     "ranking_name": "FFB - Blackball - Equipes - DN1",
+     *     "fetch_id": 10,
+     *     "discipline": "blackball",
+     *     "scope": "national",
+     *     "ranking_type": "team",
+     *     "team_category": "DN1",
+     *     "club_team_present": true
+     *   },
+     *   "links": [],
+     *   "error": null
+     * }
      */
     public function teams(CueScoreRanking $ranking): JsonResponse
     {
@@ -149,10 +287,56 @@ class CueScoreController extends Controller
     }
 
     /**
-     * Vue agrégée des classements club basée sur des filtres query.
+     * Vue club des classements CueScore
      *
-     * @param Request $request
-     * @return JsonResponse
+     * Retourne une vue agrégée des classements club selon des filtres optionnels.
+     *
+     * @group CueScore
+     *
+     * @queryParam discipline string Filtrer par discipline. Exemple : blackball
+     * @queryParam scope string Filtrer par scope. Exemple : national
+     * @queryParam ranking_type string Filtrer par type de classement. Exemple : individual
+     *
+     * @response 200 {
+     *   "data": [
+     *     {
+     *       "ranking": {
+     *         "id": 1,
+     *         "name": "FFB - Blackball - TN - Master",
+     *         "cuescore_id": "123456",
+     *         "url": "https://cuescore.com/ranking/example",
+     *         "source_type": "ranking",
+     *         "discipline": "blackball",
+     *         "scope": "national",
+     *         "ranking_type": "individual",
+     *         "team_category": null,
+     *         "season": "2025-2026",
+     *         "is_active": true,
+     *         "sort_order": 1
+     *       },
+     *       "fetch": {
+     *         "id": 10,
+     *         "status": "success",
+     *         "fetched_at": "2026-04-25T10:00:00+00:00",
+     *         "http_status": 200,
+     *         "records_count": 120,
+     *         "is_active": true
+     *       },
+     *       "count": 1,
+     *       "data": []
+     *     }
+     *   ],
+     *   "meta": {
+     *     "count": 1,
+     *     "filters": {
+     *       "discipline": "blackball",
+     *       "scope": "national",
+     *       "ranking_type": "individual"
+     *     }
+     *   },
+     *   "links": [],
+     *   "error": null
+     * }
      */
     public function clubOverview(Request $request): JsonResponse
     {
@@ -164,12 +348,50 @@ class CueScoreController extends Controller
     }
 
     /**
-     * Vue agrégée des classements club via paramètres d’URL.
+     * Vue club par discipline, scope et type
      *
-     * @param string $discipline
-     * @param string $scope
-     * @param string $rankingType
-     * @return JsonResponse
+     * Retourne une vue agrégée des classements club à partir des paramètres d’URL.
+     *
+     * @group CueScore
+     *
+     * @urlParam discipline string required Slug de la discipline. Exemple : blackball
+     * @urlParam scope string required Scope du classement. Exemple : national
+     * @urlParam rankingType string required Type du classement. Exemple : individual
+     *
+     * @response 200 {
+     *   "data": [
+     *     {
+     *       "ranking": {
+     *         "id": 1,
+     *         "name": "FFB - Blackball - TN - Master",
+     *         "discipline": "blackball",
+     *         "scope": "national",
+     *         "ranking_type": "individual",
+     *         "is_active": true
+     *       },
+     *       "fetch": {
+     *         "id": 10,
+     *         "status": "success",
+     *         "fetched_at": "2026-04-25T10:00:00+00:00",
+     *         "http_status": 200,
+     *         "records_count": 120,
+     *         "is_active": true
+     *       },
+     *       "count": 1,
+     *       "data": []
+     *     }
+     *   ],
+     *   "meta": {
+     *     "count": 1,
+     *     "filters": {
+     *       "discipline": "blackball",
+     *       "scope": "national",
+     *       "ranking_type": "individual"
+     *     }
+     *   },
+     *   "links": [],
+     *   "error": null
+     * }
      */
     public function byDisciplineScopeAndType(string $discipline, string $scope, string $rankingType): JsonResponse
     {

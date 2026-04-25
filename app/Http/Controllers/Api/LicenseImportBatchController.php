@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 /**
  * Contrôleur API pour la consultation des lots d'import de licences.
  *
+ * @hideFromAPIDocumentation
+ *
  * Permet de :
  * - lister les imports avec filtres et pagination
  * - consulter le rapport complet d’un batch
@@ -29,6 +31,8 @@ class LicenseImportBatchController extends Controller
 
     /**
      * Retourne la liste paginée des batchs d'import de licences.
+     * 
+     * @hideFromAPIDocumentation
      *
      * Filtres disponibles :
      * - source
@@ -131,6 +135,7 @@ class LicenseImportBatchController extends Controller
     /**
      * Retourne le rapport complet d’un batch d’import.
      *
+     * @hideFromAPIDocumentation
      * Le rapport est construit par le service métier TelematBatchReportBuilder.
      *
      * @param LicenseImportBatch $batch
@@ -152,6 +157,7 @@ class LicenseImportBatchController extends Controller
     /**
      * Retourne le rapport complet d’un batch d’import.
      *
+     * @hideFromAPIDocumentation
      * Alias explicite de show() pour les routes orientées rapport.
      *
      * @param LicenseImportBatch $batch
@@ -176,6 +182,8 @@ class LicenseImportBatchController extends Controller
      * Le diff permet de visualiser les insertions, mises à jour,
      * suppressions et lignes inchangées produites par la projection
      * vers la table des licenciés.
+     *
+     * @hideFromAPIDocumentation
      *
      * @param LicenseImportBatch $batch
      *

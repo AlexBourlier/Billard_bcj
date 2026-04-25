@@ -1,5 +1,9 @@
-name: Endpoints
-description: ''
+name: Public
+description: |-
+  La réponse est mise en cache pendant 10 minutes.
+
+  L’article mis en avant correspond au dernier article favori.
+  Si aucun article favori n’existe, le dernier article publié est utilisé en fallback.
 endpoints:
   -
     custom: []
@@ -8,15 +12,14 @@ endpoints:
     uri: api/v1/public/site
     metadata:
       custom: []
-      groupName: Endpoints
+      groupName: Public
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Retourne les informations globales du site.'
+      title: 'Informations globales du site'
       description: |-
-        Inclut :
-        - paramètres du site
-        - menus actifs
+        Retourne les informations générales nécessaires au front public :
+        paramètres du site et menus actifs.
       authenticated: false
       deprecated: false
     headers:
@@ -33,14 +36,44 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"site_settings":{"id":1,"logo":"img\/a97fed9810c39a9270caead79d014450.png","logo_url":"http:\/\/localhost:8000\/img\/a97fed9810c39a9270caead79d014450.png","banniere":"img\/fee04cd87ca0f3ab97bbc5a30d47bafd.png","banniere_url":"http:\/\/localhost:8000\/img\/fee04cd87ca0f3ab97bbc5a30d47bafd.png","adresse":"28 Rue Joseph Cugnot, 37300 Jou\u00e9-L\u00e8s-Tours","telephone":null,"email":"contact@bcj37.fr","youtube_page":"https:\/\/www.youtube.com\/@BCJ37","facebook_page":"https:\/\/www.facebook.com\/profile.php?id=61573797213739&locale=fr_FR","facebook_page_id":"554099791128649","created_at":"2025-05-13T10:22:11.000000Z","updated_at":"2025-08-21T15:12:15.000000Z"},"menus":[{"id":5,"name":"americain","image":"menu\/Image_Americain_color.png","image_url":"http:\/\/localhost:8000\/menu\/Image_Americain_color.png","actif":true,"created_at":null,"updated_at":"2026-01-10T16:53:05.000000Z"},{"id":2,"name":"blackball","image":"menu\/Image_Blackball_color.png","image_url":"http:\/\/localhost:8000\/menu\/Image_Blackball_color.png","actif":true,"created_at":null,"updated_at":"2025-05-29T17:06:39.000000Z"},{"id":3,"name":"carambole","image":"menu\/Image_Carambole_color.png","image_url":"http:\/\/localhost:8000\/menu\/Image_Carambole_color.png","actif":true,"created_at":null,"updated_at":"2025-05-14T07:36:52.000000Z"},{"id":1,"name":"club","image":"menu\/Image_Leclub_color.png","image_url":"http:\/\/localhost:8000\/menu\/Image_Leclub_color.png","actif":true,"created_at":null,"updated_at":"2025-05-29T17:06:41.000000Z"},{"id":4,"name":"snooker","image":"menu\/Image_Snooker_color.png","image_url":"http:\/\/localhost:8000\/menu\/Image_Snooker_color.png","actif":true,"created_at":null,"updated_at":"2025-05-14T08:18:08.000000Z"}]},"meta":{"menus_count":5},"links":[],"error":null}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '59'
-          access-control-allow-origin: '*'
-        description: null
+        content: |-
+          {
+            "data": {
+              "site_settings": {
+                "id": 1,
+                "logo": "img/logo.png",
+                "logo_url": "https://example.com/img/logo.png",
+                "banniere": "img/banner.png",
+                "banniere_url": "https://example.com/img/banner.png",
+                "adresse": "28 Rue Joseph Cugnot, 37300 Joué-lès-Tours",
+                "telephone": null,
+                "email": "contact@bcj37.fr",
+                "youtube_page": "https://www.youtube.com/@BCJ37",
+                "facebook_page": "https://www.facebook.com/example",
+                "facebook_page_id": "123456789",
+                "created_at": "2025-05-13T10:22:11.000000Z",
+                "updated_at": "2025-08-21T15:12:15.000000Z"
+              },
+              "menus": [
+                {
+                  "id": 1,
+                  "name": "blackball",
+                  "image": "menu/blackball.png",
+                  "image_url": "https://example.com/menu/blackball.png",
+                  "actif": true,
+                  "created_at": null,
+                  "updated_at": "2025-05-29T17:06:39.000000Z"
+                }
+              ]
+            },
+            "meta": {
+              "menus_count": 1
+            },
+            "links": [],
+            "error": null
+          }
+        headers: []
+        description: ''
     responseFields: []
     auth: []
     controller: null
@@ -53,19 +86,16 @@ endpoints:
     uri: api/v1/public/home
     metadata:
       custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Retourne les données nécessaires à la page d’accueil publique.'
-      description: |-
+      groupName: Public
+      groupDescription: |-
         La réponse est mise en cache pendant 10 minutes.
 
-        Inclut :
-        - paramètres du site
-        - menus actifs
-        - partenaires
-        - article favori ou dernier article publié en fallback
+        L’article mis en avant correspond au dernier article favori.
+        Si aucun article favori n’existe, le dernier article publié est utilisé en fallback.
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Données de la page d'accueil"
+      description: 'Retourne les données nécessaires à l’affichage de la page d’accueil publique.'
       authenticated: false
       deprecated: false
     headers:
@@ -82,14 +112,73 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"site_settings":{"id":1,"logo":"img\/a97fed9810c39a9270caead79d014450.png","logo_url":"http:\/\/localhost:8000\/img\/a97fed9810c39a9270caead79d014450.png","banniere":"img\/fee04cd87ca0f3ab97bbc5a30d47bafd.png","banniere_url":"http:\/\/localhost:8000\/img\/fee04cd87ca0f3ab97bbc5a30d47bafd.png","adresse":"28 Rue Joseph Cugnot, 37300 Jou\u00e9-L\u00e8s-Tours","telephone":null,"email":"contact@bcj37.fr","youtube_page":"https:\/\/www.youtube.com\/@BCJ37","facebook_page":"https:\/\/www.facebook.com\/profile.php?id=61573797213739&locale=fr_FR","facebook_page_id":"554099791128649","created_at":"2025-05-13T10:22:11.000000Z","updated_at":"2025-08-21T15:12:15.000000Z"},"menus":[{"id":1,"name":"club","image":"menu\/Image_Leclub_color.png","image_url":"http:\/\/localhost:8000\/menu\/Image_Leclub_color.png","actif":true,"created_at":null,"updated_at":"2025-05-29T17:06:41.000000Z"},{"id":2,"name":"blackball","image":"menu\/Image_Blackball_color.png","image_url":"http:\/\/localhost:8000\/menu\/Image_Blackball_color.png","actif":true,"created_at":null,"updated_at":"2025-05-29T17:06:39.000000Z"},{"id":3,"name":"carambole","image":"menu\/Image_Carambole_color.png","image_url":"http:\/\/localhost:8000\/menu\/Image_Carambole_color.png","actif":true,"created_at":null,"updated_at":"2025-05-14T07:36:52.000000Z"},{"id":4,"name":"snooker","image":"menu\/Image_Snooker_color.png","image_url":"http:\/\/localhost:8000\/menu\/Image_Snooker_color.png","actif":true,"created_at":null,"updated_at":"2025-05-14T08:18:08.000000Z"},{"id":5,"name":"americain","image":"menu\/Image_Americain_color.png","image_url":"http:\/\/localhost:8000\/menu\/Image_Americain_color.png","actif":true,"created_at":null,"updated_at":"2026-01-10T16:53:05.000000Z"}],"partners":[{"id":1,"name":"Tours m\u00e9tropole","logo":"partenaires\/37b4f8ae3d9d972bd5bf0d208c9b6db4.png","logo_url":"http:\/\/localhost:8000\/partenaires\/37b4f8ae3d9d972bd5bf0d208c9b6db4.png","website_url":"https:\/\/www.tours-metropole.fr","created_at":"2025-05-26T14:21:37.000000Z","updated_at":"2025-12-06T20:52:52.000000Z"},{"id":3,"name":"Jou\u00e9 les Tours","logo":"partenaires\/fcdc86350be85448befa128dd97cb678.jpg","logo_url":"http:\/\/localhost:8000\/partenaires\/fcdc86350be85448befa128dd97cb678.jpg","website_url":"https:\/\/www.jouelestours.fr","created_at":"2025-05-26T14:31:35.000000Z","updated_at":"2025-12-06T20:55:45.000000Z"},{"id":4,"name":"FF billard LBCVL","logo":"partenaires\/2dc778dbe66b410464d2028a657a27a8.png","logo_url":"http:\/\/localhost:8000\/partenaires\/2dc778dbe66b410464d2028a657a27a8.png","website_url":"https:\/\/ligue-billard-centre-val-de-loire.fr","created_at":"2025-05-26T14:32:09.000000Z","updated_at":"2025-12-06T20:56:44.000000Z"},{"id":6,"name":"Handi sport","logo":"partenaires\/161322e89b4e12b0baed38f5f875fbe4.png","logo_url":"http:\/\/localhost:8000\/partenaires\/161322e89b4e12b0baed38f5f875fbe4.png","website_url":"https:\/\/www.handisport.org","created_at":"2025-05-26T14:32:44.000000Z","updated_at":"2025-12-06T20:57:10.000000Z"},{"id":11,"name":"FFSA","logo":"partenaires\/75a23ee4123c3eddd989e2b64e391239.png","logo_url":"http:\/\/localhost:8000\/partenaires\/75a23ee4123c3eddd989e2b64e391239.png","website_url":"https:\/\/sportadapte.fr","created_at":"2025-08-19T11:30:46.000000Z","updated_at":"2025-12-06T20:58:53.000000Z"},{"id":12,"name":"Bulldog-billard","logo":"partenaires\/12e2647c9ac9a25f6f34d4d0217c63ce.png","logo_url":"http:\/\/localhost:8000\/partenaires\/12e2647c9ac9a25f6f34d4d0217c63ce.png","website_url":"https:\/\/bulldog-billard.com","created_at":"2025-08-19T11:31:12.000000Z","updated_at":"2025-12-06T20:59:21.000000Z"},{"id":16,"name":"Brit Hotel Jou\u00e9-l\u00e8s-Tours","logo":"partenaires\/12a05680-30c8-403e-bc59-085f4b8a3d81.webp","logo_url":"http:\/\/localhost:8000\/partenaires\/12a05680-30c8-403e-bc59-085f4b8a3d81.webp","website_url":"https:\/\/hotel-tours.brithotel.fr","created_at":"2025-12-05T09:59:48.000000Z","updated_at":"2025-12-06T21:00:00.000000Z"},{"id":17,"name":"Kyriad Jou\u00e9-L\u00e8s-Tours","logo":"partenaires\/87d7527e-b0cc-43a8-ab2c-f9b17e9f950a.webp","logo_url":"http:\/\/localhost:8000\/partenaires\/87d7527e-b0cc-43a8-ab2c-f9b17e9f950a.webp","website_url":"https:\/\/tours-joue-les-tours.kyriad.com\/fr-fr\/?sr=SEO_GOOGLE","created_at":"2025-12-05T10:01:52.000000Z","updated_at":"2025-12-06T21:00:47.000000Z"}],"featured_post":{"id":112,"title":"2026 - Tournoi National n\u00b04 - Villeneuve-sur-Lot","slug":"2026-tournoi-national-n4-villeneuve-sur-lot","excerpt":"&nbsp;Du 31 janvier au 1er f\u00e9vrier 2026Un week-end intense pour nos joueurs, avec de tr\u00e8s beaux r\u00e9sultats \u00e0 la cl\u00e9.&nbsp;Blackball MasterVictoire d\u2019Al...","content":"<h5><strong style=\"color: rgb(101, 104, 108);\"><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t7e\/1\/16\/1f4c5.png\" alt=\"\ud83d\udcc5\" height=\"16\" width=\"16\">&nbsp;<em>Du 31 janvier au 1er f\u00e9vrier 2026<\/em><\/strong><\/h5><p class=\"ql-indent-1\">Un week-end intense pour nos joueurs, avec de tr\u00e8s beaux r\u00e9sultats \u00e0 la cl\u00e9.<\/p><p><br><\/p><h5><strong class=\"ql-size-large\" style=\"color: rgb(101, 104, 108);\"><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/tbe\/1\/16\/1f3c6.png\" alt=\"\ud83c\udfc6\" height=\"16\" width=\"16\">&nbsp;Blackball Master<\/strong><\/h5><ul><li>Victoire d\u2019Alex Buscetti&nbsp;\u2014&nbsp;<em>sa premi\u00e8re, et avec la mani\u00e8re !<\/em><\/li><\/ul><p class=\"ql-indent-2\">Score final :&nbsp;8\u20134, un match parfaitement ma\u00eetris\u00e9. Gr\u00e2ce \u00e0 cette performance,&nbsp;Alex grimpe \u00e0 la 3\u1d49 place du classement g\u00e9n\u00e9ral.<\/p><ul><li>&nbsp;Christophe Lambert&nbsp;s\u2019arr\u00eate en&nbsp;1\/2 finale<\/li><li>&nbsp;\u00c9lie Christidis&nbsp;atteint les&nbsp;1\/4 de finale<\/li><\/ul><p><br><\/p><h5><strong class=\"ql-size-large\" style=\"color: rgb(101, 104, 108);\"><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/te9\/1\/16\/2640.png\" alt=\"\u2640\ufe0f\" height=\"16\" width=\"16\">&nbsp;Cat\u00e9gorie F\u00e9minine<\/strong><\/h5><ul><li>Oph\u00e9lie Laval&nbsp;r\u00e9alise un tr\u00e8s beau parcours et atteint la&nbsp;finale<\/li><\/ul><p class=\"ql-indent-2\">Un jeu solide tout au long du tournoi, mais la victoire lui \u00e9chappe.<\/p><p class=\"ql-indent-2\">Elle se positionne d\u00e9sormais&nbsp;5\u1d49 au classement g\u00e9n\u00e9ral<\/p><p><br><\/p><h5><strong class=\"ql-size-large\" style=\"color: rgb(101, 104, 108);\"><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t8d\/1\/16\/1f500.png\" alt=\"\ud83d\udd00\" height=\"16\" width=\"16\">&nbsp;Cat\u00e9gorie Mixte<\/strong><\/h5><ul><li>J\u00e9r\u00f4me L''Anthoen&nbsp;atteint les&nbsp;1\/4 de finale&nbsp;apr\u00e8s&nbsp;4 matchs remport\u00e9s.<\/li><\/ul><p class=\"ql-indent-2\">Malgr\u00e9 une d\u00e9faite au 1er tour du tournoi v\u00e9t\u00e9ran, il r\u00e9alise une tr\u00e8s belle op\u00e9ration au mixte.<\/p><p class=\"ql-indent-2\">4\u1d49 place au classement g\u00e9n\u00e9ral&nbsp;!<\/p><p><br><\/p><h5><strong class=\"ql-size-large\" style=\"color: rgb(101, 104, 108);\"><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t8b\/1\/16\/1f465.png\" alt=\"\ud83d\udc65\" height=\"16\" width=\"16\">&nbsp;Comp\u00e9tition \u00c9quipes \u2013 DN1<\/strong><\/h5><ul><li><strong>Jou\u00e9 1<\/strong><\/li><\/ul><p class=\"ql-indent-2\">3 victoires en 3 matchs<\/p><p class=\"ql-indent-2\">Dernier match remport\u00e9 avec le&nbsp;point offensif&nbsp;et&nbsp;5 fermes<\/p><p class=\"ql-indent-2\">Jou\u00e9 1 conserve sa 2\u1d49 place au classement<\/p><ul><li><strong>Jou\u00e9 2<\/strong><\/li><\/ul><p class=\"ql-indent-2\">Victoire lors du premier match<\/p><p class=\"ql-indent-2\">D\u00e9faites sur les deux suivants, avec&nbsp;1 point d\u00e9fensif&nbsp;r\u00e9cup\u00e9r\u00e9<\/p><p class=\"ql-indent-2\">Une journ\u00e9e compliqu\u00e9e qui les fait descendre \u00e0 la&nbsp;4\u1d49 place<\/p><p class=\"ql-indent-2\"><em>Mais rien n\u2019est jou\u00e9 : la saison continue !<\/em><\/p><p><br><\/p><p><br><\/p><p>F\u00e9licitations \u00e0 l\u2019ensemble des joueurs pour leur engagement et leurs performances<\/p>","discipline":"blackball","discipline_id":1,"year":2026,"favoris":true,"image":null,"image_url":null,"video":"https:\/\/sportenfrance.com\/videos\/x9yzs4s","created_at":"2026-02-02T08:11:13.000000Z","updated_at":"2026-02-02T08:31:49.000000Z"}},"meta":{"menus_count":5,"partners_count":8,"has_featured_post":true},"links":[],"error":null}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '58'
-          access-control-allow-origin: '*'
-        description: null
+        content: |-
+          {
+            "data": {
+              "site_settings": {
+                "id": 1,
+                "logo": "img/logo.png",
+                "logo_url": "https://example.com/img/logo.png",
+                "banniere": "img/banner.png",
+                "banniere_url": "https://example.com/img/banner.png",
+                "adresse": "28 Rue Joseph Cugnot, 37300 Joué-lès-Tours",
+                "telephone": null,
+                "email": "contact@bcj37.fr",
+                "youtube_page": "https://www.youtube.com/@BCJ37",
+                "facebook_page": "https://www.facebook.com/example",
+                "facebook_page_id": "123456789",
+                "created_at": "2025-05-13T10:22:11.000000Z",
+                "updated_at": "2025-08-21T15:12:15.000000Z"
+              },
+              "menus": [
+                {
+                  "id": 1,
+                  "name": "blackball",
+                  "image": "menu/blackball.png",
+                  "image_url": "https://example.com/menu/blackball.png",
+                  "actif": true,
+                  "created_at": null,
+                  "updated_at": "2025-05-29T17:06:39.000000Z"
+                }
+              ],
+              "partners": [
+                {
+                  "id": 1,
+                  "name": "Tours Métropole",
+                  "logo": "partenaires/logo.png",
+                  "logo_url": "https://example.com/partenaires/logo.png",
+                  "website_url": "https://www.tours-metropole.fr",
+                  "created_at": "2025-05-26T14:21:37.000000Z",
+                  "updated_at": "2025-12-06T20:52:52.000000Z"
+                }
+              ],
+              "featured_post": {
+                "id": 1,
+                "title": "Titre de l'article",
+                "slug": "titre-de-l-article",
+                "excerpt": "Résumé de l'article...",
+                "content": "<p>Contenu HTML de l'article</p>",
+                "discipline": "blackball",
+                "discipline_id": 1,
+                "year": 2026,
+                "favoris": true,
+                "image": null,
+                "image_url": null,
+                "video": null,
+                "created_at": "2026-02-02T08:11:13.000000Z",
+                "updated_at": "2026-02-02T08:31:49.000000Z"
+              }
+            },
+            "meta": {
+              "menus_count": 1,
+              "partners_count": 1,
+              "has_featured_post": true
+            },
+            "links": [],
+            "error": null
+          }
+        headers: []
+        description: ''
     responseFields: []
     auth: []
     controller: null
@@ -102,12 +191,12 @@ endpoints:
     uri: api/v1/partenaires
     metadata:
       custom: []
-      groupName: Endpoints
+      groupName: Public
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Retourne la liste de tous les partenaires.'
-      description: ''
+      title: 'Liste des partenaires'
+      description: 'Retourne la liste des partenaires publics du club.'
       authenticated: false
       deprecated: false
     headers:
@@ -124,1179 +213,27 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"name":"Tours m\u00e9tropole","logo":"partenaires\/37b4f8ae3d9d972bd5bf0d208c9b6db4.png","logo_url":"http:\/\/localhost:8000\/partenaires\/37b4f8ae3d9d972bd5bf0d208c9b6db4.png","website_url":"https:\/\/www.tours-metropole.fr","created_at":"2025-05-26T14:21:37.000000Z","updated_at":"2025-12-06T20:52:52.000000Z"},{"id":3,"name":"Jou\u00e9 les Tours","logo":"partenaires\/fcdc86350be85448befa128dd97cb678.jpg","logo_url":"http:\/\/localhost:8000\/partenaires\/fcdc86350be85448befa128dd97cb678.jpg","website_url":"https:\/\/www.jouelestours.fr","created_at":"2025-05-26T14:31:35.000000Z","updated_at":"2025-12-06T20:55:45.000000Z"},{"id":4,"name":"FF billard LBCVL","logo":"partenaires\/2dc778dbe66b410464d2028a657a27a8.png","logo_url":"http:\/\/localhost:8000\/partenaires\/2dc778dbe66b410464d2028a657a27a8.png","website_url":"https:\/\/ligue-billard-centre-val-de-loire.fr","created_at":"2025-05-26T14:32:09.000000Z","updated_at":"2025-12-06T20:56:44.000000Z"},{"id":6,"name":"Handi sport","logo":"partenaires\/161322e89b4e12b0baed38f5f875fbe4.png","logo_url":"http:\/\/localhost:8000\/partenaires\/161322e89b4e12b0baed38f5f875fbe4.png","website_url":"https:\/\/www.handisport.org","created_at":"2025-05-26T14:32:44.000000Z","updated_at":"2025-12-06T20:57:10.000000Z"},{"id":11,"name":"FFSA","logo":"partenaires\/75a23ee4123c3eddd989e2b64e391239.png","logo_url":"http:\/\/localhost:8000\/partenaires\/75a23ee4123c3eddd989e2b64e391239.png","website_url":"https:\/\/sportadapte.fr","created_at":"2025-08-19T11:30:46.000000Z","updated_at":"2025-12-06T20:58:53.000000Z"},{"id":12,"name":"Bulldog-billard","logo":"partenaires\/12e2647c9ac9a25f6f34d4d0217c63ce.png","logo_url":"http:\/\/localhost:8000\/partenaires\/12e2647c9ac9a25f6f34d4d0217c63ce.png","website_url":"https:\/\/bulldog-billard.com","created_at":"2025-08-19T11:31:12.000000Z","updated_at":"2025-12-06T20:59:21.000000Z"},{"id":16,"name":"Brit Hotel Jou\u00e9-l\u00e8s-Tours","logo":"partenaires\/12a05680-30c8-403e-bc59-085f4b8a3d81.webp","logo_url":"http:\/\/localhost:8000\/partenaires\/12a05680-30c8-403e-bc59-085f4b8a3d81.webp","website_url":"https:\/\/hotel-tours.brithotel.fr","created_at":"2025-12-05T09:59:48.000000Z","updated_at":"2025-12-06T21:00:00.000000Z"},{"id":17,"name":"Kyriad Jou\u00e9-L\u00e8s-Tours","logo":"partenaires\/87d7527e-b0cc-43a8-ab2c-f9b17e9f950a.webp","logo_url":"http:\/\/localhost:8000\/partenaires\/87d7527e-b0cc-43a8-ab2c-f9b17e9f950a.webp","website_url":"https:\/\/tours-joue-les-tours.kyriad.com\/fr-fr\/?sr=SEO_GOOGLE","created_at":"2025-12-05T10:01:52.000000Z","updated_at":"2025-12-06T21:00:47.000000Z"}],"meta":{"count":8},"links":[],"error":null}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '57'
-          access-control-allow-origin: '*'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: api/v1/posts
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Retourne la liste paginée des articles.'
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 200
-        content: '{"data":[{"id":112,"title":"2026 - Tournoi National n\u00b04 - Villeneuve-sur-Lot","slug":"2026-tournoi-national-n4-villeneuve-sur-lot","excerpt":"&nbsp;Du 31 janvier au 1er f\u00e9vrier 2026Un week-end intense pour nos joueurs, avec de tr\u00e8s beaux r\u00e9sultats \u00e0 la cl\u00e9.&nbsp;Blackball MasterVictoire d\u2019Al...","content":"<h5><strong style=\"color: rgb(101, 104, 108);\"><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t7e\/1\/16\/1f4c5.png\" alt=\"\ud83d\udcc5\" height=\"16\" width=\"16\">&nbsp;<em>Du 31 janvier au 1er f\u00e9vrier 2026<\/em><\/strong><\/h5><p class=\"ql-indent-1\">Un week-end intense pour nos joueurs, avec de tr\u00e8s beaux r\u00e9sultats \u00e0 la cl\u00e9.<\/p><p><br><\/p><h5><strong class=\"ql-size-large\" style=\"color: rgb(101, 104, 108);\"><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/tbe\/1\/16\/1f3c6.png\" alt=\"\ud83c\udfc6\" height=\"16\" width=\"16\">&nbsp;Blackball Master<\/strong><\/h5><ul><li>Victoire d\u2019Alex Buscetti&nbsp;\u2014&nbsp;<em>sa premi\u00e8re, et avec la mani\u00e8re !<\/em><\/li><\/ul><p class=\"ql-indent-2\">Score final :&nbsp;8\u20134, un match parfaitement ma\u00eetris\u00e9. Gr\u00e2ce \u00e0 cette performance,&nbsp;Alex grimpe \u00e0 la 3\u1d49 place du classement g\u00e9n\u00e9ral.<\/p><ul><li>&nbsp;Christophe Lambert&nbsp;s\u2019arr\u00eate en&nbsp;1\/2 finale<\/li><li>&nbsp;\u00c9lie Christidis&nbsp;atteint les&nbsp;1\/4 de finale<\/li><\/ul><p><br><\/p><h5><strong class=\"ql-size-large\" style=\"color: rgb(101, 104, 108);\"><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/te9\/1\/16\/2640.png\" alt=\"\u2640\ufe0f\" height=\"16\" width=\"16\">&nbsp;Cat\u00e9gorie F\u00e9minine<\/strong><\/h5><ul><li>Oph\u00e9lie Laval&nbsp;r\u00e9alise un tr\u00e8s beau parcours et atteint la&nbsp;finale<\/li><\/ul><p class=\"ql-indent-2\">Un jeu solide tout au long du tournoi, mais la victoire lui \u00e9chappe.<\/p><p class=\"ql-indent-2\">Elle se positionne d\u00e9sormais&nbsp;5\u1d49 au classement g\u00e9n\u00e9ral<\/p><p><br><\/p><h5><strong class=\"ql-size-large\" style=\"color: rgb(101, 104, 108);\"><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t8d\/1\/16\/1f500.png\" alt=\"\ud83d\udd00\" height=\"16\" width=\"16\">&nbsp;Cat\u00e9gorie Mixte<\/strong><\/h5><ul><li>J\u00e9r\u00f4me L''Anthoen&nbsp;atteint les&nbsp;1\/4 de finale&nbsp;apr\u00e8s&nbsp;4 matchs remport\u00e9s.<\/li><\/ul><p class=\"ql-indent-2\">Malgr\u00e9 une d\u00e9faite au 1er tour du tournoi v\u00e9t\u00e9ran, il r\u00e9alise une tr\u00e8s belle op\u00e9ration au mixte.<\/p><p class=\"ql-indent-2\">4\u1d49 place au classement g\u00e9n\u00e9ral&nbsp;!<\/p><p><br><\/p><h5><strong class=\"ql-size-large\" style=\"color: rgb(101, 104, 108);\"><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t8b\/1\/16\/1f465.png\" alt=\"\ud83d\udc65\" height=\"16\" width=\"16\">&nbsp;Comp\u00e9tition \u00c9quipes \u2013 DN1<\/strong><\/h5><ul><li><strong>Jou\u00e9 1<\/strong><\/li><\/ul><p class=\"ql-indent-2\">3 victoires en 3 matchs<\/p><p class=\"ql-indent-2\">Dernier match remport\u00e9 avec le&nbsp;point offensif&nbsp;et&nbsp;5 fermes<\/p><p class=\"ql-indent-2\">Jou\u00e9 1 conserve sa 2\u1d49 place au classement<\/p><ul><li><strong>Jou\u00e9 2<\/strong><\/li><\/ul><p class=\"ql-indent-2\">Victoire lors du premier match<\/p><p class=\"ql-indent-2\">D\u00e9faites sur les deux suivants, avec&nbsp;1 point d\u00e9fensif&nbsp;r\u00e9cup\u00e9r\u00e9<\/p><p class=\"ql-indent-2\">Une journ\u00e9e compliqu\u00e9e qui les fait descendre \u00e0 la&nbsp;4\u1d49 place<\/p><p class=\"ql-indent-2\"><em>Mais rien n\u2019est jou\u00e9 : la saison continue !<\/em><\/p><p><br><\/p><p><br><\/p><p>F\u00e9licitations \u00e0 l\u2019ensemble des joueurs pour leur engagement et leurs performances<\/p>","discipline":"blackball","discipline_id":1,"year":2026,"favoris":true,"image":null,"image_url":null,"video":"https:\/\/sportenfrance.com\/videos\/x9yzs4s","created_at":"2026-02-02T08:11:13.000000Z","updated_at":"2026-02-02T08:31:49.000000Z"},{"id":111,"title":"4e Tournoi International de Para-Billard","slug":"4e-tournoi-international-de-para-billard","excerpt":"Venez vivre un \u00e9v\u00e9nement sportif d\u2019exception o\u00f9 des joueurs et joueuses de para-billard, venus de toute la France et de l\u2019international, s\u2019affrontent...","content":"<p>Venez vivre un \u00e9v\u00e9nement sportif d\u2019exception o\u00f9 des joueurs et joueuses de para-billard, venus de toute la France et de l\u2019international, s\u2019affrontent au plus haut niveau.<\/p><p>Pendant plusieurs jours, pr\u00e9cision, ma\u00eetrise, strat\u00e9gie et mental seront au c\u0153ur de matchs intenses, en individuel et par \u00e9quipes. Ici, la performance prime, le handicap s\u2019efface, et le billard devient un v\u00e9ritable spectacle de haut niveau.<\/p><h3><br><\/h3><h3><strong>Pourquoi venir ?<\/strong><\/h3><ul><li><strong>Un sport spectaculaire et exigeant<\/strong><\/li><\/ul><p class=\"ql-indent-1\">D\u00e9couvrez le para-billard comme vous ne l\u2019avez jamais vu : des parties engag\u00e9es, une concentration extr\u00eame et un niveau de jeu impressionnant.<\/p><ul><li><strong>Des athl\u00e8tes inspirants<\/strong><\/li><\/ul><p class=\"ql-indent-1\">Rencontrez des comp\u00e9titeurs qui repoussent leurs limites \u00e0 chaque coup, port\u00e9s par la passion, la rigueur et l\u2019envie de se d\u00e9passer.<\/p><ul><li><strong>Une comp\u00e9tition internationale<\/strong><\/li><\/ul><p class=\"ql-indent-1\">Assistez \u00e0 des confrontations entre joueurs venus de diff\u00e9rents horizons, dans une ambiance \u00e0 la fois sportive, conviviale et respectueuse.<\/p><ul><li><strong>Un moment fort en \u00e9motions<\/strong><\/li><\/ul><p class=\"ql-indent-1\">Que vous soyez amateur de billard ou simple curieux, ce tournoi promet des instants intenses, authentiques et m\u00e9morables.<\/p><p><br><\/p><p>\ud83d\udc49 <strong>Entr\u00e9e gratuite \u2013 Tout public bienvenu<\/strong><\/p><p class=\"ql-indent-1\">Venez soutenir le para-billard et partager une vision inclusive et exigeante du sport.<\/p><h3><br><\/h3><p><br><\/p><p><strong>English version<\/strong><\/p><h2><strong>4th International Para-Billiards Tournament<\/strong><\/h2><p><br><\/p><p>Come and experience an exceptional sporting event where para-billiards players from across France and beyond compete at the highest level.<\/p><p>For several days, precision, strategy, focus and mental strength will define intense individual and team matches. Here, performance comes first, disability fades away, and billiards becomes a true high-level sporting spectacle.<\/p><h3><br><\/h3><h3><strong>Why attend?<\/strong><\/h3><ul><li><strong>A demanding and spectacular sport<\/strong><\/li><\/ul><p class=\"ql-indent-1\">Discover para-billiards in a new light, with high-intensity matches and remarkable technical skill.<\/p><ul><li><strong>Inspiring athletes<\/strong><\/li><\/ul><p class=\"ql-indent-1\">Meet competitors who push their limits at every shot, driven by passion, discipline and determination.<\/p><ul><li><strong>An international competition<\/strong><\/li><\/ul><p class=\"ql-indent-1\">Enjoy exciting match-ups between players from different countries in a respectful and welcoming atmosphere.<\/p><ul><li><strong>A powerful emotional experience<\/strong><\/li><\/ul><p class=\"ql-indent-1\">Whether you are a billiards enthusiast or simply curious, this tournament promises unforgettable moments.<\/p><p><br><\/p><p>\ud83d\udc49 <strong>Free admission \u2013 Open to all<\/strong><\/p>","discipline":null,"discipline_id":null,"year":2026,"favoris":false,"image":"files\/2426c8a6d74304637b1bce1649ae7113.png","image_url":"http:\/\/localhost:8000\/files\/2426c8a6d74304637b1bce1649ae7113.png","video":null,"created_at":"2026-01-15T14:48:08.000000Z","updated_at":"2026-01-15T16:40:34.000000Z"},{"id":110,"title":"Soir\u00e9e d\u00e9couverte - Billard au f\u00e9minin","slug":"soiree-decouverte-billard-au-feminin","excerpt":" Soir\u00e9e d\u00e9couverte billard \u2013 Sp\u00e9ciale femmes&nbsp;Le Billard Club de Jou\u00e9-L\u00e8s-Tours ouvre ses portes pour une soir\u00e9e d\u00e9couverte r\u00e9serv\u00e9e aux femmes no...","content":"<p><span style=\"background-color: rgb(255, 255, 255);\"><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t9a\/1\/16\/1f3b1.png\" alt=\"\ud83c\udfb1\" height=\"16\" width=\"16\"> <\/span>Soir\u00e9e d\u00e9couverte billard \u2013 Sp\u00e9ciale femmes&nbsp;<img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t9a\/1\/16\/1f3b1.png\" alt=\"\ud83c\udfb1\" height=\"16\" width=\"16\"><\/p><p>Le Billard Club de Jou\u00e9-L\u00e8s-Tours ouvre ses portes pour une soir\u00e9e d\u00e9couverte r\u00e9serv\u00e9e aux femmes non adh\u00e9rentes, plac\u00e9e sous le signe de la convivialit\u00e9 et de la bonne humeur.<\/p><p><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t51\/1\/16\/1f449.png\" alt=\"\ud83d\udc49\" height=\"16\" width=\"16\">&nbsp;Envie de passer une soir\u00e9e sympa entre copines ?<\/p><p>Venez d\u00e9couvrir le billard anglais et le billard fran\u00e7ais, \u00e9changer avec les adh\u00e9rent(e)s du club et participer \u00e0 de petites animations accessibles \u00e0 toutes, d\u00e9butantes comme curieuses !<\/p><p><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/tf4\/1\/16\/2728.png\" alt=\"\u2728\" height=\"16\" width=\"16\">&nbsp;Soir\u00e9e gratuite (hors consommations)<\/p><p><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/tc0\/1\/16\/1f4e9.png\" alt=\"\ud83d\udce9\" height=\"16\" width=\"16\">&nbsp;R\u00e9servation obligatoire par mail pour des raisons d\u2019organisation : contact@bcj37.fr<\/p>","discipline":null,"discipline_id":null,"year":2026,"favoris":false,"image":"files\/64c9506646739859b7ce34856bf71804.png","image_url":"http:\/\/localhost:8000\/files\/64c9506646739859b7ce34856bf71804.png","video":null,"created_at":"2026-01-05T09:08:12.000000Z","updated_at":"2026-02-02T08:09:58.000000Z"},{"id":109,"title":"\ud83c\udfa5 TN3 Am\u00e9ricain - Jeu de la 8 - le 05 d\u00e9cembre 2025","slug":"tn3-americain-jeu-de-la-8-le-05-decembre-2025","excerpt":"\ud83d\udccd Schiltigheim\ud83d\udcc5 05 d\u00e9cembre 2025\ud83c\udfb1 TN3 Am\u00e9ricain \u2013 Jeu de la 8\ud83c\udfc6 Organisateur : BC1935Ambiance de grand rendez-vous national \u00e0 Schiltigheim pour ce...","content":"<p>\ud83d\udccd <strong>Schiltigheim<\/strong><\/p><p>\ud83d\udcc5 <strong>05 d\u00e9cembre 2025<\/strong><\/p><p>\ud83c\udfb1 <strong>TN3 Am\u00e9ricain \u2013 Jeu de la 8<\/strong><\/p><p>\ud83c\udfc6 <strong>Organisateur : BC1935<\/strong><\/p><p><br><\/p><p>Ambiance de grand rendez-vous national \u00e0 Schiltigheim pour ce TN3 Am\u00e9ricain \u2013 Jeu de la 8, avec une journ\u00e9e intense, des matchs accroch\u00e9s et un niveau de jeu remarquable tout au long de la comp\u00e9tition.<\/p><p><br><\/p><p>\ud83d\udd25 <strong>Finale au sommet<\/strong> :<\/p><p><strong class=\"ql-size-large\"> \ud83d\udc49 <em>Christophe Lambert \ud83c\udd9a Aymeric Luneau<\/em><\/strong><\/p><p><br><\/p><p>Une finale spectaculaire, tendue et engag\u00e9e, \u00e0 revivre en vid\u00e9o, o\u00f9 chaque bille comptait.<\/p><p>\ud83d\udc4f <strong>F\u00e9licitations \u00e0 Christophe Lambert<\/strong>, qui s\u2019impose et remporte le tournoi national !<\/p><p><br><\/p><p>\ud83d\udcca <strong>Stat incroyable<\/strong> :<\/p><p>\u27a1\ufe0f 2 participations sur 3 tournois<\/p><p>\u27a1\ufe0f 2 victoires<\/p><p>Une r\u00e9gularit\u00e9 et une efficacit\u00e9 impressionnantes au plus haut niveau \ud83d\udcaa\ud83d\udd25<\/p>","discipline":"americain","discipline_id":4,"year":2025,"favoris":false,"image":null,"image_url":null,"video":"https:\/\/www.youtube.com\/live\/6BBnr61RyxI","created_at":"2025-12-16T11:00:00.000000Z","updated_at":"2026-01-05T09:06:27.000000Z"},{"id":108,"title":"BILAN CARAMBOLE \u2013 PREMIER SEMESTRE","slug":"bilan-carambole-premier-semestre","excerpt":"Un d\u00e9but de saison riche, dynamique et plein de belles ambitions pour la section Carambole du BCJ !\ud83d\udd39 1 \u2013 Organisation de la saisonLa r\u00e9union du 1er o...","content":"<p>Un d\u00e9but de saison riche, dynamique et plein de belles ambitions pour la section Carambole du BCJ !<\/p><p><br><\/p><h2>\ud83d\udd39 <strong>1 \u2013 Organisation de la saison<\/strong><\/h2><p>La r\u00e9union du <strong>1er octobre<\/strong> a permis de lancer les bases d\u2019une saison structur\u00e9e et motivante :<\/p><ul><li>Mise en place des comp\u00e9titions internes :<\/li><li>\ud83d\udc49 Deux poules en <strong>parties libres<\/strong><\/li><li>\ud83d\udc49 Une poule unique en <strong>bande<\/strong>, <strong>trois bandes<\/strong> et <strong>casin<\/strong><\/li><li>\ud83c\udfaf Handicaps d\u00e9finis selon ceux de la FFB ou adapt\u00e9s pour les nouveaux joueurs.<\/li><li>Mise en place des <strong>challenges<\/strong> :<\/li><li>\ud83d\udc49 3 \u00e9quipes <strong>V\u00e9t\u00e9rans<\/strong><\/li><li>\ud83d\udc49 1 \u00e9quipe <strong>Casin<\/strong><\/li><li>\ud83d\udc49 2 \u00e9quipes <strong>Foulon<\/strong><\/li><li>\ud83d\udc49 1 \u00e9quipe <strong>Flambeau<\/strong><\/li><li>Avec, pour chaque \u00e9quipe, un responsable d\u00e9di\u00e9.<\/li><\/ul><p><br><\/p><h2>\ud83d\udd39 <strong>2 \u2013 R\u00e9sultats partiels des challenges<\/strong><\/h2><p>Quelques belles performances \u00e0 ce stade de la saison :<\/p><p>\ud83c\udfc5 <strong>V\u00e9t\u00e9rans<\/strong> (15 \u00e9quipes engag\u00e9es)<\/p><p>Deux de nos \u00e9quipes pointent \u00e0 la <strong>4\u1d49 et 5\u1d49 place<\/strong> apr\u00e8s le 4\u1d49 tour. La troisi\u00e8me reste motiv\u00e9e malgr\u00e9 un classement plus bas.<\/p><p>\ud83c\udfc5 <strong>Casin<\/strong> (8 \u00e9quipes engag\u00e9es)<\/p><p>Notre \u00e9quipe se situe actuellement <strong>au milieu du classement<\/strong> apr\u00e8s quatre tours.<\/p><p>\ud83c\udfc5 <strong>Foulon<\/strong> (4 \u00e9quipes engag\u00e9es)<\/p><p>Super d\u00e9but ! Une \u00e9quipe est <strong>1\u02b3\u1d49<\/strong>, l\u2019autre occupe la <strong>3\u1d49 place<\/strong> apr\u00e8s deux tours.<\/p><p>\ud83c\udfc5 <strong>Flambeau<\/strong> (8 \u00e9quipes engag\u00e9es)<\/p><p>Excellente performance : Jou\u00e9 est <strong>en t\u00eate du classement<\/strong> apr\u00e8s quatre tours !<\/p><p><br><\/p><h2>\ud83d\udd39 <strong>3 \u2013 Comp\u00e9titions internes<\/strong><\/h2><p>Les comp\u00e9titions <strong>Libre<\/strong> et <strong>Bande<\/strong> sont r\u00e9guli\u00e8rement suivies avec une fr\u00e9quentation moyenne de <strong>18 %<\/strong>, m\u00eame si elle varie selon les joueurs inscrits.<\/p><p>La participation est plus faible pour les autres disciplines, mais l\u2019esprit de comp\u00e9tition reste bien pr\u00e9sent !<\/p><p><br><\/p><h2>\ud83d\udd39 <strong>4 \u2013 Comp\u00e9titions individuelles CSDB37<\/strong><\/h2><p>Quatre joueurs repr\u00e9sentent le club dans plusieurs disciplines : <strong>libre<\/strong>, <strong>bande<\/strong> et <strong>trois bandes<\/strong>.<\/p><p>Les r\u00e9sultats du premier tour restent <strong>provisoires<\/strong>, mais la motivation est bien l\u00e0 !<\/p><p><br><\/p><p><br><\/p><p>\ud83d\udc4f <strong>Bravo \u00e0 tous les joueurs pour leur engagement, leur bonne humeur et leur esprit sportif !<\/strong><\/p><p><br><\/p><p>Continuons sur cette belle dynamique pour la suite de la saison.<\/p><p>Allez Jou\u00e9-L\u00e8s-Tours !<\/p>","discipline":"carambole","discipline_id":2,"year":2025,"favoris":false,"image":"files\/a2753a3bea67bdf240e2e537b5098965.png","image_url":"http:\/\/localhost:8000\/files\/a2753a3bea67bdf240e2e537b5098965.png","video":null,"created_at":"2025-12-05T11:00:00.000000Z","updated_at":"2025-12-05T10:54:40.000000Z"},{"id":107,"title":"\ud83c\udfb1 Tournoi R\u00e9gional Blackball n\u00b03 2025 \u00e0 Jou\u00e9-L\u00e8s-Tours","slug":"tournoi-regional-blackball-n3-2025-a-joue-les-tours","excerpt":"&nbsp;Gymnase Matarazzo&nbsp;Du 12 au 14 d\u00e9cembre 2025Ce week-end restera une tr\u00e8s belle \u00e9tape dans la vie du club&nbsp;Il s\u2019agissait de la&nbsp;premi...","content":"<p><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t2d\/1\/16\/1f4cd.png\" alt=\"\ud83d\udccd\" height=\"16\" width=\"16\">&nbsp;Gymnase Matarazzo<\/p><p><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t7e\/1\/16\/1f4c5.png\" alt=\"\ud83d\udcc5\" height=\"16\" width=\"16\">&nbsp;Du 12 au 14 d\u00e9cembre 2025<\/p><p><br><\/p><p>Ce week-end restera une tr\u00e8s belle \u00e9tape dans la vie du club&nbsp;<img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t6c\/1\/16\/1f499.png\" alt=\"\ud83d\udc99\" height=\"16\" width=\"16\"><\/p><p><br><\/p><p>Il s\u2019agissait de la&nbsp;premi\u00e8re organisation d\u2019un tournoi r\u00e9gional&nbsp;depuis le changement de pr\u00e9sident et la r\u00e9organisation de l\u2019\u00e9quipe dirigeante. Et quelle r\u00e9ussite !<\/p><p><br><\/p><p><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/tfe\/1\/16\/1f44f.png\" alt=\"\ud83d\udc4f\" height=\"16\" width=\"16\">&nbsp;Les b\u00e9n\u00e9voles ont r\u00e9pondu pr\u00e9sents, et en masse !<\/p><p>Gr\u00e2ce \u00e0 votre mobilisation, l\u2019installation \u00e9tait quasiment finalis\u00e9e d\u00e8s le&nbsp;jeudi soir \u00e0 23h15, le d\u00e9montage s\u2019est termin\u00e9&nbsp;dimanche \u00e0 20h, permettant aux b\u00e9n\u00e9voles du lundi matin de finaliser le rangement dans le calme et la s\u00e9r\u00e9nit\u00e9.<\/p><p><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t96\/1\/16\/1f37b.png\" alt=\"\ud83c\udf7b\" height=\"16\" width=\"16\">&nbsp;Mention sp\u00e9ciale \u00e0 la buvette&nbsp;:<\/p><p>Le roulement parfaitement organis\u00e9 par&nbsp;Isabelle&nbsp;a permis d\u2019\u00e9quilibrer les t\u00e2ches et de vous accueillir tout le week-end avec le sourire.<\/p><p><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t80\/1\/16\/1f64f.png\" alt=\"\ud83d\ude4f\" height=\"16\" width=\"16\">&nbsp;Un immense MERCI \u00e0 tous les b\u00e9n\u00e9voles, sans qui rien ne serait possible. Vous \u00eates la force du club&nbsp;<img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t6c\/1\/16\/2764.png\" alt=\"\u2764\ufe0f\" height=\"16\" width=\"16\"><\/p><p><br><\/p><p>Nous tenions \u00e9galement \u00e0 remercier chaleureusement&nbsp;l\u2019\u00e9quipe municipale,&nbsp;Mr Osmond&nbsp;et&nbsp;Mr Cravenaud, pour sa pr\u00e9sence lors de la remise des troph\u00e9es.<\/p><p>Merci \u00e0&nbsp;Mme Patry&nbsp;(directrice des sports de Jou\u00e9-L\u00e8s-Tours) d\u2019\u00eatre pass\u00e9e nous voir le samedi, ainsi qu\u2019\u00e0&nbsp;Mr Moulay&nbsp;(vice-pr\u00e9sident de la r\u00e9gion)&nbsp;pour sa venue&nbsp;dimanche, \u00e0 l\u2019improviste, t\u00e9moignant de l\u2019int\u00e9r\u00eat port\u00e9 \u00e0 la vie sportive et associative locale.<\/p><p>Votre pr\u00e9sence et votre soutien sont tr\u00e8s appr\u00e9ci\u00e9s par le club et ses b\u00e9n\u00e9voles&nbsp;<img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t80\/1\/16\/1f64f.png\" alt=\"\ud83d\ude4f\" height=\"16\" width=\"16\"><\/p><p><br><\/p><h5><strong style=\"color: rgb(101, 104, 108);\"><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/tbe\/1\/16\/1f3c6.png\" alt=\"\ud83c\udfc6\" height=\"16\" width=\"16\">&nbsp;R\u00c9SULTATS SPORTIFS \u2013 BCJ EN HAUSSE !<\/strong><\/h5><p>Le BCJ a clairement&nbsp;hauss\u00e9 son niveau, avec de tr\u00e8s belles performances qui donnent beaucoup d\u2019espoir pour l\u2019avenir&nbsp;<img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t50\/1\/16\/1f525.png\" alt=\"\ud83d\udd25\" height=\"16\" width=\"16\"><\/p><p><br><\/p><h5><strong style=\"color: rgb(101, 104, 108);\"><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t60\/1\/16\/1f51d.png\" alt=\"\ud83d\udd1d\" height=\"16\" width=\"16\">&nbsp;Top Ligue<\/strong><\/h5><p><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t9e\/1\/16\/27a1.png\" alt=\"\u27a1\ufe0f\" height=\"16\" width=\"16\">&nbsp;Yvan SKNOEZECK&nbsp;s\u2019arr\u00eate en&nbsp;1\/8e de finale&nbsp;et se classe&nbsp;7e au g\u00e9n\u00e9ral<\/p><p><br><\/p><h5><strong style=\"color: rgb(101, 104, 108);\"><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/te9\/1\/16\/2640.png\" alt=\"\u2640\ufe0f\" height=\"16\" width=\"16\"><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/teb\/1\/16\/2642.png\" alt=\"\u2642\ufe0f\" height=\"16\" width=\"16\">&nbsp;Mixte<\/strong><\/h5><p><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t9e\/1\/16\/27a1.png\" alt=\"\u27a1\ufe0f\" height=\"16\" width=\"16\">&nbsp;Darius &amp; Tarik&nbsp;r\u00e9alisent un superbe parcours en atteignant les&nbsp;1\/4 de finale<\/p><ul><li>Darius GANNAT&nbsp;(entr\u00e9 au 1er tour) remporte&nbsp;5 victoires<\/li><li>Tarik BOUATTAOUN, \u00e0 quelques secondes d\u2019\u00e9galiser pour acc\u00e9der aux 1\/2 finales, se fait rattraper par le timer\u2026<\/li><li><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t9e\/1\/16\/27a1.png\" alt=\"\u27a1\ufe0f\" height=\"16\" width=\"16\">&nbsp;Il se classe tout de m\u00eame&nbsp;10e au g\u00e9n\u00e9ral, une tr\u00e8s belle performance&nbsp;<img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t6c\/1\/16\/1f4aa.png\" alt=\"\ud83d\udcaa\" height=\"16\" width=\"16\"><\/li><\/ul><p><br><\/p><h5><strong style=\"color: rgb(101, 104, 108);\"><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t62\/1\/16\/1f9d1_200d_1f393.png\" alt=\"\ud83e\uddd1\u200d\ud83c\udf93\" height=\"16\" width=\"16\">&nbsp;U23<\/strong><\/h5><p><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t15\/1\/16\/1f948.png\" alt=\"\ud83e\udd48\" height=\"16\" width=\"16\">&nbsp;Victoire de Math\u00e9o BOUTEILLE<\/p><p><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t9e\/1\/16\/27a1.png\" alt=\"\u27a1\ufe0f\" height=\"16\" width=\"16\">&nbsp;Il se positionne&nbsp;2e au classement g\u00e9n\u00e9ral<\/p><p>Le club nourrit&nbsp;beaucoup d\u2019espoirs&nbsp;pour la suite&nbsp;<img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/ted\/1\/16\/1f4ab.png\" alt=\"\ud83d\udcab\" height=\"16\" width=\"16\"><\/p><h5><br><\/h5><h5><strong style=\"color: rgb(101, 104, 108);\"><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/tdf\/1\/16\/1f9d2.png\" alt=\"\ud83e\uddd2\" height=\"16\" width=\"16\">&nbsp;U15<\/strong><\/h5><p><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t94\/1\/16\/1f947.png\" alt=\"\ud83e\udd47\" height=\"16\" width=\"16\">&nbsp;Encore l\u2019or pour Cl\u00e9ment DA COSTA, qui continue de dominer le classement g\u00e9n\u00e9ral<\/p><p><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t9e\/1\/16\/27a1.png\" alt=\"\u27a1\ufe0f\" height=\"16\" width=\"16\">&nbsp;Le travail \u00e0 l\u2019entra\u00eenement paie, bravo \u00e0 toi&nbsp;<img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/tfe\/1\/16\/1f44f.png\" alt=\"\ud83d\udc4f\" height=\"16\" width=\"16\"><\/p><p><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/tfe\/1\/16\/1f44f.png\" alt=\"\ud83d\udc4f\" height=\"16\" width=\"16\">&nbsp;Bravo \u00e9galement \u00e0 Djino WAGON, demi-finaliste, qui se classe&nbsp;5e au g\u00e9n\u00e9ral<\/p><p><br><\/p><h5><strong style=\"color: rgb(101, 104, 108);\"><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/tfc\/1\/16\/267f.png\" alt=\"\u267f\" height=\"16\" width=\"16\">&nbsp;Handi-fauteuil<\/strong><\/h5><p><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t94\/1\/16\/1f947.png\" alt=\"\ud83e\udd47\" height=\"16\" width=\"16\"><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t15\/1\/16\/1f948.png\" alt=\"\ud83e\udd48\" height=\"16\" width=\"16\">&nbsp;Finale 100 % jocondienne<\/p><p><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t9e\/1\/16\/27a1.png\" alt=\"\u27a1\ufe0f\" height=\"16\" width=\"16\">&nbsp;Victoire de&nbsp;Tristan PIERROT&nbsp;face \u00e0&nbsp;Thomas RAINEAU&nbsp;<img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t6c\/1\/16\/1f499.png\" alt=\"\ud83d\udc99\" height=\"16\" width=\"16\"><\/p><p><br><\/p><h5><strong style=\"color: rgb(101, 104, 108);\"><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t72\/1\/16\/1f9cd.png\" alt=\"\ud83e\uddcd\" height=\"16\" width=\"16\">&nbsp;Handi-debout<\/strong><\/h5><p><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t9e\/1\/16\/27a1.png\" alt=\"\u27a1\ufe0f\" height=\"16\" width=\"16\">&nbsp;J\u00e9r\u00f4me JUSSY&nbsp;s\u2019arr\u00eate aux portes des&nbsp;1\/2 finales<\/p><p><br><\/p><h5><strong style=\"color: rgb(101, 104, 108);\"><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/ta9\/1\/16\/1f474.png\" alt=\"\ud83d\udc74\" height=\"16\" width=\"16\">&nbsp;V\u00e9t\u00e9rans<\/strong><\/h5><p><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t9e\/1\/16\/27a1.png\" alt=\"\u27a1\ufe0f\" height=\"16\" width=\"16\">&nbsp;Darius GANNAT&nbsp;s\u2019incline en&nbsp;1\/8e de finale, \u00e0 tr\u00e8s peu de choses pr\u00e8s<\/p><p><br><\/p><h5><strong style=\"color: rgb(101, 104, 108);\"><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t8b\/1\/16\/1f465.png\" alt=\"\ud83d\udc65\" height=\"16\" width=\"16\">&nbsp;CHAMPIONNATS PAR \u00c9QUIPES<\/strong><\/h5><h5><strong style=\"color: rgb(101, 104, 108);\"><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/tef\/1\/16\/1f535.png\" alt=\"\ud83d\udd35\" height=\"16\" width=\"16\">&nbsp;\u00c9quipe DR2 \u2013 Jou\u00e9 1<\/strong><\/h5><p><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t9e\/1\/16\/27a1.png\" alt=\"\u27a1\ufe0f\" height=\"16\" width=\"16\">&nbsp;Journ\u00e9e frustrante pour cette&nbsp;premi\u00e8re saison en DR2,&nbsp;le r\u00e9sultat n''est pas repr\u00e9sentatif du niveau de jeu r\u00e9alis\u00e9.<\/p><ul><li>2 d\u00e9faites \u00e0&nbsp;une partie du point d\u00e9fensif<\/li><li>1 \u00e9galit\u00e9 apr\u00e8s avoir men\u00e9&nbsp;8\u20136<\/li><li><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/tfb\/1\/16\/1f5e3.png\" alt=\"\ud83d\udde3\ufe0f\" height=\"16\" width=\"16\">&nbsp;<em>\u00ab C\u2019est rageant, mais encourageant ! \u00bb<\/em>&nbsp;(le capitaine)<\/li><li><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t9e\/1\/16\/27a1.png\" alt=\"\u27a1\ufe0f\" height=\"16\" width=\"16\">&nbsp;8e position&nbsp;au classement provisoire<\/li><\/ul><h5><br><\/h5><h5><strong style=\"color: rgb(101, 104, 108);\"><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/tef\/1\/16\/1f535.png\" alt=\"\ud83d\udd35\" height=\"16\" width=\"16\">&nbsp;\u00c9quipes DR3<\/strong><\/h5><ul><li>Jou\u00e9 2&nbsp;: 1 victoire, 1 nul, 1 d\u00e9faite<\/li><li><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t9e\/1\/16\/27a1.png\" alt=\"\u27a1\ufe0f\" height=\"16\" width=\"16\">&nbsp;7e position&nbsp;\u2013 tout reste jouable, mais il va falloir serrer le jeu&nbsp;<img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t52\/1\/16\/1f527.png\" alt=\"\ud83d\udd27\" height=\"16\" width=\"16\"><\/li><li>Jou\u00e9 4&nbsp;: premi\u00e8re saison en DR3<\/li><li><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t9e\/1\/16\/27a1.png\" alt=\"\u27a1\ufe0f\" height=\"16\" width=\"16\">&nbsp;D\u00e9buts difficiles avec 2 d\u00e9faites, mais une&nbsp;belle victoire pour conclure la journ\u00e9e<\/li><li><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t9e\/1\/16\/27a1.png\" alt=\"\u27a1\ufe0f\" height=\"16\" width=\"16\">&nbsp;8e position&nbsp;provisoire<\/li><\/ul><p><br><\/p><p><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t6c\/1\/16\/1f499.png\" alt=\"\ud83d\udc99\" height=\"16\" width=\"16\">&nbsp;Bravo \u00e0 tous les joueurs, b\u00e9n\u00e9voles et encadrants<\/p><p>Ce tournoi montre que le BCJ est&nbsp;sur la bonne voie, sportivement et humainement.<\/p><p>L\u2019avenir s\u2019annonce prometteur&nbsp;<img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t9a\/1\/16\/1f3b1.png\" alt=\"\ud83c\udfb1\" height=\"16\" width=\"16\"><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t50\/1\/16\/1f525.png\" alt=\"\ud83d\udd25\" height=\"16\" width=\"16\"><\/p><p><br><\/p><p><br><\/p><p><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/tfe\/1\/16\/1f3e8.png\" alt=\"\ud83c\udfe8\" height=\"16\" width=\"16\"> partenaires :<\/p><p>- Kyriad Jou\u00e9-l\u00e8s-Tours&nbsp;<img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/tb3\/1\/16\/1f517.png\" alt=\"\ud83d\udd17\" height=\"16\" width=\"16\">&nbsp;<a href=\"http:\/\/www.kyriad-tours-joue-les-tours.fr\/?fbclid=IwZXh0bgNhZW0CMTAAYnJpZBEwbmZ4VjJMa1RMcEk2dDI3cXNydGMGYXBwX2lkEDIyMjAzOTE3ODgyMDA4OTIAAR7-JfGNrJBUt-j9NAM6GnFzlUJr-GwWLjd182KVNl4Q3SrUmh7nqfHbsxQkDQ_aem_MQBpjc2WakouIFyPLhiUEg\" rel=\"noopener noreferrer\" target=\"_blank\" style=\"background-color: transparent; color: rgb(0, 100, 209);\">www.kyriad-tours-joue-les-tours.fr<\/a><\/p><p>- Brit Hotel Jou\u00e9-l\u00e8s-Tours&nbsp;<img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/tb3\/1\/16\/1f517.png\" alt=\"\ud83d\udd17\" height=\"16\" width=\"16\">&nbsp;<a href=\"http:\/\/www.hotel-tours.brithotel.fr\/?fbclid=IwZXh0bgNhZW0CMTAAYnJpZBEwbmZ4VjJMa1RMcEk2dDI3cXNydGMGYXBwX2lkEDIyMjAzOTE3ODgyMDA4OTIAAR6ZOekG3EzV1DnO5WJUgM45NTYow7UwRSokVz2gUmyLLWj9YlFkwmiQXh1fLg_aem_V_g6Se1DiTswqF8N2k_e4w\" rel=\"noopener noreferrer\" target=\"_blank\" style=\"background-color: transparent; color: rgb(0, 100, 209);\">www.hotel-tours.brithotel.fr<\/a><\/p><p><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t80\/1\/16\/1f64f.png\" alt=\"\ud83d\ude4f\" height=\"16\" width=\"16\">&nbsp;Un grand merci \u00e0 Bulldog-Billard pour son soutien et la qualit\u00e9 de ses \u00e9quipements&nbsp;<img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/tfe\/1\/16\/1f44f.png\" alt=\"\ud83d\udc4f\" height=\"16\" width=\"16\">&nbsp;<img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/tb3\/1\/16\/1f517.png\" alt=\"\ud83d\udd17\" height=\"16\" width=\"16\">&nbsp;<a href=\"http:\/\/www.bulldog-billard.com\/?fbclid=IwZXh0bgNhZW0CMTAAYnJpZBEwbmZ4VjJMa1RMcEk2dDI3cXNydGMGYXBwX2lkEDIyMjAzOTE3ODgyMDA4OTIAAR7Mjws2HvxGwrWy1Yo2rIXLuqsCeE79eD8sckAas2fEWFeElhuDRqd7wwlMeA_aem_yIt4rsjXOSnoYLBwwDfR8Q\" rel=\"noopener noreferrer\" target=\"_blank\" style=\"background-color: transparent; color: rgb(0, 100, 209);\">www.bulldog-billard.com<\/a>&nbsp;<\/p>","discipline":"blackball","discipline_id":1,"year":2025,"favoris":false,"image":"files\/a30f03dfbc77520c02094cd307716724.jpeg","image_url":"http:\/\/localhost:8000\/files\/a30f03dfbc77520c02094cd307716724.jpeg","video":null,"created_at":"2025-11-10T11:00:00.000000Z","updated_at":"2025-12-16T22:33:14.000000Z"},{"id":106,"title":"\ud83c\udfc5 Christophe Lambert s\u2019impose au tournoi national am\u00e9ricain \u2013 Jeu de la 10 \u2013 \u00e0 Cergy","slug":"christophe-lambert-simpose-au-tournoi-national-americain-jeu-de-la-10-a-cergy","excerpt":"Les 11 et 12 octobre 2025, le billard club de Cergy accueillait le premier tournoi national de billard am\u00e9ricain \u2013 Jeu de la 10 \u2013 de la saison, r\u00e9unis...","content":"<p>Les <strong>11 et 12 octobre 2025<\/strong>, le <strong>billard club de Cergy<\/strong> accueillait le <strong>premier tournoi national de billard am\u00e9ricain \u2013 Jeu de la 10 \u2013<\/strong> de la saison, r\u00e9unissant <strong>48 joueurs<\/strong> venus de toute la France.<\/p><p><br><\/p><p>Habituellement sp\u00e9cialiste du <strong>Blackball<\/strong>, <strong>Christophe Lambert<\/strong> a une nouvelle fois d\u00e9montr\u00e9 toute l\u2019\u00e9tendue de son talent en s\u2019imposant dans cette discipline voisine. Il a r\u00e9alis\u00e9 un <strong>parcours parfait<\/strong>, remportant <strong>tous ses matchs<\/strong>, dont la <strong>finale sur le score de 7 \u00e0 3<\/strong>.<\/p><p>Une victoire \u00e9clatante qui illustre sa polyvalence et son haut niveau de jeu, quelle que soit la table ou la discipline.<\/p><p><br><\/p><p>\ud83d\udd17 <strong>R\u00e9sultats complets sur CueScore :<\/strong><\/p><p><a href=\"https:\/\/urls.fr\/GKKbAa\" rel=\"noopener noreferrer\" target=\"_blank\">https:\/\/urls.fr\/GKKbAa<\/a><\/p>","discipline":"americain","discipline_id":4,"year":2025,"favoris":false,"image":null,"image_url":null,"video":"https:\/\/www.youtube.com\/embed\/kTjKBXM66rY","created_at":"2025-10-12T21:00:00.000000Z","updated_at":"2025-11-07T15:18:01.000000Z"},{"id":105,"title":"\ud83c\udfc6 Oph\u00e9lie Laval en 1\/8e de finale du 2025 Asian Open Women Heyball Championship","slug":"ophelie-laval-en-18e-de-finale-du-2025-asian-open-women-heyball-championship","excerpt":"Du 8 au 11 octobre 2025, le prestigieux Asian Open Women Heyball Championship s\u2019est tenu au Mena Tyche Hotel d\u2019Amman (Jordanie).Parmi les 29 participa...","content":"<p>Du <strong>8 au 11 octobre 2025<\/strong>, le prestigieux <strong>Asian Open Women Heyball Championship<\/strong> s\u2019est tenu au <strong>Mena Tyche Hotel d\u2019Amman (Jordanie)<\/strong>.<\/p><p><br><\/p><p>Parmi les <strong>29 participantes<\/strong>, la France \u00e9tait repr\u00e9sent\u00e9e par <strong>Oph\u00e9lie Laval<\/strong>, accompagn\u00e9e de <strong>Marion Jude<\/strong>.<\/p><p>Pour sa premi\u00e8re participation \u00e0 cette comp\u00e9tition d\u2019envergure internationale, Oph\u00e9lie a r\u00e9alis\u00e9 un beau parcours. Elle s\u2019est impos\u00e9e \u00e0 <strong>deux reprises<\/strong> avant de s\u2019incliner en <strong>1\/8e de finale<\/strong>, apr\u00e8s un match disput\u00e9 face \u00e0 une adversaire exp\u00e9riment\u00e9e.<\/p><p><br><\/p><p>Une performance encourageante qui confirme la progression d\u2019Oph\u00e9lie sur la sc\u00e8ne internationale et son engagement \u00e0 porter haut les couleurs fran\u00e7aises dans la discipline du Heyball.<\/p>","discipline":"americain","discipline_id":4,"year":2025,"favoris":false,"image":"files\/59afdf6a7bbc78807c32e6ab56d1d0aa.jpg","image_url":"http:\/\/localhost:8000\/files\/59afdf6a7bbc78807c32e6ab56d1d0aa.jpg","video":null,"created_at":"2025-10-12T10:00:00.000000Z","updated_at":"2025-10-12T10:00:00.000000Z"},{"id":104,"title":"Challenge V\u00e9t\u00e9rans : un bon d\u00e9part pour le BCJ !","slug":"challenge-veterans-un-bon-depart-pour-le-bcj","excerpt":"La premi\u00e8re journ\u00e9e du Challenge V\u00e9t\u00e9rans s\u2019est d\u00e9roul\u00e9e ce jeudi 2 octobre au club de Jou\u00e9-l\u00e8s-Tours.Nos trois \u00e9quipes \u00e9taient sur le pont pour cette...","content":"<p>La premi\u00e8re journ\u00e9e du <strong>Challenge V\u00e9t\u00e9rans<\/strong> s\u2019est d\u00e9roul\u00e9e ce <strong>jeudi 2 octobre<\/strong> au club de Jou\u00e9-l\u00e8s-Tours.<\/p><p><br><\/p><p>Nos trois \u00e9quipes \u00e9taient sur le pont pour cette reprise de la saison.<\/p><p>Le matin, <strong>Jou\u00e9 3<\/strong> s\u2019est impos\u00e9e avec autorit\u00e9 face \u00e0 <strong>Loches 3<\/strong> sur le score de <strong>12 \u00e0 4<\/strong>.<\/p><p>L\u2019apr\u00e8s-midi, les \u00e9quipes <strong>Jou\u00e9 1<\/strong> et <strong>Jou\u00e9 2<\/strong> se sont affront\u00e9es dans une rencontre \u00e9quilibr\u00e9e, qui s\u2019est sold\u00e9e par un <strong>match nul 8 \u00e0 8<\/strong>.<\/p><p><br><\/p><p>\u00c0 noter la belle performance de <strong>Jos\u00e9-Manuel Soares<\/strong> (deuxi\u00e8me \u00e0 partir de la gauche sur la photo) qui r\u00e9alise une <strong>moyenne de 4.286<\/strong> !<\/p><p><br><\/p><p>Une premi\u00e8re journ\u00e9e prometteuse pour nos V\u00e9t\u00e9rans, qui lancent de belle mani\u00e8re leur saison.<\/p><p><em>(Ci-joint : les deux \u00e9quipes de l\u2019apr\u00e8s-midi)<\/em><\/p>","discipline":"carambole","discipline_id":2,"year":2025,"favoris":false,"image":"files\/fce45db72e6f69ca306f219b5d6bbba2.png","image_url":"http:\/\/localhost:8000\/files\/fce45db72e6f69ca306f219b5d6bbba2.png","video":null,"created_at":"2025-10-03T10:00:00.000000Z","updated_at":"2025-10-12T21:42:26.000000Z"},{"id":103,"title":"Composition des \u00e9quipes carambole pour la saison 2025-2026","slug":"composition-des-equipes-carambole-pour-la-saison-2025-2026","excerpt":"","content":"<p><br><\/p>","discipline":"carambole","discipline_id":2,"year":2025,"favoris":false,"image":"files\/1962cfd2765918d1636b6b6ac26cb7c1.jpg","image_url":"http:\/\/localhost:8000\/files\/1962cfd2765918d1636b6b6ac26cb7c1.jpg","video":null,"created_at":"2025-09-20T10:00:00.000000Z","updated_at":"2025-09-21T10:00:00.000000Z"}],"meta":{"count":47,"current_page":1,"last_page":5,"per_page":10,"from":1,"to":10,"total":47},"links":{"first":"http:\/\/localhost:8000\/api\/v1\/posts?page=1","last":"http:\/\/localhost:8000\/api\/v1\/posts?page=5","prev":null,"next":"http:\/\/localhost:8000\/api\/v1\/posts?page=2"},"error":null}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '56'
-          access-control-allow-origin: '*'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: api/v1/posts/favoris
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Retourne les articles marqués comme favoris.'
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 200
-        content: '{"data":[{"id":112,"title":"2026 - Tournoi National n\u00b04 - Villeneuve-sur-Lot","slug":"2026-tournoi-national-n4-villeneuve-sur-lot","excerpt":"&nbsp;Du 31 janvier au 1er f\u00e9vrier 2026Un week-end intense pour nos joueurs, avec de tr\u00e8s beaux r\u00e9sultats \u00e0 la cl\u00e9.&nbsp;Blackball MasterVictoire d\u2019Al...","content":"<h5><strong style=\"color: rgb(101, 104, 108);\"><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t7e\/1\/16\/1f4c5.png\" alt=\"\ud83d\udcc5\" height=\"16\" width=\"16\">&nbsp;<em>Du 31 janvier au 1er f\u00e9vrier 2026<\/em><\/strong><\/h5><p class=\"ql-indent-1\">Un week-end intense pour nos joueurs, avec de tr\u00e8s beaux r\u00e9sultats \u00e0 la cl\u00e9.<\/p><p><br><\/p><h5><strong class=\"ql-size-large\" style=\"color: rgb(101, 104, 108);\"><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/tbe\/1\/16\/1f3c6.png\" alt=\"\ud83c\udfc6\" height=\"16\" width=\"16\">&nbsp;Blackball Master<\/strong><\/h5><ul><li>Victoire d\u2019Alex Buscetti&nbsp;\u2014&nbsp;<em>sa premi\u00e8re, et avec la mani\u00e8re !<\/em><\/li><\/ul><p class=\"ql-indent-2\">Score final :&nbsp;8\u20134, un match parfaitement ma\u00eetris\u00e9. Gr\u00e2ce \u00e0 cette performance,&nbsp;Alex grimpe \u00e0 la 3\u1d49 place du classement g\u00e9n\u00e9ral.<\/p><ul><li>&nbsp;Christophe Lambert&nbsp;s\u2019arr\u00eate en&nbsp;1\/2 finale<\/li><li>&nbsp;\u00c9lie Christidis&nbsp;atteint les&nbsp;1\/4 de finale<\/li><\/ul><p><br><\/p><h5><strong class=\"ql-size-large\" style=\"color: rgb(101, 104, 108);\"><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/te9\/1\/16\/2640.png\" alt=\"\u2640\ufe0f\" height=\"16\" width=\"16\">&nbsp;Cat\u00e9gorie F\u00e9minine<\/strong><\/h5><ul><li>Oph\u00e9lie Laval&nbsp;r\u00e9alise un tr\u00e8s beau parcours et atteint la&nbsp;finale<\/li><\/ul><p class=\"ql-indent-2\">Un jeu solide tout au long du tournoi, mais la victoire lui \u00e9chappe.<\/p><p class=\"ql-indent-2\">Elle se positionne d\u00e9sormais&nbsp;5\u1d49 au classement g\u00e9n\u00e9ral<\/p><p><br><\/p><h5><strong class=\"ql-size-large\" style=\"color: rgb(101, 104, 108);\"><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t8d\/1\/16\/1f500.png\" alt=\"\ud83d\udd00\" height=\"16\" width=\"16\">&nbsp;Cat\u00e9gorie Mixte<\/strong><\/h5><ul><li>J\u00e9r\u00f4me L''Anthoen&nbsp;atteint les&nbsp;1\/4 de finale&nbsp;apr\u00e8s&nbsp;4 matchs remport\u00e9s.<\/li><\/ul><p class=\"ql-indent-2\">Malgr\u00e9 une d\u00e9faite au 1er tour du tournoi v\u00e9t\u00e9ran, il r\u00e9alise une tr\u00e8s belle op\u00e9ration au mixte.<\/p><p class=\"ql-indent-2\">4\u1d49 place au classement g\u00e9n\u00e9ral&nbsp;!<\/p><p><br><\/p><h5><strong class=\"ql-size-large\" style=\"color: rgb(101, 104, 108);\"><img src=\"https:\/\/static.xx.fbcdn.net\/images\/emoji.php\/v9\/t8b\/1\/16\/1f465.png\" alt=\"\ud83d\udc65\" height=\"16\" width=\"16\">&nbsp;Comp\u00e9tition \u00c9quipes \u2013 DN1<\/strong><\/h5><ul><li><strong>Jou\u00e9 1<\/strong><\/li><\/ul><p class=\"ql-indent-2\">3 victoires en 3 matchs<\/p><p class=\"ql-indent-2\">Dernier match remport\u00e9 avec le&nbsp;point offensif&nbsp;et&nbsp;5 fermes<\/p><p class=\"ql-indent-2\">Jou\u00e9 1 conserve sa 2\u1d49 place au classement<\/p><ul><li><strong>Jou\u00e9 2<\/strong><\/li><\/ul><p class=\"ql-indent-2\">Victoire lors du premier match<\/p><p class=\"ql-indent-2\">D\u00e9faites sur les deux suivants, avec&nbsp;1 point d\u00e9fensif&nbsp;r\u00e9cup\u00e9r\u00e9<\/p><p class=\"ql-indent-2\">Une journ\u00e9e compliqu\u00e9e qui les fait descendre \u00e0 la&nbsp;4\u1d49 place<\/p><p class=\"ql-indent-2\"><em>Mais rien n\u2019est jou\u00e9 : la saison continue !<\/em><\/p><p><br><\/p><p><br><\/p><p>F\u00e9licitations \u00e0 l\u2019ensemble des joueurs pour leur engagement et leurs performances<\/p>","discipline":"blackball","discipline_id":1,"year":2026,"favoris":true,"image":null,"image_url":null,"video":"https:\/\/sportenfrance.com\/videos\/x9yzs4s","created_at":"2026-02-02T08:11:13.000000Z","updated_at":"2026-02-02T08:31:49.000000Z"}],"meta":{"favoris":true,"count":1,"current_page":1,"last_page":1,"per_page":10,"from":1,"to":1,"total":1},"links":{"first":"http:\/\/localhost:8000\/api\/v1\/posts\/favoris?page=1","last":"http:\/\/localhost:8000\/api\/v1\/posts\/favoris?page=1","prev":null,"next":null},"error":null}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '55'
-          access-control-allow-origin: '*'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: 'api/v1/posts/discipline/{discipline}'
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: "Retourne les articles d'une discipline donnée."
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      discipline:
-        custom: []
-        name: discipline
-        description: 'The discipline.'
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      discipline: architecto
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 404
-        content: '{"data":null,"meta":[],"links":[],"error":{"code":"discipline_not_found","message":"Discipline not found"}}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '54'
-          access-control-allow-origin: '*'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: 'api/v1/posts/slug/{slug}'
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Retourne un article via son slug.'
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      slug:
-        custom: []
-        name: slug
-        description: 'The slug of the slug.'
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      slug: architecto
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 404
         content: |-
           {
-              "message": "No query results for model [App\\Models\\Post]."
+            "data": [
+              {
+                "id": 1,
+                "name": "Tours Métropole",
+                "logo": "partenaires/logo.png",
+                "logo_url": "https://example.com/partenaires/logo.png",
+                "website_url": "https://www.tours-metropole.fr",
+                "created_at": "2025-05-26T14:21:37.000000Z",
+                "updated_at": "2025-12-06T20:52:52.000000Z"
+              }
+            ],
+            "meta": {
+              "count": 1
+            },
+            "links": [],
+            "error": null
           }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '53'
-          access-control-allow-origin: '*'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: 'api/v1/posts/decade/{year}'
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: "Retourne les articles d'une décennie donnée."
-      description: |-
-        Exemple :
-        - 2023 → décennie 2020-2029
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      year:
-        custom: []
-        name: year
+        headers: []
         description: ''
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      year: architecto
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 500
-        content: |-
-          {
-              "message": "Server Error"
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '52'
-          access-control-allow-origin: '*'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: 'api/v1/posts/year/{year}'
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: "Retourne les articles d'une année donnée."
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      year:
-        custom: []
-        name: year
-        description: 'The year.'
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      year: architecto
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 500
-        content: |-
-          {
-              "message": "Server Error"
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '51'
-          access-control-allow-origin: '*'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: 'api/v1/posts/{id}'
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Retourne un article par son identifiant.'
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        custom: []
-        name: id
-        description: 'The ID of the post.'
-        required: true
-        example: dans-les-coulisses-des-jeunes-bleus-en-stage
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      id: dans-les-coulisses-des-jeunes-bleus-en-stage
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/posts/dans-les-coulisses-des-jeunes-bleus-en-stage could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: api/v1/licencies
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Retourne la liste complète des licenciés.'
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 200
-        content: '{"data":[{"id":1,"licence":"191100 S","nom":"ARROUAS","prenom":"ISABELLE","url":null},{"id":2,"licence":"190399 F","nom":"AUCHART","prenom":"THIERRY","url":null},{"id":3,"licence":"018952 Y","nom":"AUGER","prenom":"WILLIAM","url":null},{"id":4,"licence":"185211 R","nom":"BAILLON","prenom":"DIDIER","url":null},{"id":5,"licence":"126663 R","nom":"BARBIER","prenom":"JEAN FRANCOIS","url":null},{"id":6,"licence":"165139 Z","nom":"BARICAULT","prenom":"JEAN CHRISTOPHE","url":null},{"id":7,"licence":"173547 N","nom":"BARRAS","prenom":"MICHEL","url":null},{"id":8,"licence":"111666 W","nom":"BONNET","prenom":"MICHEL","url":null},{"id":9,"licence":"188587 L","nom":"BOUATTAOUN","prenom":"TARIK","url":null},{"id":10,"licence":"177407 J","nom":"BOURLIER","prenom":"ALEXANDRE","url":null},{"id":11,"licence":"137219 R","nom":"BOUTEILLE","prenom":"MATHEO","url":null},{"id":12,"licence":"180469 M","nom":"BOUYCHOU","prenom":"CYRIL","url":null},{"id":13,"licence":"148836 D","nom":"BRUNEAU","prenom":"MARTIN","url":null},{"id":14,"licence":"141625 D","nom":"BUSCETTI","prenom":"ALEXANDRE","url":null},{"id":15,"licence":"179777 K","nom":"BUZIAUX","prenom":"NANCY","url":null},{"id":16,"licence":"157681 S","nom":"CADINOT","prenom":"GREGORY","url":null},{"id":17,"licence":"174450 V","nom":"CARVALHO","prenom":"RAUL","url":null},{"id":18,"licence":"183753 G","nom":"CESVRE","prenom":"JEAN LOUIS","url":null},{"id":19,"licence":"183253 N","nom":"CHAS","prenom":"THIERRY","url":null},{"id":20,"licence":"131348 W","nom":"CHAUVIN","prenom":"ROLAND","url":null},{"id":21,"licence":"111518 E","nom":"CHERAMY","prenom":"DAVID","url":null},{"id":22,"licence":"141681 H","nom":"CHEVE","prenom":"BENJAMIN","url":null},{"id":23,"licence":"155556 H","nom":"CHRISTIDIS","prenom":"ELIE","url":null},{"id":24,"licence":"157999 N","nom":"COLDRICK","prenom":"PAUL","url":null},{"id":25,"licence":"159105 Q","nom":"CONCHON","prenom":"JEAN PIERRE","url":null},{"id":26,"licence":"104860 C","nom":"COSTARD","prenom":"ALAIN","url":null},{"id":27,"licence":"104861 D","nom":"COUTARD","prenom":"BRUNO","url":null},{"id":28,"licence":"181887 D","nom":"CROUZAT REYNES","prenom":"NICOLAS","url":null},{"id":29,"licence":"173585 E","nom":"DA COSTA","prenom":"CLEMENT","url":null},{"id":30,"licence":"173661 M","nom":"DA COSTA","prenom":"DAVID","url":null},{"id":31,"licence":"185890 E","nom":"DA CRUZ PEREIRA","prenom":"LUIS","url":null},{"id":32,"licence":"193794 W","nom":"DA SILVA FERREIRA","prenom":"JORGE","url":null},{"id":33,"licence":"020779 F","nom":"DANEL","prenom":"MICHEL","url":null},{"id":34,"licence":"162426 A","nom":"DENIS","prenom":"DIDIER","url":null},{"id":35,"licence":"150158 Q","nom":"DEROT","prenom":"JEAN YVES","url":null},{"id":36,"licence":"124564 Y","nom":"DEVAUD","prenom":"MARCEL","url":null},{"id":37,"licence":"192805 W","nom":"DHAOUADI","prenom":"TAHER","url":null},{"id":38,"licence":"181485 R","nom":"DOMMERY","prenom":"VITAL","url":null},{"id":39,"licence":"151465 L","nom":"DOS REIS VENDAS","prenom":"JOSE","url":null},{"id":40,"licence":"177415 S","nom":"DUBAN","prenom":"GUYLAINE","url":null},{"id":41,"licence":"187565 A","nom":"DUSSOUCHAUD","prenom":"DAVID","url":null},{"id":42,"licence":"190158 T","nom":"EL ATTARI","prenom":"ZAKARIA","url":null},{"id":43,"licence":"153043 B","nom":"FAGE","prenom":"PHILIPPE","url":null},{"id":44,"licence":"116369 T","nom":"FAURIE","prenom":"CHRISTOPHE","url":null},{"id":45,"licence":"180354 M","nom":"FERASSE","prenom":"CHRISTOPHE","url":null},{"id":46,"licence":"138473 X","nom":"FRAYSSE","prenom":"FREDERIC","url":null},{"id":47,"licence":"109197 X","nom":"GANNAT","prenom":"DARIUS","url":null},{"id":48,"licence":"181362 H","nom":"GOUAS","prenom":"ALINE","url":null},{"id":49,"licence":"173548 P","nom":"GOUAS","prenom":"PATRICK","url":null},{"id":50,"licence":"177408 K","nom":"GUEGAN","prenom":"JEAN MARIE","url":null},{"id":51,"licence":"177932 E","nom":"HERISSON","prenom":"JEROME","url":null},{"id":52,"licence":"177885 D","nom":"HERISSON","prenom":"MATHEO","url":null},{"id":53,"licence":"180470 N","nom":"HERITIER","prenom":"CELINE","url":null},{"id":54,"licence":"156524 K","nom":"JUSSY","prenom":"JEROME","url":null},{"id":55,"licence":"156527 N","nom":"L ANTHOEN","prenom":"JEROME","url":null},{"id":56,"licence":"121547 X","nom":"LAMBERT","prenom":"CHRISTOPHE","url":null},{"id":57,"licence":"151779 C","nom":"LARCHET","prenom":"GUY","url":null},{"id":58,"licence":"152188 X","nom":"LAVAL","prenom":"OPHELIE","url":null},{"id":59,"licence":"154187 V","nom":"LE NOACH","prenom":"PATRICK","url":null},{"id":60,"licence":"182214 J","nom":"LEFEBVRE","prenom":"ALEXANDRE","url":null},{"id":61,"licence":"182217 M","nom":"LEFEBVRE","prenom":"FABIEN","url":null},{"id":62,"licence":"182215 K","nom":"LEFEBVRE","prenom":"PAUL ANTOINE","url":null},{"id":63,"licence":"166523 D","nom":"LEGROS","prenom":"PHILIPPE","url":null},{"id":64,"licence":"192244 L","nom":"LEGUY","prenom":"PATRICIA","url":null},{"id":65,"licence":"185892 G","nom":"LEMOIGNE","prenom":"DOMINIQUE","url":null},{"id":66,"licence":"103443 P","nom":"LEMOIGNE","prenom":"GERARD","url":null},{"id":67,"licence":"184162 B","nom":"LENEEZ","prenom":"QUENTIN","url":null},{"id":68,"licence":"141677 D","nom":"LEON","prenom":"MICHEL","url":null},{"id":69,"licence":"018276 Y","nom":"LEROUX","prenom":"ERIC","url":null},{"id":70,"licence":"104868 K","nom":"LEROUX","prenom":"JULIEN","url":null},{"id":71,"licence":"175790 B","nom":"LISSY","prenom":"MICHEL","url":null},{"id":72,"licence":"175398 A","nom":"LOYAU TULASNE","prenom":"THIERRY","url":null},{"id":73,"licence":"182058 P","nom":"MAHFOUDI","prenom":"ANASS","url":null},{"id":74,"licence":"188153 P","nom":"MAILLET","prenom":"CLAUDE","url":null},{"id":75,"licence":"177469 B","nom":"MAILLET","prenom":"ISABELLE","url":null},{"id":76,"licence":"184356 M","nom":"MAILLET","prenom":"JEAN MARC","url":null},{"id":77,"licence":"170602 M","nom":"MAILLET","prenom":"MICHAEL","url":null},{"id":78,"licence":"177470 C","nom":"MAILLET","prenom":"PATRICE","url":null},{"id":79,"licence":"018278 A","nom":"MARAIS","prenom":"JEAN CLAUDE","url":null},{"id":80,"licence":"133947 V","nom":"MARILLAUD","prenom":"PIERRE","url":null},{"id":81,"licence":"119340 A","nom":"MERCIER","prenom":"JEAN MARIE","url":null},{"id":82,"licence":"144532 Y","nom":"MICHEZ","prenom":"BASTIEN","url":null},{"id":83,"licence":"182056 M","nom":"MOUSSAMIH","prenom":"OMAR","url":null},{"id":84,"licence":"187521 C","nom":"NEERMAL","prenom":"SABINE","url":null},{"id":85,"licence":"177784 T","nom":"OLMEDA","prenom":"CHRISTIAN","url":null},{"id":86,"licence":"178096 H","nom":"ORTEGA","prenom":"BEATRICE","url":null},{"id":87,"licence":"168356 W","nom":"PALLUS","prenom":"CLAUDE","url":null},{"id":88,"licence":"131351 Z","nom":"PARIS","prenom":"MICHEL","url":null},{"id":89,"licence":"158309 A","nom":"PASCUTTO","prenom":"FABRICE","url":null},{"id":90,"licence":"146692 A","nom":"PELLISSIER","prenom":"SIMON","url":null},{"id":91,"licence":"013898 O","nom":"PERENNES","prenom":"JEAN YVES","url":null},{"id":92,"licence":"160792 Z","nom":"PIERROT","prenom":"TRISTAN","url":null},{"id":93,"licence":"177414 R","nom":"PIRES","prenom":"NICOLAS","url":null},{"id":94,"licence":"171306 C","nom":"PORTEVIN","prenom":"HUGO","url":null},{"id":95,"licence":"173909 G","nom":"RAINEAU","prenom":"THOMAS","url":null},{"id":96,"licence":"189149 X","nom":"RAVARD","prenom":"CHRISTOPHE","url":null},{"id":97,"licence":"166335 Z","nom":"REFAUVELET","prenom":"CHRISTIAN","url":null},{"id":98,"licence":"192118 Z","nom":"REMY","prenom":"NICOLAS","url":null},{"id":99,"licence":"189109 D","nom":"RETHIERE","prenom":"JEAN","url":null},{"id":100,"licence":"111670 A","nom":"RIBERA","prenom":"ANDREE","url":null},{"id":101,"licence":"122178 E","nom":"RIMPOT","prenom":"HENRI","url":null},{"id":102,"licence":"179958 G","nom":"ROBUCHON","prenom":"PHILIPPE","url":null},{"id":103,"licence":"182184 B","nom":"RUSSEIL","prenom":"MORGAN","url":null},{"id":104,"licence":"178088 Z","nom":"SKNOEZECK","prenom":"MAE","url":null},{"id":105,"licence":"110008 C","nom":"SKNOEZECK","prenom":"YVAN","url":null},{"id":106,"licence":"182458 Z","nom":"SOARES","prenom":"JOSE MANUEL","url":null},{"id":107,"licence":"178141 G","nom":"SOUVERAIN","prenom":"MICKAEL","url":null},{"id":108,"licence":"185893 H","nom":"SOW","prenom":"AMADOU","url":null},{"id":109,"licence":"157854 F","nom":"STORME","prenom":"ANTOINE","url":null},{"id":110,"licence":"179957 F","nom":"TOTAL","prenom":"GILLES","url":null},{"id":111,"licence":"145093 N","nom":"VACHER","prenom":"JEAN RENE","url":null},{"id":112,"licence":"018282 E","nom":"VIET","prenom":"CHRISTIAN","url":null},{"id":113,"licence":"192243 K","nom":"WADEY","prenom":"SOLVEGUE","url":null},{"id":114,"licence":"179413 P","nom":"WAGON","prenom":"DJINO","url":null},{"id":115,"licence":"179294 K","nom":"WAGON","prenom":"PIEDADE","url":null},{"id":116,"licence":"178350 J","nom":"WAGON","prenom":"TITO","url":null}],"meta":{"count":116},"links":[],"error":null}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '50'
-          access-control-allow-origin: '*'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: 'api/v1/licencies/search/{name}'
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Recherche des licenciés par nom, prénom ou numéro de licence.'
-      description: |-
-        La recherche est partielle (LIKE %value%).
-        Les résultats sont dédupliqués et limités aux champs utiles.
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      name:
-        custom: []
-        name: name
-        description: ''
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      name: architecto
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 200
-        content: '{"data":[],"meta":{"search":"architecto","count":0},"links":[],"error":null}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '49'
-          access-control-allow-origin: '*'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: api/v1/license-import/batches
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: "Retourne la liste paginée des batchs d'import de licences."
-      description: |-
-        Filtres disponibles :
-        - source
-        - status
-        - is_active
-        - trigger_type
-        - from
-        - to
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 401
-        content: '{"message":"Unauthenticated."}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: 'api/v1/license-import/batches/{batch_id}'
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Retourne le rapport complet d’un batch d’import.'
-      description: 'Le rapport est construit par le service métier TelematBatchReportBuilder.'
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      batch_id:
-        custom: []
-        name: batch_id
-        description: 'The ID of the batch.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      batch_id: 1
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 401
-        content: '{"message":"Unauthenticated."}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: 'api/v1/license-import/batches/{batch_id}/report'
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Retourne le rapport complet d’un batch d’import.'
-      description: 'Alias explicite de show() pour les routes orientées rapport.'
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      batch_id:
-        custom: []
-        name: batch_id
-        description: 'The ID of the batch.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      batch_id: 1
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 401
-        content: '{"message":"Unauthenticated."}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: 'api/v1/license-import/batches/{batch_id}/diff'
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Retourne uniquement le diff de projection d’un batch.'
-      description: |-
-        Le diff permet de visualiser les insertions, mises à jour,
-        suppressions et lignes inchangées produites par la projection
-        vers la table des licenciés.
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      batch_id:
-        custom: []
-        name: batch_id
-        description: 'The ID of the batch.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      batch_id: 1
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 401
-        content: '{"message":"Unauthenticated."}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: api/v1/cuescore/rankings
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Liste les classements CueScore avec filtres optionnels.'
-      description: |-
-        Filtres disponibles :
-        - discipline
-        - scope
-        - ranking_type
-        - team_category
-        - is_active
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 200
-        content: '{"data":[{"id":1,"name":"US Demi Finale N1 SUD 2025-2026","cuescore_id":"79941976","url":"https:\/\/cuescore.com\/ranking\/US_Demi+Finale+N1+SUD_2025-2026\/79941976","source_type":"ranking","discipline":"americain","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":1},{"id":2,"name":"US Demi Finale N1 NORD 2025-2026","cuescore_id":"79941973","url":"https:\/\/cuescore.com\/ranking\/US_Demi+Finale+N1+NORD_2025-2026\/79941973","source_type":"ranking","discipline":"americain","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":2},{"id":3,"name":"US Finale France U17 2025-2026","cuescore_id":"79880440","url":"https:\/\/cuescore.com\/ranking\/US_finale+de+France+U17+2025-2026\/79880440","source_type":"ranking","discipline":"americain","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":3},{"id":4,"name":"US Classement TN N1 2025-2026","cuescore_id":"66292051","url":"https:\/\/cuescore.com\/ranking\/US_Classement+TN+N1++2025-2026\/66292051","source_type":"ranking","discipline":"americain","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":4},{"id":5,"name":"US CDF 2025-2026","cuescore_id":"74350597","url":"https:\/\/cuescore.com\/ranking\/US_CDF_2025+2026\/74350597","source_type":"ranking","discipline":"americain","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":5},{"id":6,"name":"US Classement TN Masters 2025-2026","cuescore_id":"66292048","url":"https:\/\/cuescore.com\/ranking\/US_Classement+TN+Masters+2025+2026\/66292048","source_type":"ranking","discipline":"americain","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":6},{"id":7,"name":"LBCVL Finale Ligue Americain 25-26","cuescore_id":"76092814","url":"https:\/\/cuescore.com\/ranking\/LBCVL+FINALE+LIGUE+AMERICAIN+25-26\/76092814","source_type":"ranking","discipline":"americain","scope":"regional","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":10},{"id":8,"name":"Snooker Classement Seniors 2025-2026","cuescore_id":"67004710","url":"https:\/\/cuescore.com\/ranking\/SNOOKER_Classement+Seniors+2025%252F2026\/67004710","source_type":"ranking","discipline":"snooker","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":20},{"id":9,"name":"Snooker Classement F\u00e9minin 2025-2026","cuescore_id":"67004704","url":"https:\/\/cuescore.com\/ranking\/SNOOKER_Classement+f\u00e9minin+2025%252F2026\/67004704","source_type":"ranking","discipline":"snooker","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":21},{"id":10,"name":"Snooker Classement TN Masters 2025-2026","cuescore_id":"67004686","url":"https:\/\/cuescore.com\/ranking\/SNOOKER_Classement+TN+Masters+2025-2026\/67004686","source_type":"ranking","discipline":"snooker","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":22},{"id":11,"name":"Snooker Classement national 2025-2026","cuescore_id":"67004695","url":"https:\/\/cuescore.com\/ranking\/SNOOKER_Classement+national+2025%252F2026\/67004695","source_type":"ranking","discipline":"snooker","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":23},{"id":12,"name":"CVL Snooker ZOuest","cuescore_id":"73214698","url":"https:\/\/cuescore.com\/tournament\/CVL+Snooker+ZOuest\/73214698#match-73214737","source_type":"tournament","discipline":"snooker","scope":"d\u00e9partemental","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":24},{"id":13,"name":"FFB - Blackball - TN - Handi Billard - 2025-2026","cuescore_id":"65726164","url":"https:\/\/cuescore.com\/ranking\/FFB+-+Blackball+-+TN+-+Handi+Billard\/65726164","source_type":"ranking","discipline":"blackball","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":25},{"id":14,"name":"FFB - Blackball - TN - Master - 2025-2026","cuescore_id":"65726161","url":"https:\/\/cuescore.com\/ranking\/FFB+-+Blackball+-+TN+-+Master\/65726161","source_type":"ranking","discipline":"blackball","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":26},{"id":15,"name":"FFB - Blackball - TN - Mixte National - 2025-2026","cuescore_id":"65726158","url":"https:\/\/cuescore.com\/ranking\/FFB+-+Blackball+-+TN+-+Mixte+National\/65726158","source_type":"ranking","discipline":"blackball","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":27},{"id":16,"name":"FFB - Blackball - TN - V\u00e9t\u00e9ran - 2025-2026","cuescore_id":"65726155","url":"https:\/\/cuescore.com\/ranking\/FFB+-+Blackball+-+TN+-+V%C3%A9t%C3%A9ran\/65726155","source_type":"ranking","discipline":"blackball","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":28},{"id":17,"name":"FFB - Blackball - TN - F\u00e9minin - 2025-2026","cuescore_id":"65726152","url":"https:\/\/cuescore.com\/ranking\/FFB+-+Blackball+-+TN+-+F%C3%A9minin\/65726152","source_type":"ranking","discipline":"blackball","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":29},{"id":18,"name":"FFB - Blackball - TN - Espoir - 2025-2026","cuescore_id":"65726149","url":"https:\/\/cuescore.com\/ranking\/FFB+-+Blackball+-+TN+-+Espoir\/65726149","source_type":"ranking","discipline":"blackball","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":30},{"id":19,"name":"FFB - Blackball - TN - Junior - 2025-2026","cuescore_id":"65726146","url":"https:\/\/cuescore.com\/ranking\/FFB+-+Blackball+-+TN+-+Junior\/65726146","source_type":"ranking","discipline":"blackball","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":31},{"id":20,"name":"TOP LIGUE 25-26","cuescore_id":"67097476","url":"https:\/\/cuescore.com\/ranking\/TOP+LIGUE+25-26\/67097476","source_type":"ranking","discipline":"blackball","scope":"regional","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":32},{"id":21,"name":"MIXTE 25-26","cuescore_id":"67097479","url":"https:\/\/cuescore.com\/ranking\/MIXTE+25-26\/67097479","source_type":"ranking","discipline":"blackball","scope":"regional","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":33},{"id":22,"name":"VETERAN 25-26","cuescore_id":"67097482","url":"https:\/\/cuescore.com\/ranking\/VETERAN+25-26\/67097482","source_type":"ranking","discipline":"blackball","scope":"regional","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":34},{"id":23,"name":"FEMININ 25-26","cuescore_id":"67097485","url":"https:\/\/cuescore.com\/ranking\/FEMININ+25-26\/67097485","source_type":"ranking","discipline":"blackball","scope":"regional","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":35},{"id":24,"name":"ESPOIR 25-26","cuescore_id":"67097488","url":"https:\/\/cuescore.com\/ranking\/ESPOIR+25-26\/67097488","source_type":"ranking","discipline":"blackball","scope":"regional","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":36},{"id":25,"name":"JUNIOR 25-26","cuescore_id":"67097494","url":"https:\/\/cuescore.com\/ranking\/JUNIOR+25-26\/67097494","source_type":"ranking","discipline":"blackball","scope":"regional","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":37},{"id":26,"name":"BENJAMIN 25-26","cuescore_id":"67097506","url":"https:\/\/cuescore.com\/ranking\/BENJAMIN+25-26\/67097506","source_type":"ranking","discipline":"blackball","scope":"regional","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":38},{"id":27,"name":"HANDI-DEBOUT 25-26","cuescore_id":"67097509","url":"https:\/\/cuescore.com\/ranking\/HANDI-DEBOUT+25-26\/67097509","source_type":"ranking","discipline":"blackball","scope":"regional","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":39},{"id":28,"name":"HANDI-FAUTEUIL 25-26","cuescore_id":"77825152","url":"https:\/\/cuescore.com\/ranking\/HANDI-FAUTEUIL+25-26\/77825152","source_type":"ranking","discipline":"blackball","scope":"regional","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":40},{"id":29,"name":"TRZ OUEST MIXTE 25-26","cuescore_id":"71389255","url":"https:\/\/cuescore.com\/ranking\/TRZ+OUEST+MIXTE+25-26\/71389255","source_type":"ranking","discipline":"blackball","scope":"d\u00e9partemental","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":41},{"id":30,"name":"TRZ OUEST FEMININ 25-26","cuescore_id":"71389252","url":"https:\/\/cuescore.com\/ranking\/TRZ+OUEST+FEMININ+25-26\/71389252","source_type":"ranking","discipline":"blackball","scope":"d\u00e9partemental","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":42},{"id":31,"name":"FFB - Blackball - Equipes - DN1 - 2025-2026","cuescore_id":"67490224","url":"https:\/\/cuescore.com\/tournament\/FFB+-+Blackball+-+Equipes+-+DN1+-+2025-2026\/67490224","source_type":"tournament","discipline":"blackball","scope":"national","ranking_type":"team","team_category":"DN1","season":"2025-2026","is_active":true,"sort_order":43},{"id":32,"name":"FFB - Blackball - Equipes - DN2 - 2025-2026","cuescore_id":"67490356","url":"https:\/\/cuescore.com\/tournament\/FFB+-+Blackball+-+Equipes+-+DN2+-+2025-2026\/67490356","source_type":"tournament","discipline":"blackball","scope":"national","ranking_type":"team","team_category":"DN2","season":"2025-2026","is_active":true,"sort_order":44},{"id":33,"name":"FFB - Blackball - Equipes - DN3 - 2025-2026","cuescore_id":"67490959","url":"https:\/\/cuescore.com\/tournament\/FFB+-+Blackball+-+Equipes+-+DN3+-+2025-2026\/67490959","source_type":"tournament","discipline":"blackball","scope":"national","ranking_type":"team","team_category":"DN3","season":"2025-2026","is_active":true,"sort_order":45},{"id":34,"name":"BB_CVL \u00c9QUIPE DR1 25-26","cuescore_id":"67097593","url":"https:\/\/cuescore.com\/tournament\/BB_CVL+\u00c9QUIPE+DR1+25-26\/67097593","source_type":"tournament","discipline":"blackball","scope":"regional","ranking_type":"team","team_category":"DR1","season":"2025-2026","is_active":true,"sort_order":46},{"id":35,"name":"BB CVL \u00c9QUIPE DR2 25-26","cuescore_id":"67097608","url":"https:\/\/cuescore.com\/tournament\/BB_CVL+\u00c9QUIPE+DR2+25-26\/67097608","source_type":"tournament","discipline":"blackball","scope":"regional","ranking_type":"team","team_category":"DR2","season":"2025-2026","is_active":true,"sort_order":47},{"id":36,"name":"BB CVL \u00c9QUIPE DR3 25-26","cuescore_id":"67097614","url":"https:\/\/cuescore.com\/tournament\/BB_CVL+\u00c9QUIPE+DR3+25-26\/67097614","source_type":"tournament","discipline":"blackball","scope":"regional","ranking_type":"team","team_category":"DR3","season":"2025-2026","is_active":true,"sort_order":48},{"id":37,"name":"CVL \u00c9QUIPE DR4 ZONE OUEST 25-26","cuescore_id":"69856342","url":"https:\/\/cuescore.com\/tournament\/CVL+\u00c9QUIPE+DR4+ZONE+OUEST+25-26\/69856342#match-69864133","source_type":"tournament","discipline":"blackball","scope":"d\u00e9partemental","ranking_type":"team","team_category":"DR4","season":"2025-2026","is_active":true,"sort_order":49}],"meta":{"count":37},"links":[],"error":null}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '48'
-          access-control-allow-origin: '*'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: api/v1/cuescore/club
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Vue agrégée des classements club basée sur des filtres query.'
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 200
-        content: '{"data":[{"ranking":{"id":1,"name":"US Demi Finale N1 SUD 2025-2026","cuescore_id":"79941976","url":"https:\/\/cuescore.com\/ranking\/US_Demi+Finale+N1+SUD_2025-2026\/79941976","source_type":"ranking","discipline":"americain","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":1},"fetch":{"id":1,"status":"success","fetched_at":"2026-04-22T18:27:14+02:00","http_status":200,"records_count":0,"is_active":true},"count":0,"data":[]},{"ranking":{"id":2,"name":"US Demi Finale N1 NORD 2025-2026","cuescore_id":"79941973","url":"https:\/\/cuescore.com\/ranking\/US_Demi+Finale+N1+NORD_2025-2026\/79941973","source_type":"ranking","discipline":"americain","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":2},"fetch":{"id":2,"status":"success","fetched_at":"2026-04-22T18:27:15+02:00","http_status":200,"records_count":0,"is_active":true},"count":0,"data":[]},{"ranking":{"id":3,"name":"US Finale France U17 2025-2026","cuescore_id":"79880440","url":"https:\/\/cuescore.com\/ranking\/US_finale+de+France+U17+2025-2026\/79880440","source_type":"ranking","discipline":"americain","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":3},"fetch":{"id":3,"status":"success","fetched_at":"2026-04-22T18:27:17+02:00","http_status":200,"records_count":8,"is_active":true},"count":0,"data":[]},{"ranking":{"id":4,"name":"US Classement TN N1 2025-2026","cuescore_id":"66292051","url":"https:\/\/cuescore.com\/ranking\/US_Classement+TN+N1++2025-2026\/66292051","source_type":"ranking","discipline":"americain","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":4},"fetch":{"id":4,"status":"success","fetched_at":"2026-04-22T18:27:20+02:00","http_status":200,"records_count":116,"is_active":true},"count":2,"data":[{"rank_position":5,"participant_name":"Christophe Lambert","participant_external_id":"1286610","participant_url":"https:\/\/cuescore.com\/player\/Christophe+Lambert\/1286610","points":"772.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":56,"licence":"121547 X","nom":"LAMBERT","prenom":"CHRISTOPHE"}},{"rank_position":82,"participant_name":"Christophe Faurie","participant_external_id":"31580935","participant_url":"https:\/\/cuescore.com\/player\/Christophe+Faurie\/31580935","points":"70.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":44,"licence":"116369 T","nom":"FAURIE","prenom":"CHRISTOPHE"}}]},{"ranking":{"id":5,"name":"US CDF 2025-2026","cuescore_id":"74350597","url":"https:\/\/cuescore.com\/ranking\/US_CDF_2025+2026\/74350597","source_type":"ranking","discipline":"americain","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":5},"fetch":{"id":5,"status":"success","fetched_at":"2026-04-22T18:27:23+02:00","http_status":200,"records_count":16,"is_active":true},"count":0,"data":[]},{"ranking":{"id":6,"name":"US Classement TN Masters 2025-2026","cuescore_id":"66292048","url":"https:\/\/cuescore.com\/ranking\/US_Classement+TN+Masters+2025+2026\/66292048","source_type":"ranking","discipline":"americain","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":6},"fetch":{"id":6,"status":"success","fetched_at":"2026-04-22T18:27:25+02:00","http_status":200,"records_count":16,"is_active":true},"count":0,"data":[]},{"ranking":{"id":7,"name":"LBCVL Finale Ligue Americain 25-26","cuescore_id":"76092814","url":"https:\/\/cuescore.com\/ranking\/LBCVL+FINALE+LIGUE+AMERICAIN+25-26\/76092814","source_type":"ranking","discipline":"americain","scope":"regional","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":10},"fetch":{"id":7,"status":"success","fetched_at":"2026-04-22T18:27:27+02:00","http_status":200,"records_count":8,"is_active":true},"count":0,"data":[]},{"ranking":{"id":8,"name":"Snooker Classement Seniors 2025-2026","cuescore_id":"67004710","url":"https:\/\/cuescore.com\/ranking\/SNOOKER_Classement+Seniors+2025%252F2026\/67004710","source_type":"ranking","discipline":"snooker","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":20},"fetch":{"id":8,"status":"success","fetched_at":"2026-04-22T18:27:29+02:00","http_status":200,"records_count":15,"is_active":true},"count":0,"data":[]},{"ranking":{"id":9,"name":"Snooker Classement F\u00e9minin 2025-2026","cuescore_id":"67004704","url":"https:\/\/cuescore.com\/ranking\/SNOOKER_Classement+f\u00e9minin+2025%252F2026\/67004704","source_type":"ranking","discipline":"snooker","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":21},"fetch":{"id":9,"status":"success","fetched_at":"2026-04-22T18:27:31+02:00","http_status":200,"records_count":9,"is_active":true},"count":1,"data":[{"rank_position":1,"participant_name":"Oph\u00e9lie Laval","participant_external_id":"30608668","participant_url":"https:\/\/cuescore.com\/player\/Oph%C3%A9lie+Laval\/30608668","points":"220.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":58,"licence":"152188 X","nom":"LAVAL","prenom":"OPHELIE"}}]},{"ranking":{"id":10,"name":"Snooker Classement TN Masters 2025-2026","cuescore_id":"67004686","url":"https:\/\/cuescore.com\/ranking\/SNOOKER_Classement+TN+Masters+2025-2026\/67004686","source_type":"ranking","discipline":"snooker","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":22},"fetch":{"id":10,"status":"success","fetched_at":"2026-04-22T18:27:33+02:00","http_status":200,"records_count":12,"is_active":true},"count":1,"data":[{"rank_position":12,"participant_name":"Oph\u00e9lie Laval","participant_external_id":"30608668","participant_url":"https:\/\/cuescore.com\/player\/Oph%C3%A9lie+Laval\/30608668","points":"390.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":58,"licence":"152188 X","nom":"LAVAL","prenom":"OPHELIE"}}]},{"ranking":{"id":11,"name":"Snooker Classement national 2025-2026","cuescore_id":"67004695","url":"https:\/\/cuescore.com\/ranking\/SNOOKER_Classement+national+2025%252F2026\/67004695","source_type":"ranking","discipline":"snooker","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":23},"fetch":{"id":11,"status":"success","fetched_at":"2026-04-22T18:27:36+02:00","http_status":200,"records_count":145,"is_active":true},"count":0,"data":[]},{"ranking":{"id":12,"name":"CVL Snooker ZOuest","cuescore_id":"73214698","url":"https:\/\/cuescore.com\/tournament\/CVL+Snooker+ZOuest\/73214698#match-73214737","source_type":"tournament","discipline":"snooker","scope":"d\u00e9partemental","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":24},"fetch":{"id":12,"status":"success","fetched_at":"2026-04-22T18:27:40+02:00","http_status":200,"records_count":7,"is_active":true},"count":2,"data":[{"rank_position":4,"participant_name":"David CHERAMY","participant_external_id":"31530742","participant_url":"https:\/\/cuescore.com\/player\/David+CHERAMY\/31530742","points":null,"played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":21,"licence":"111518 E","nom":"CHERAMY","prenom":"DAVID"}},{"rank_position":6,"participant_name":"OMAR MOUSSAMIH","participant_external_id":"32637808","participant_url":"https:\/\/cuescore.com\/player\/OMAR+MOUSSAMIH\/32637808","points":null,"played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":83,"licence":"182056 M","nom":"MOUSSAMIH","prenom":"OMAR"}}]},{"ranking":{"id":13,"name":"FFB - Blackball - TN - Handi Billard - 2025-2026","cuescore_id":"65726164","url":"https:\/\/cuescore.com\/ranking\/FFB+-+Blackball+-+TN+-+Handi+Billard\/65726164","source_type":"ranking","discipline":"blackball","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":25},"fetch":{"id":13,"status":"success","fetched_at":"2026-04-22T18:27:42+02:00","http_status":200,"records_count":5,"is_active":true},"count":3,"data":[{"rank_position":2,"participant_name":"Thomas RAINEAU","participant_external_id":"32452216","participant_url":"https:\/\/cuescore.com\/player\/Thomas+RAINEAU\/32452216","points":"140.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":95,"licence":"173909 G","nom":"RAINEAU","prenom":"THOMAS"}},{"rank_position":3,"participant_name":"Christophe FERASSE","participant_external_id":"33399133","participant_url":"https:\/\/cuescore.com\/player\/Christophe+FERASSE\/33399133","points":"112.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":45,"licence":"180354 M","nom":"FERASSE","prenom":"CHRISTOPHE"}},{"rank_position":4,"participant_name":"Gregory Cadinot","participant_external_id":"30706906","participant_url":"https:\/\/cuescore.com\/player\/Gregory+Cadinot\/30706906","points":"88.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":16,"licence":"157681 S","nom":"CADINOT","prenom":"GREGORY"}}]},{"ranking":{"id":14,"name":"FFB - Blackball - TN - Master - 2025-2026","cuescore_id":"65726161","url":"https:\/\/cuescore.com\/ranking\/FFB+-+Blackball+-+TN+-+Master\/65726161","source_type":"ranking","discipline":"blackball","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":26},"fetch":{"id":14,"status":"success","fetched_at":"2026-04-22T18:27:44+02:00","http_status":200,"records_count":24,"is_active":true},"count":6,"data":[{"rank_position":4,"participant_name":"Christophe Lambert","participant_external_id":"1286610","participant_url":"https:\/\/cuescore.com\/player\/Christophe+Lambert\/1286610","points":"1552.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":56,"licence":"121547 X","nom":"LAMBERT","prenom":"CHRISTOPHE"}},{"rank_position":5,"participant_name":"Alexandre Buscetti","participant_external_id":"15345739","participant_url":"https:\/\/cuescore.com\/player\/Alexandre+Buscetti\/15345739","points":"1440.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":14,"licence":"141625 D","nom":"BUSCETTI","prenom":"ALEXANDRE"}},{"rank_position":10,"participant_name":"Paul Coldrick","participant_external_id":"8112141","participant_url":"https:\/\/cuescore.com\/player\/Paul+Coldrick\/8112141","points":"968.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":24,"licence":"157999 N","nom":"COLDRICK","prenom":"PAUL"}},{"rank_position":12,"participant_name":"Julien Leroux","participant_external_id":"30265855","participant_url":"https:\/\/cuescore.com\/player\/Julien+Leroux\/30265855","points":"904.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":70,"licence":"104868 K","nom":"LEROUX","prenom":"JULIEN"}},{"rank_position":16,"participant_name":"Simon Pellissier","participant_external_id":"21763675","participant_url":"https:\/\/cuescore.com\/player\/Simon+Pellissier\/21763675","points":"872.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":90,"licence":"146692 A","nom":"PELLISSIER","prenom":"SIMON"}},{"rank_position":17,"participant_name":"Elie Christidis","participant_external_id":"31808725","participant_url":"https:\/\/cuescore.com\/player\/Elie+Christidis\/31808725","points":"864.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":23,"licence":"155556 H","nom":"CHRISTIDIS","prenom":"ELIE"}}]},{"ranking":{"id":15,"name":"FFB - Blackball - TN - Mixte National - 2025-2026","cuescore_id":"65726158","url":"https:\/\/cuescore.com\/ranking\/FFB+-+Blackball+-+TN+-+Mixte+National\/65726158","source_type":"ranking","discipline":"blackball","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":27},"fetch":{"id":15,"status":"success","fetched_at":"2026-04-22T18:27:47+02:00","http_status":200,"records_count":558,"is_active":true},"count":15,"data":[{"rank_position":5,"participant_name":"Jerome L anthoen","participant_external_id":"30796072","participant_url":"https:\/\/cuescore.com\/player\/Jerome+L+anthoen\/30796072","points":"630.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":55,"licence":"156527 N","nom":"L ANTHOEN","prenom":"JEROME"}},{"rank_position":26,"participant_name":"Christophe Faurie","participant_external_id":"31580935","participant_url":"https:\/\/cuescore.com\/player\/Christophe+Faurie\/31580935","points":"470.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":44,"licence":"116369 T","nom":"FAURIE","prenom":"CHRISTOPHE"}},{"rank_position":32,"participant_name":"Yvan SKNOEZECK","participant_external_id":"30066106","participant_url":"https:\/\/cuescore.com\/player\/Yvan+SKNOEZECK\/30066106","points":"446.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":105,"licence":"110008 C","nom":"SKNOEZECK","prenom":"YVAN"}},{"rank_position":41,"participant_name":"Antoine Storme","participant_external_id":"30069262","participant_url":"https:\/\/cuescore.com\/player\/Antoine+Storme\/30069262","points":"410.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":109,"licence":"157854 F","nom":"STORME","prenom":"ANTOINE"}},{"rank_position":58,"participant_name":"Oph\u00e9lie Laval","participant_external_id":"30608668","participant_url":"https:\/\/cuescore.com\/player\/Oph%C3%A9lie+Laval\/30608668","points":"372.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":58,"licence":"152188 X","nom":"LAVAL","prenom":"OPHELIE"}},{"rank_position":250,"participant_name":"Cl\u00e9ment Da Costa","participant_external_id":"32103676","participant_url":"https:\/\/cuescore.com\/player\/Cl%C3%A9ment+Da+Costa\/32103676","points":"80.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":29,"licence":"173585 E","nom":"DA COSTA","prenom":"CLEMENT"}},{"rank_position":328,"participant_name":"MICHAEL MAILLET","participant_external_id":"31085209","participant_url":"https:\/\/cuescore.com\/player\/MICHAEL+MAILLET\/31085209","points":"44.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":77,"licence":"170602 M","nom":"MAILLET","prenom":"MICHAEL"}},{"rank_position":339,"participant_name":"OMAR MOUSSAMIH","participant_external_id":"32637808","participant_url":"https:\/\/cuescore.com\/player\/OMAR+MOUSSAMIH\/32637808","points":"36.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":83,"licence":"182056 M","nom":"MOUSSAMIH","prenom":"OMAR"}},{"rank_position":353,"participant_name":"David CHERAMY","participant_external_id":"31530742","participant_url":"https:\/\/cuescore.com\/player\/David+CHERAMY\/31530742","points":"36.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":21,"licence":"111518 E","nom":"CHERAMY","prenom":"DAVID"}},{"rank_position":370,"participant_name":"Zakaria El attari","participant_external_id":"67417390","participant_url":"https:\/\/cuescore.com\/player\/Zakaria+El+attari\/67417390","points":"36.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":42,"licence":"190158 T","nom":"EL ATTARI","prenom":"ZAKARIA"}},{"rank_position":376,"participant_name":"Math\u00e9o Bouteille","participant_external_id":"32407420","participant_url":"https:\/\/cuescore.com\/player\/Math%C3%A9o+Bouteille\/32407420","points":"36.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":11,"licence":"137219 R","nom":"BOUTEILLE","prenom":"MATHEO"}},{"rank_position":395,"participant_name":"Anass MAHFOUDI","participant_external_id":"32533960","participant_url":"https:\/\/cuescore.com\/player\/Anass+MAHFOUDI\/32533960","points":"22.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":73,"licence":"182058 P","nom":"MAHFOUDI","prenom":"ANASS"}},{"rank_position":395,"participant_name":"Tarik bouattaoun","participant_external_id":"52919002","participant_url":"https:\/\/cuescore.com\/player\/Tarik+bouattaoun\/52919002","points":"22.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":9,"licence":"188587 L","nom":"BOUATTAOUN","prenom":"TARIK"}},{"rank_position":419,"participant_name":"Christian OLMEDA","participant_external_id":"32957365","participant_url":"https:\/\/cuescore.com\/player\/Christian+OLMEDA\/32957365","points":"22.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":85,"licence":"177784 T","nom":"OLMEDA","prenom":"CHRISTIAN"}},{"rank_position":485,"participant_name":"DARIUS GANNAT","participant_external_id":"33554953","participant_url":"https:\/\/cuescore.com\/player\/DARIUS+GANNAT\/33554953","points":"22.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":47,"licence":"109197 X","nom":"GANNAT","prenom":"DARIUS"}}]},{"ranking":{"id":16,"name":"FFB - Blackball - TN - V\u00e9t\u00e9ran - 2025-2026","cuescore_id":"65726155","url":"https:\/\/cuescore.com\/ranking\/FFB+-+Blackball+-+TN+-+V%C3%A9t%C3%A9ran\/65726155","source_type":"ranking","discipline":"blackball","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":28},"fetch":{"id":16,"status":"success","fetched_at":"2026-04-22T18:27:57+02:00","http_status":200,"records_count":111,"is_active":true},"count":1,"data":[{"rank_position":9,"participant_name":"Jerome L anthoen","participant_external_id":"30796072","participant_url":"https:\/\/cuescore.com\/player\/Jerome+L+anthoen\/30796072","points":"368.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":55,"licence":"156527 N","nom":"L ANTHOEN","prenom":"JEROME"}}]},{"ranking":{"id":17,"name":"FFB - Blackball - TN - F\u00e9minin - 2025-2026","cuescore_id":"65726152","url":"https:\/\/cuescore.com\/ranking\/FFB+-+Blackball+-+TN+-+F%C3%A9minin\/65726152","source_type":"ranking","discipline":"blackball","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":29},"fetch":{"id":17,"status":"success","fetched_at":"2026-04-22T18:28:00+02:00","http_status":200,"records_count":57,"is_active":true},"count":1,"data":[{"rank_position":5,"participant_name":"Oph\u00e9lie Laval","participant_external_id":"30608668","participant_url":"https:\/\/cuescore.com\/player\/Oph%C3%A9lie+Laval\/30608668","points":"524.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":58,"licence":"152188 X","nom":"LAVAL","prenom":"OPHELIE"}}]},{"ranking":{"id":18,"name":"FFB - Blackball - TN - Espoir - 2025-2026","cuescore_id":"65726149","url":"https:\/\/cuescore.com\/ranking\/FFB+-+Blackball+-+TN+-+Espoir\/65726149","source_type":"ranking","discipline":"blackball","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":30},"fetch":{"id":18,"status":"success","fetched_at":"2026-04-22T18:28:02+02:00","http_status":200,"records_count":43,"is_active":true},"count":1,"data":[{"rank_position":22,"participant_name":"Math\u00e9o Bouteille","participant_external_id":"32407420","participant_url":"https:\/\/cuescore.com\/player\/Math%C3%A9o+Bouteille\/32407420","points":"60.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":11,"licence":"137219 R","nom":"BOUTEILLE","prenom":"MATHEO"}}]},{"ranking":{"id":19,"name":"FFB - Blackball - TN - Junior - 2025-2026","cuescore_id":"65726146","url":"https:\/\/cuescore.com\/ranking\/FFB+-+Blackball+-+TN+-+Junior\/65726146","source_type":"ranking","discipline":"blackball","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":31},"fetch":{"id":19,"status":"success","fetched_at":"2026-04-22T18:28:05+02:00","http_status":200,"records_count":36,"is_active":true},"count":1,"data":[{"rank_position":13,"participant_name":"Cl\u00e9ment Da Costa","participant_external_id":"32103676","participant_url":"https:\/\/cuescore.com\/player\/Cl%C3%A9ment+Da+Costa\/32103676","points":"180.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":29,"licence":"173585 E","nom":"DA COSTA","prenom":"CLEMENT"}}]},{"ranking":{"id":20,"name":"TOP LIGUE 25-26","cuescore_id":"67097476","url":"https:\/\/cuescore.com\/ranking\/TOP+LIGUE+25-26\/67097476","source_type":"ranking","discipline":"blackball","scope":"regional","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":32},"fetch":{"id":20,"status":"success","fetched_at":"2026-04-22T18:28:07+02:00","http_status":200,"records_count":32,"is_active":true},"count":1,"data":[{"rank_position":3,"participant_name":"Yvan SKNOEZECK","participant_external_id":"30066106","participant_url":"https:\/\/cuescore.com\/player\/Yvan+SKNOEZECK\/30066106","points":"1460.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":105,"licence":"110008 C","nom":"SKNOEZECK","prenom":"YVAN"}}]},{"ranking":{"id":21,"name":"MIXTE 25-26","cuescore_id":"67097479","url":"https:\/\/cuescore.com\/ranking\/MIXTE+25-26\/67097479","source_type":"ranking","discipline":"blackball","scope":"regional","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":33},"fetch":{"id":21,"status":"success","fetched_at":"2026-04-22T18:28:10+02:00","http_status":200,"records_count":236,"is_active":true},"count":25,"data":[{"rank_position":9,"participant_name":"Tarik bouattaoun","participant_external_id":"52919002","participant_url":"https:\/\/cuescore.com\/player\/Tarik+bouattaoun\/52919002","points":"795.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":9,"licence":"188587 L","nom":"BOUATTAOUN","prenom":"TARIK"}},{"rank_position":30,"participant_name":"David CHERAMY","participant_external_id":"31530742","participant_url":"https:\/\/cuescore.com\/player\/David+CHERAMY\/31530742","points":"660.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":21,"licence":"111518 E","nom":"CHERAMY","prenom":"DAVID"}},{"rank_position":46,"participant_name":"Christian OLMEDA","participant_external_id":"32957365","participant_url":"https:\/\/cuescore.com\/player\/Christian+OLMEDA\/32957365","points":"536.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":85,"licence":"177784 T","nom":"OLMEDA","prenom":"CHRISTIAN"}},{"rank_position":51,"participant_name":"Math\u00e9o Bouteille","participant_external_id":"32407420","participant_url":"https:\/\/cuescore.com\/player\/Math%C3%A9o+Bouteille\/32407420","points":"516.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":11,"licence":"137219 R","nom":"BOUTEILLE","prenom":"MATHEO"}},{"rank_position":53,"participant_name":"bastien MICHEZ","participant_external_id":"31559914","participant_url":"https:\/\/cuescore.com\/player\/bastien+MICHEZ\/31559914","points":"508.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":82,"licence":"144532 Y","nom":"MICHEZ","prenom":"BASTIEN"}},{"rank_position":54,"participant_name":"Cl\u00e9ment Da Costa","participant_external_id":"32103676","participant_url":"https:\/\/cuescore.com\/player\/Cl%C3%A9ment+Da+Costa\/32103676","points":"507.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":29,"licence":"173585 E","nom":"DA COSTA","prenom":"CLEMENT"}},{"rank_position":57,"participant_name":"DARIUS GANNAT","participant_external_id":"33554953","participant_url":"https:\/\/cuescore.com\/player\/DARIUS+GANNAT\/33554953","points":"497.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":47,"licence":"109197 X","nom":"GANNAT","prenom":"DARIUS"}},{"rank_position":62,"participant_name":"Alexandre Bourlier","participant_external_id":"30257935","participant_url":"https:\/\/cuescore.com\/player\/Alexandre+Bourlier\/30257935","points":"493.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":10,"licence":"177407 J","nom":"BOURLIER","prenom":"ALEXANDRE"}},{"rank_position":71,"participant_name":"MICHAEL MAILLET","participant_external_id":"31085209","participant_url":"https:\/\/cuescore.com\/player\/MICHAEL+MAILLET\/31085209","points":"477.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":77,"licence":"170602 M","nom":"MAILLET","prenom":"MICHAEL"}},{"rank_position":76,"participant_name":"BENJAMIN CHEV\u00c9","participant_external_id":"34388548","participant_url":"https:\/\/cuescore.com\/player\/BENJAMIN+CHEV%C3%89\/34388548","points":"453.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":22,"licence":"141681 H","nom":"CHEVE","prenom":"BENJAMIN"}},{"rank_position":92,"participant_name":"David DA COSTA","participant_external_id":"30258862","participant_url":"https:\/\/cuescore.com\/player\/David+DA+COSTA\/30258862","points":"420.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":30,"licence":"173661 M","nom":"DA COSTA","prenom":"DAVID"}},{"rank_position":100,"participant_name":"Quentin Leneez","participant_external_id":"41942272","participant_url":"https:\/\/cuescore.com\/player\/Quentin+Leneez\/41942272","points":"392.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":67,"licence":"184162 B","nom":"LENEEZ","prenom":"QUENTIN"}},{"rank_position":103,"participant_name":"mickael souverain","participant_external_id":"32035528","participant_url":"https:\/\/cuescore.com\/player\/mickael+souverain\/32035528","points":"392.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":107,"licence":"178141 G","nom":"SOUVERAIN","prenom":"MICKAEL"}},{"rank_position":115,"participant_name":"Djino Wagon","participant_external_id":"33642442","participant_url":"https:\/\/cuescore.com\/player\/Djino+Wagon\/33642442","points":"364.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":114,"licence":"179413 P","nom":"WAGON","prenom":"DJINO"}},{"rank_position":119,"participant_name":"OMAR MOUSSAMIH","participant_external_id":"32637808","participant_url":"https:\/\/cuescore.com\/player\/OMAR+MOUSSAMIH\/32637808","points":"352.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":83,"licence":"182056 M","nom":"MOUSSAMIH","prenom":"OMAR"}},{"rank_position":151,"participant_name":"Piedade Wagon","participant_external_id":"33417292","participant_url":"https:\/\/cuescore.com\/player\/Piedade+Wagon\/33417292","points":"252.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":115,"licence":"179294 K","nom":"WAGON","prenom":"PIEDADE"}},{"rank_position":156,"participant_name":"Tito Wagon","participant_external_id":"33642439","participant_url":"https:\/\/cuescore.com\/player\/Tito+Wagon\/33642439","points":"238.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":116,"licence":"178350 J","nom":"WAGON","prenom":"TITO"}},{"rank_position":165,"participant_name":"Thomas RAINEAU","participant_external_id":"32452216","participant_url":"https:\/\/cuescore.com\/player\/Thomas+RAINEAU\/32452216","points":"224.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":95,"licence":"173909 G","nom":"RAINEAU","prenom":"THOMAS"}},{"rank_position":175,"participant_name":"Zakaria El attari","participant_external_id":"67417390","participant_url":"https:\/\/cuescore.com\/player\/Zakaria+El+attari\/67417390","points":"168.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":42,"licence":"190158 T","nom":"EL ATTARI","prenom":"ZAKARIA"}},{"rank_position":188,"participant_name":"Anass MAHFOUDI","participant_external_id":"32533960","participant_url":"https:\/\/cuescore.com\/player\/Anass+MAHFOUDI\/32533960","points":"126.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":73,"licence":"182058 P","nom":"MAHFOUDI","prenom":"ANASS"}},{"rank_position":213,"participant_name":"Tristan Pierrot","participant_external_id":"33690460","participant_url":"https:\/\/cuescore.com\/player\/Tristan+Pierrot\/33690460","points":"70.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":92,"licence":"160792 Z","nom":"PIERROT","prenom":"TRISTAN"}},{"rank_position":217,"participant_name":"J\u00e9r\u00f4me Jussy","participant_external_id":"33409729","participant_url":"https:\/\/cuescore.com\/player\/J%C3%A9r%C3%B4me+Jussy\/33409729","points":"70.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":54,"licence":"156524 K","nom":"JUSSY","prenom":"JEROME"}},{"rank_position":224,"participant_name":"Christophe FERASSE","participant_external_id":"33399133","participant_url":"https:\/\/cuescore.com\/player\/Christophe+FERASSE\/33399133","points":"56.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":45,"licence":"180354 M","nom":"FERASSE","prenom":"CHRISTOPHE"}},{"rank_position":230,"participant_name":"J\u00e9r\u00f4me H\u00e9risson","participant_external_id":"49534204","participant_url":"https:\/\/cuescore.com\/player\/J%C3%A9r%C3%B4me+H%C3%A9risson\/49534204","points":"56.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":51,"licence":"177932 E","nom":"HERISSON","prenom":"JEROME"}},{"rank_position":230,"participant_name":"Philippe Robuchon","participant_external_id":"33409852","participant_url":"https:\/\/cuescore.com\/player\/Philippe+Robuchon\/33409852","points":"56.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":102,"licence":"179958 G","nom":"ROBUCHON","prenom":"PHILIPPE"}}]},{"ranking":{"id":22,"name":"VETERAN 25-26","cuescore_id":"67097482","url":"https:\/\/cuescore.com\/ranking\/VETERAN+25-26\/67097482","source_type":"ranking","discipline":"blackball","scope":"regional","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":34},"fetch":{"id":22,"status":"success","fetched_at":"2026-04-22T18:28:15+02:00","http_status":200,"records_count":59,"is_active":true},"count":1,"data":[{"rank_position":39,"participant_name":"DARIUS GANNAT","participant_external_id":"33554953","participant_url":"https:\/\/cuescore.com\/player\/DARIUS+GANNAT\/33554953","points":"70.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":47,"licence":"109197 X","nom":"GANNAT","prenom":"DARIUS"}}]},{"ranking":{"id":23,"name":"FEMININ 25-26","cuescore_id":"67097485","url":"https:\/\/cuescore.com\/ranking\/FEMININ+25-26\/67097485","source_type":"ranking","discipline":"blackball","scope":"regional","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":35},"fetch":{"id":23,"status":"success","fetched_at":"2026-04-22T18:28:18+02:00","http_status":200,"records_count":22,"is_active":true},"count":1,"data":[{"rank_position":16,"participant_name":"Piedade Wagon","participant_external_id":"33417292","participant_url":"https:\/\/cuescore.com\/player\/Piedade+Wagon\/33417292","points":"30.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":115,"licence":"179294 K","nom":"WAGON","prenom":"PIEDADE"}}]},{"ranking":{"id":24,"name":"ESPOIR 25-26","cuescore_id":"67097488","url":"https:\/\/cuescore.com\/ranking\/ESPOIR+25-26\/67097488","source_type":"ranking","discipline":"blackball","scope":"regional","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":36},"fetch":{"id":24,"status":"success","fetched_at":"2026-04-22T18:28:20+02:00","http_status":200,"records_count":10,"is_active":true},"count":1,"data":[{"rank_position":2,"participant_name":"Math\u00e9o Bouteille","participant_external_id":"32407420","participant_url":"https:\/\/cuescore.com\/player\/Math%C3%A9o+Bouteille\/32407420","points":"435.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":11,"licence":"137219 R","nom":"BOUTEILLE","prenom":"MATHEO"}}]},{"ranking":{"id":25,"name":"JUNIOR 25-26","cuescore_id":"67097494","url":"https:\/\/cuescore.com\/ranking\/JUNIOR+25-26\/67097494","source_type":"ranking","discipline":"blackball","scope":"regional","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":37},"fetch":{"id":25,"status":"success","fetched_at":"2026-04-22T18:28:21+02:00","http_status":200,"records_count":7,"is_active":true},"count":1,"data":[{"rank_position":7,"participant_name":"Tito Wagon","participant_external_id":"33642439","participant_url":"https:\/\/cuescore.com\/player\/Tito+Wagon\/33642439","points":"195.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":116,"licence":"178350 J","nom":"WAGON","prenom":"TITO"}}]},{"ranking":{"id":26,"name":"BENJAMIN 25-26","cuescore_id":"67097506","url":"https:\/\/cuescore.com\/ranking\/BENJAMIN+25-26\/67097506","source_type":"ranking","discipline":"blackball","scope":"regional","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":38},"fetch":{"id":26,"status":"success","fetched_at":"2026-04-22T18:28:23+02:00","http_status":200,"records_count":20,"is_active":true},"count":3,"data":[{"rank_position":1,"participant_name":"Cl\u00e9ment Da Costa","participant_external_id":"32103676","participant_url":"https:\/\/cuescore.com\/player\/Cl%C3%A9ment+Da+Costa\/32103676","points":"775.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":29,"licence":"173585 E","nom":"DA COSTA","prenom":"CLEMENT"}},{"rank_position":3,"participant_name":"Djino Wagon","participant_external_id":"33642442","participant_url":"https:\/\/cuescore.com\/player\/Djino+Wagon\/33642442","points":"485.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":114,"licence":"179413 P","nom":"WAGON","prenom":"DJINO"}},{"rank_position":11,"participant_name":"Ma\u00e9 Sknoezeck","participant_external_id":"38360302","participant_url":"https:\/\/cuescore.com\/player\/Ma%C3%A9+Sknoezeck\/38360302","points":"180.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":104,"licence":"178088 Z","nom":"SKNOEZECK","prenom":"MAE"}}]},{"ranking":{"id":27,"name":"HANDI-DEBOUT 25-26","cuescore_id":"67097509","url":"https:\/\/cuescore.com\/ranking\/HANDI-DEBOUT+25-26\/67097509","source_type":"ranking","discipline":"blackball","scope":"regional","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":39},"fetch":{"id":27,"status":"success","fetched_at":"2026-04-22T18:28:25+02:00","http_status":200,"records_count":16,"is_active":true},"count":2,"data":[{"rank_position":6,"participant_name":"mickael souverain","participant_external_id":"32035528","participant_url":"https:\/\/cuescore.com\/player\/mickael+souverain\/32035528","points":"345.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":107,"licence":"178141 G","nom":"SOUVERAIN","prenom":"MICKAEL"}},{"rank_position":12,"participant_name":"J\u00e9r\u00f4me Jussy","participant_external_id":"33409729","participant_url":"https:\/\/cuescore.com\/player\/J%C3%A9r%C3%B4me+Jussy\/33409729","points":"165.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":54,"licence":"156524 K","nom":"JUSSY","prenom":"JEROME"}}]},{"ranking":{"id":28,"name":"HANDI-FAUTEUIL 25-26","cuescore_id":"77825152","url":"https:\/\/cuescore.com\/ranking\/HANDI-FAUTEUIL+25-26\/77825152","source_type":"ranking","discipline":"blackball","scope":"regional","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":40},"fetch":{"id":28,"status":"success","fetched_at":"2026-04-22T18:28:27+02:00","http_status":200,"records_count":5,"is_active":true},"count":4,"data":[{"rank_position":1,"participant_name":"Christophe FERASSE","participant_external_id":"33399133","participant_url":"https:\/\/cuescore.com\/player\/Christophe+FERASSE\/33399133","points":"235.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":45,"licence":"180354 M","nom":"FERASSE","prenom":"CHRISTOPHE"}},{"rank_position":2,"participant_name":"Thomas RAINEAU","participant_external_id":"32452216","participant_url":"https:\/\/cuescore.com\/player\/Thomas+RAINEAU\/32452216","points":"185.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":95,"licence":"173909 G","nom":"RAINEAU","prenom":"THOMAS"}},{"rank_position":3,"participant_name":"Gregory Cadinot","participant_external_id":"30706906","participant_url":"https:\/\/cuescore.com\/player\/Gregory+Cadinot\/30706906","points":"145.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":16,"licence":"157681 S","nom":"CADINOT","prenom":"GREGORY"}},{"rank_position":4,"participant_name":"Tristan Pierrot","participant_external_id":"33690460","participant_url":"https:\/\/cuescore.com\/player\/Tristan+Pierrot\/33690460","points":"100.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":92,"licence":"160792 Z","nom":"PIERROT","prenom":"TRISTAN"}}]},{"ranking":{"id":29,"name":"TRZ OUEST MIXTE 25-26","cuescore_id":"71389255","url":"https:\/\/cuescore.com\/ranking\/TRZ+OUEST+MIXTE+25-26\/71389255","source_type":"ranking","discipline":"blackball","scope":"d\u00e9partemental","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":41},"fetch":{"id":29,"status":"success","fetched_at":"2026-04-22T18:28:29+02:00","http_status":200,"records_count":26,"is_active":true},"count":11,"data":[{"rank_position":3,"participant_name":"Djino Wagon","participant_external_id":"33642442","participant_url":"https:\/\/cuescore.com\/player\/Djino+Wagon\/33642442","points":"248.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":114,"licence":"179413 P","nom":"WAGON","prenom":"DJINO"}},{"rank_position":10,"participant_name":"Thomas RAINEAU","participant_external_id":"32452216","participant_url":"https:\/\/cuescore.com\/player\/Thomas+RAINEAU\/32452216","points":"160.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":95,"licence":"173909 G","nom":"RAINEAU","prenom":"THOMAS"}},{"rank_position":13,"participant_name":"Christophe FERASSE","participant_external_id":"33399133","participant_url":"https:\/\/cuescore.com\/player\/Christophe+FERASSE\/33399133","points":"144.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":45,"licence":"180354 M","nom":"FERASSE","prenom":"CHRISTOPHE"}},{"rank_position":14,"participant_name":"Tito Wagon","participant_external_id":"33642439","participant_url":"https:\/\/cuescore.com\/player\/Tito+Wagon\/33642439","points":"124.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":116,"licence":"178350 J","nom":"WAGON","prenom":"TITO"}},{"rank_position":15,"participant_name":"Math\u00e9o H\u00e9risson","participant_external_id":"33301852","participant_url":"https:\/\/cuescore.com\/player\/Math%C3%A9o+H%C3%A9risson\/33301852","points":"91.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":52,"licence":"177885 D","nom":"HERISSON","prenom":"MATHEO"}},{"rank_position":17,"participant_name":"J\u00e9r\u00f4me H\u00e9risson","participant_external_id":"49534204","participant_url":"https:\/\/cuescore.com\/player\/J%C3%A9r%C3%B4me+H%C3%A9risson\/49534204","points":"89.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":51,"licence":"177932 E","nom":"HERISSON","prenom":"JEROME"}},{"rank_position":21,"participant_name":"Patrice MAILLET","participant_external_id":"31356370","participant_url":"https:\/\/cuescore.com\/player\/Patrice+MAILLET\/31356370","points":"56.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":78,"licence":"177470 C","nom":"MAILLET","prenom":"PATRICE"}},{"rank_position":22,"participant_name":"Vital DOMMERY","participant_external_id":"39073993","participant_url":"https:\/\/cuescore.com\/player\/Vital+DOMMERY\/39073993","points":"36.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":38,"licence":"181485 R","nom":"DOMMERY","prenom":"VITAL"}},{"rank_position":23,"participant_name":"mickael souverain","participant_external_id":"32035528","participant_url":"https:\/\/cuescore.com\/player\/mickael+souverain\/32035528","points":"36.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":107,"licence":"178141 G","nom":"SOUVERAIN","prenom":"MICKAEL"}},{"rank_position":24,"participant_name":"Gregory Cadinot","participant_external_id":"30706906","participant_url":"https:\/\/cuescore.com\/player\/Gregory+Cadinot\/30706906","points":"36.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":16,"licence":"157681 S","nom":"CADINOT","prenom":"GREGORY"}},{"rank_position":25,"participant_name":"Piedade Wagon","participant_external_id":"33417292","participant_url":"https:\/\/cuescore.com\/player\/Piedade+Wagon\/33417292","points":"36.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":115,"licence":"179294 K","nom":"WAGON","prenom":"PIEDADE"}}]},{"ranking":{"id":30,"name":"TRZ OUEST FEMININ 25-26","cuescore_id":"71389252","url":"https:\/\/cuescore.com\/ranking\/TRZ+OUEST+FEMININ+25-26\/71389252","source_type":"ranking","discipline":"blackball","scope":"d\u00e9partemental","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":42},"fetch":{"id":30,"status":"success","fetched_at":"2026-04-22T18:28:31+02:00","http_status":200,"records_count":3,"is_active":true},"count":1,"data":[{"rank_position":2,"participant_name":"Piedade Wagon","participant_external_id":"33417292","participant_url":"https:\/\/cuescore.com\/player\/Piedade+Wagon\/33417292","points":"200.00","played":null,"wins":null,"losses":null,"ties":null,"matching":{"method":"exact_normalized","confidence_score":100,"is_confirmed":true},"licencie":{"id":115,"licence":"179294 K","nom":"WAGON","prenom":"PIEDADE"}}]},{"ranking":{"id":31,"name":"FFB - Blackball - Equipes - DN1 - 2025-2026","cuescore_id":"67490224","url":"https:\/\/cuescore.com\/tournament\/FFB+-+Blackball+-+Equipes+-+DN1+-+2025-2026\/67490224","source_type":"tournament","discipline":"blackball","scope":"national","ranking_type":"team","team_category":"DN1","season":"2025-2026","is_active":true,"sort_order":43},"fetch":{"id":31,"status":"success","fetched_at":"2026-04-22T18:28:36+02:00","http_status":200,"records_count":12,"is_active":true},"count":12,"data":[{"rank_position":1,"team_name":"VIROFLAY 1 DN1","team_external_id":"29966809","team_url":"https:\/\/cuescore.com\/team\/VIROFLAY+1+DN1\/29966809","points":"87.00","played":16,"wins":15,"losses":1,"ties":0,"is_club_team":false,"additional_data":{"frame_wins":226,"frame_score":132,"frame_losses":94}},{"rank_position":2,"team_name":"JOU\u00c9 L\u00c8S TOURS 1 DN1","team_external_id":"29967052","team_url":"https:\/\/cuescore.com\/team\/JOU%C3%89+L%C3%88S+TOURS+1+DN1\/29967052","points":"76.00","played":16,"wins":13,"losses":1,"ties":2,"is_club_team":true,"additional_data":{"frame_wins":193,"frame_score":66,"frame_losses":127}},{"rank_position":3,"team_name":"LES HERBIERS DN1","team_external_id":"29967067","team_url":"https:\/\/cuescore.com\/team\/LES+HERBIERS+DN1\/29967067","points":"72.00","played":16,"wins":12,"losses":3,"ties":1,"is_club_team":false,"additional_data":{"frame_wins":189,"frame_score":58,"frame_losses":131}},{"rank_position":4,"team_name":"JOU\u00c9 L\u00c8S TOURS 2 DN1","team_external_id":"29967073","team_url":"https:\/\/cuescore.com\/team\/JOU%C3%89+L%C3%88S+TOURS+2+DN1\/29967073","points":"63.00","played":16,"wins":9,"losses":6,"ties":1,"is_club_team":true,"additional_data":{"frame_wins":168,"frame_score":16,"frame_losses":152}},{"rank_position":5,"team_name":"VIC LE COMTE DN1","team_external_id":"29969134","team_url":"https:\/\/cuescore.com\/team\/VIC+LE+COMTE+DN1\/29969134","points":"57.00","played":16,"wins":8,"losses":7,"ties":1,"is_club_team":false,"additional_data":{"frame_wins":158,"frame_score":-4,"frame_losses":162}},{"rank_position":6,"team_name":"QUIMPER DN1","team_external_id":"29967061","team_url":"https:\/\/cuescore.com\/team\/QUIMPER+DN1\/29967061","points":"53.00","played":16,"wins":6,"losses":6,"ties":4,"is_club_team":false,"additional_data":{"frame_wins":156,"frame_score":-8,"frame_losses":164}},{"rank_position":7,"team_name":"DUNKERQUE DN1","team_external_id":"29968849","team_url":"https:\/\/cuescore.com\/team\/DUNKERQUE+DN1\/29968849","points":"50.00","played":16,"wins":6,"losses":9,"ties":1,"is_club_team":false,"additional_data":{"frame_wins":150,"frame_score":-20,"frame_losses":170}},{"rank_position":8,"team_name":"AGEN DN1","team_external_id":"29969137","team_url":"https:\/\/cuescore.com\/team\/AGEN+DN1\/29969137","points":"47.00","played":16,"wins":6,"losses":10,"ties":0,"is_club_team":false,"additional_data":{"frame_wins":142,"frame_score":-36,"frame_losses":178}},{"rank_position":9,"team_name":"VIROFLAY 2 DN1","team_external_id":"29968945","team_url":"https:\/\/cuescore.com\/team\/VIROFLAY+2+DN1\/29968945","points":"45.00","played":16,"wins":4,"losses":10,"ties":2,"is_club_team":false,"additional_data":{"frame_wins":143,"frame_score":-34,"frame_losses":177}},{"rank_position":10,"team_name":"ANTONY DN1","team_external_id":"29970487","team_url":"https:\/\/cuescore.com\/team\/ANTONY+DN1\/29970487","points":"42.00","played":16,"wins":4,"losses":10,"ties":2,"is_club_team":false,"additional_data":{"frame_wins":129,"frame_score":-62,"frame_losses":191}},{"rank_position":11,"team_name":"SAINT NICOLAS DE PORT DN1","team_external_id":"29967076","team_url":"https:\/\/cuescore.com\/team\/SAINT+NICOLAS+DE+PORT+DN1\/29967076","points":"38.00","played":16,"wins":2,"losses":12,"ties":2,"is_club_team":false,"additional_data":{"frame_wins":141,"frame_score":-38,"frame_losses":179}},{"rank_position":12,"team_name":"NOYAL PONTIVY  DN1","team_external_id":"35441404","team_url":"https:\/\/cuescore.com\/team\/NOYAL+PONTIVY++DN1\/35441404","points":"32.00","played":16,"wins":1,"losses":11,"ties":4,"is_club_team":false,"additional_data":{"frame_wins":125,"frame_score":-70,"frame_losses":195}}],"club_team_present":true},{"ranking":{"id":32,"name":"FFB - Blackball - Equipes - DN2 - 2025-2026","cuescore_id":"67490356","url":"https:\/\/cuescore.com\/tournament\/FFB+-+Blackball+-+Equipes+-+DN2+-+2025-2026\/67490356","source_type":"tournament","discipline":"blackball","scope":"national","ranking_type":"team","team_category":"DN2","season":"2025-2026","is_active":true,"sort_order":44},"fetch":{"id":32,"status":"success","fetched_at":"2026-04-22T18:28:40+02:00","http_status":200,"records_count":12,"is_active":true},"count":0,"data":[],"club_team_present":false},{"ranking":{"id":33,"name":"FFB - Blackball - Equipes - DN3 - 2025-2026","cuescore_id":"67490959","url":"https:\/\/cuescore.com\/tournament\/FFB+-+Blackball+-+Equipes+-+DN3+-+2025-2026\/67490959","source_type":"tournament","discipline":"blackball","scope":"national","ranking_type":"team","team_category":"DN3","season":"2025-2026","is_active":true,"sort_order":45},"fetch":{"id":33,"status":"success","fetched_at":"2026-04-22T18:28:45+02:00","http_status":200,"records_count":16,"is_active":true},"count":0,"data":[],"club_team_present":false},{"ranking":{"id":34,"name":"BB_CVL \u00c9QUIPE DR1 25-26","cuescore_id":"67097593","url":"https:\/\/cuescore.com\/tournament\/BB_CVL+\u00c9QUIPE+DR1+25-26\/67097593","source_type":"tournament","discipline":"blackball","scope":"regional","ranking_type":"team","team_category":"DR1","season":"2025-2026","is_active":true,"sort_order":46},"fetch":{"id":34,"status":"success","fetched_at":"2026-04-22T18:28:48+02:00","http_status":200,"records_count":10,"is_active":true},"count":0,"data":[],"club_team_present":false},{"ranking":{"id":35,"name":"BB CVL \u00c9QUIPE DR2 25-26","cuescore_id":"67097608","url":"https:\/\/cuescore.com\/tournament\/BB_CVL+\u00c9QUIPE+DR2+25-26\/67097608","source_type":"tournament","discipline":"blackball","scope":"regional","ranking_type":"team","team_category":"DR2","season":"2025-2026","is_active":true,"sort_order":47},"fetch":{"id":35,"status":"success","fetched_at":"2026-04-22T18:28:52+02:00","http_status":200,"records_count":10,"is_active":true},"count":10,"data":[{"rank_position":1,"team_name":"SAINT LAURENT NOUAN 1 DR2","team_external_id":"31539304","team_url":"https:\/\/cuescore.com\/team\/SAINT+LAURENT+NOUAN+1+DR2\/31539304","points":"78.00","played":16,"wins":12,"losses":1,"ties":3,"is_club_team":false,"additional_data":{"frame_wins":175,"frame_score":94,"frame_losses":81}},{"rank_position":2,"team_name":"BC ORLEANS 2 DR2","team_external_id":"31531096","team_url":"https:\/\/cuescore.com\/team\/BC+ORLEANS+2+DR2\/31531096","points":"73.00","played":16,"wins":12,"losses":3,"ties":1,"is_club_team":false,"additional_data":{"frame_wins":164,"frame_score":72,"frame_losses":92}},{"rank_position":3,"team_name":"LUCE 2 DR2","team_external_id":"32864440","team_url":"https:\/\/cuescore.com\/team\/LUCE+2+DR2\/32864440","points":"70.00","played":16,"wins":11,"losses":3,"ties":2,"is_club_team":false,"additional_data":{"frame_wins":153,"frame_score":50,"frame_losses":103}},{"rank_position":4,"team_name":"ACADEMIE BLESOISE DE BILLARD 2 DR2","team_external_id":"33204151","team_url":"https:\/\/cuescore.com\/team\/ACADEMIE+BLESOISE+DE+BILLARD+2+DR2\/33204151","points":"62.00","played":16,"wins":8,"losses":6,"ties":2,"is_club_team":false,"additional_data":{"frame_wins":143,"frame_score":30,"frame_losses":113}},{"rank_position":5,"team_name":"JOUE LES TOURS 1 DR2","team_external_id":"31579930","team_url":"https:\/\/cuescore.com\/team\/JOUE+LES+TOURS+1+DR2\/31579930","points":"61.00","played":16,"wins":8,"losses":5,"ties":3,"is_club_team":true,"additional_data":{"frame_wins":141,"frame_score":26,"frame_losses":115}},{"rank_position":6,"team_name":"ROMO 5 DR2","team_external_id":"49190521","team_url":"https:\/\/cuescore.com\/team\/ROMO+5+DR2\/49190521","points":"59.00","played":16,"wins":6,"losses":4,"ties":6,"is_club_team":false,"additional_data":{"frame_wins":143,"frame_score":30,"frame_losses":113}},{"rank_position":7,"team_name":"DREUX 7 DR2","team_external_id":"32864434","team_url":"https:\/\/cuescore.com\/team\/DREUX+7+DR2\/32864434","points":"51.00","played":16,"wins":5,"losses":7,"ties":4,"is_club_team":false,"additional_data":{"frame_wins":123,"frame_score":-10,"frame_losses":133}},{"rank_position":8,"team_name":"ACADEMIE BLESOISE DE BILLARD 3 DR2","team_external_id":"33204154","team_url":"https:\/\/cuescore.com\/team\/ACADEMIE+BLESOISE+DE+BILLARD+3+DR2\/33204154","points":"38.00","played":16,"wins":4,"losses":10,"ties":2,"is_club_team":false,"additional_data":{"frame_wins":91,"frame_score":-74,"frame_losses":165}},{"rank_position":9,"team_name":"DREUX 5 DR2","team_external_id":"31530961","team_url":"https:\/\/cuescore.com\/team\/DREUX+5+DR2\/31530961","points":"29.00","played":16,"wins":1,"losses":14,"ties":1,"is_club_team":false,"additional_data":{"frame_wins":76,"frame_score":-104,"frame_losses":180}},{"rank_position":10,"team_name":"BOURGES 1 DR2","team_external_id":"33204160","team_url":"https:\/\/cuescore.com\/team\/BOURGES+1+DR2\/33204160","points":"27.00","played":16,"wins":1,"losses":15,"ties":0,"is_club_team":false,"additional_data":{"frame_wins":71,"frame_score":-114,"frame_losses":185}}],"club_team_present":true},{"ranking":{"id":36,"name":"BB CVL \u00c9QUIPE DR3 25-26","cuescore_id":"67097614","url":"https:\/\/cuescore.com\/tournament\/BB_CVL+\u00c9QUIPE+DR3+25-26\/67097614","source_type":"tournament","discipline":"blackball","scope":"regional","ranking_type":"team","team_category":"DR3","season":"2025-2026","is_active":true,"sort_order":48},"fetch":{"id":36,"status":"success","fetched_at":"2026-04-22T18:28:55+02:00","http_status":200,"records_count":10,"is_active":true},"count":10,"data":[{"rank_position":1,"team_name":"ROMO 4 DR3","team_external_id":"31579927","team_url":"https:\/\/cuescore.com\/team\/ROMO+4+DR3\/31579927","points":"75.00","played":16,"wins":12,"losses":3,"ties":1,"is_club_team":false,"additional_data":{"frame_wins":164,"frame_score":72,"frame_losses":92}},{"rank_position":2,"team_name":"BC ORLEANS 4 DR3","team_external_id":"31531102","team_url":"https:\/\/cuescore.com\/team\/BC+ORLEANS+4+DR3\/31531102","points":"66.00","played":16,"wins":10,"losses":3,"ties":3,"is_club_team":false,"additional_data":{"frame_wins":144,"frame_score":32,"frame_losses":112}},{"rank_position":3,"team_name":"LUCE 3 DR3","team_external_id":"32864449","team_url":"https:\/\/cuescore.com\/team\/LUCE+3+DR3\/32864449","points":"65.00","played":16,"wins":9,"losses":4,"ties":3,"is_club_team":false,"additional_data":{"frame_wins":144,"frame_score":32,"frame_losses":112}},{"rank_position":4,"team_name":"LENAY 2 DR3","team_external_id":"31579945","team_url":"https:\/\/cuescore.com\/team\/LENAY+2+DR3\/31579945","points":"63.00","played":16,"wins":8,"losses":4,"ties":4,"is_club_team":false,"additional_data":{"frame_wins":145,"frame_score":34,"frame_losses":111}},{"rank_position":5,"team_name":"ISSOUDUN 2 DR3","team_external_id":"31530979","team_url":"https:\/\/cuescore.com\/team\/ISSOUDUN+2+DR3\/31530979","points":"61.00","played":16,"wins":8,"losses":4,"ties":4,"is_club_team":false,"additional_data":{"frame_wins":137,"frame_score":18,"frame_losses":119}},{"rank_position":6,"team_name":"CHATEAUROUX 1 DR3","team_external_id":"33204178","team_url":"https:\/\/cuescore.com\/team\/CHATEAUROUX+1+DR3\/33204178","points":"60.00","played":16,"wins":9,"losses":5,"ties":2,"is_club_team":false,"additional_data":{"frame_wins":133,"frame_score":10,"frame_losses":123}},{"rank_position":7,"team_name":"JOUE LES TOURS 2 DR3","team_external_id":"31579933","team_url":"https:\/\/cuescore.com\/team\/JOUE+LES+TOURS+2+DR3\/31579933","points":"50.00","played":16,"wins":4,"losses":7,"ties":5,"is_club_team":true,"additional_data":{"frame_wins":132,"frame_score":8,"frame_losses":124}},{"rank_position":8,"team_name":"BC ORLEANS 3 DR3","team_external_id":"31531099","team_url":"https:\/\/cuescore.com\/team\/BC+ORLEANS+3+DR3\/31531099","points":"44.00","played":16,"wins":4,"losses":10,"ties":2,"is_club_team":false,"additional_data":{"frame_wins":113,"frame_score":-30,"frame_losses":143}},{"rank_position":9,"team_name":"JOUE LES TOURS 4 DR3","team_external_id":"33204163","team_url":"https:\/\/cuescore.com\/team\/JOUE+LES+TOURS+4+DR3\/33204163","points":"34.00","played":16,"wins":2,"losses":13,"ties":1,"is_club_team":true,"additional_data":{"frame_wins":89,"frame_score":-78,"frame_losses":167}},{"rank_position":10,"team_name":"POLE ESPOIR DR3","team_external_id":"31579939","team_url":"https:\/\/cuescore.com\/team\/POLE+ESPOIR+DR3\/31579939","points":"29.00","played":16,"wins":1,"losses":14,"ties":1,"is_club_team":false,"additional_data":{"frame_wins":79,"frame_score":-98,"frame_losses":177}}],"club_team_present":true},{"ranking":{"id":37,"name":"CVL \u00c9QUIPE DR4 ZONE OUEST 25-26","cuescore_id":"69856342","url":"https:\/\/cuescore.com\/tournament\/CVL+\u00c9QUIPE+DR4+ZONE+OUEST+25-26\/69856342#match-69864133","source_type":"tournament","discipline":"blackball","scope":"d\u00e9partemental","ranking_type":"team","team_category":"DR4","season":"2025-2026","is_active":true,"sort_order":49},"fetch":{"id":37,"status":"success","fetched_at":"2026-04-22T18:28:58+02:00","http_status":200,"records_count":7,"is_active":true},"count":7,"data":[{"rank_position":1,"team_name":"BILLARDERS BLESOIS 1 DR4","team_external_id":"31579906","team_url":"https:\/\/cuescore.com\/team\/BILLARDERS+BLESOIS+1+DR4\/31579906","points":"60.00","played":12,"wins":10,"losses":1,"ties":1,"is_club_team":false,"additional_data":{"frame_wins":129,"frame_score":74,"frame_losses":55}},{"rank_position":2,"team_name":"SAINT AMAND LONGPRE 1 DR4","team_external_id":"33204148","team_url":"https:\/\/cuescore.com\/team\/SAINT+AMAND+LONGPRE+1+DR4\/33204148","points":"54.00","played":12,"wins":8,"losses":1,"ties":3,"is_club_team":false,"additional_data":{"frame_wins":124,"frame_score":56,"frame_losses":68}},{"rank_position":3,"team_name":"CHINON 1 DR4","team_external_id":"33204181","team_url":"https:\/\/cuescore.com\/team\/CHINON+1+DR4\/33204181","points":"49.00","played":12,"wins":7,"losses":4,"ties":1,"is_club_team":false,"additional_data":{"frame_wins":117,"frame_score":50,"frame_losses":67}},{"rank_position":4,"team_name":"ACADEMIE BLESOISE DE BILLARD 4 DR4","team_external_id":"67014373","team_url":"https:\/\/cuescore.com\/team\/ACADEMIE+BLESOISE+DE+BILLARD+4+DR4\/67014373","points":"49.00","played":12,"wins":7,"losses":4,"ties":1,"is_club_team":false,"additional_data":{"frame_wins":116,"frame_score":40,"frame_losses":76}},{"rank_position":5,"team_name":"JOUE LES TOURS 6 DR4","team_external_id":"31539301","team_url":"https:\/\/cuescore.com\/team\/JOUE+LES+TOURS+6+DR4\/31539301","points":"38.00","played":12,"wins":4,"losses":6,"ties":2,"is_club_team":true,"additional_data":{"frame_wins":93,"frame_score":-6,"frame_losses":99}},{"rank_position":6,"team_name":"JOUE LES TOURS 3 DR4","team_external_id":"31579936","team_url":"https:\/\/cuescore.com\/team\/JOUE+LES+TOURS+3+DR4\/31579936","points":"20.00","played":12,"wins":1,"losses":11,"ties":0,"is_club_team":true,"additional_data":{"frame_wins":42,"frame_score":-99,"frame_losses":141}},{"rank_position":7,"team_name":"JOUE LES TOURS 5 DR4","team_external_id":"33204166","team_url":"https:\/\/cuescore.com\/team\/JOUE+LES+TOURS+5+DR4\/33204166","points":"17.00","played":12,"wins":1,"losses":11,"ties":0,"is_club_team":true,"additional_data":{"frame_wins":26,"frame_score":-115,"frame_losses":141}}],"club_team_present":true}],"meta":{"count":37,"filters":{"discipline":"","scope":"","ranking_type":""}},"links":[],"error":null}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '47'
-          access-control-allow-origin: '*'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: 'api/v1/cuescore/rankings/{ranking_id}'
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Retourne les informations d’un classement avec son fetch actif.'
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      ranking_id:
-        custom: []
-        name: ranking_id
-        description: 'The ID of the ranking.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      ranking_id: 1
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 200
-        content: '{"data":{"id":1,"name":"US Demi Finale N1 SUD 2025-2026","cuescore_id":"79941976","url":"https:\/\/cuescore.com\/ranking\/US_Demi+Finale+N1+SUD_2025-2026\/79941976","source_type":"ranking","discipline":"americain","scope":"national","ranking_type":"individual","team_category":null,"season":"2025-2026","is_active":true,"sort_order":1,"active_fetch":{"id":1,"status":"success","fetched_at":"2026-04-22T18:27:14+02:00","http_status":200,"records_count":0,"is_active":true}},"meta":[],"links":[],"error":null}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '46'
-          access-control-allow-origin: '*'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: 'api/v1/cuescore/rankings/{ranking_id}/club'
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Retourne les données club d’un classement (individuel ou équipe).'
-      description: 'Si aucun fetch actif n’est disponible, retourne une réponse vide.'
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      ranking_id:
-        custom: []
-        name: ranking_id
-        description: 'The ID of the ranking.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      ranking_id: 1
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 200
-        content: '{"data":[],"meta":{"count":0,"ranking_id":1,"ranking_name":"US Demi Finale N1 SUD 2025-2026","fetch_id":1,"discipline":"americain","scope":"national","ranking_type":"individual","team_category":null},"links":[],"error":null}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '45'
-          access-control-allow-origin: '*'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: 'api/v1/cuescore/rankings/{ranking_id}/teams'
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Retourne uniquement les classements équipes pour un ranking.'
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      ranking_id:
-        custom: []
-        name: ranking_id
-        description: 'The ID of the ranking.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      ranking_id: 1
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 200
-        content: '{"data":[],"meta":{"count":0,"ranking_id":1,"ranking_name":"US Demi Finale N1 SUD 2025-2026","fetch_id":1,"discipline":"americain","scope":"national","ranking_type":"individual","team_category":null,"club_team_present":false},"links":[],"error":null}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '44'
-          access-control-allow-origin: '*'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: 'api/v1/cuescore/{discipline}/{scope}/{rankingType}'
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Vue agrégée des classements club via paramètres d’URL.'
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      discipline:
-        custom: []
-        name: discipline
-        description: ''
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      scope:
-        custom: []
-        name: scope
-        description: ''
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      rankingType:
-        custom: []
-        name: rankingType
-        description: ''
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      discipline: architecto
-      scope: architecto
-      rankingType: architecto
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 200
-        content: '{"data":[],"meta":{"count":0,"filters":{"discipline":"architecto","scope":"architecto","ranking_type":"architecto"}},"links":[],"error":null}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '43'
-          access-control-allow-origin: '*'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: api/v1/documents
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Retourne la liste de tous les documents.'
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 200
-        content: '{"data":[{"id":1,"discipline":"blackball","discipline_id":1,"title":"Code sportif blackball 2024-2025","file":"pdf\/blackball\/code-sportif-blackball-2024-25.pdf","file_url":"http:\/\/localhost:8000\/pdf\/blackball\/code-sportif-blackball-2024-25.pdf","created_at":null,"updated_at":null},{"id":2,"discipline":"blackball","discipline_id":1,"title":"Code arbitrage blackball 2023-2024","file":"pdf\/blackball\/code-arbitrage-balckball-2023-2024.pdf","file_url":"http:\/\/localhost:8000\/pdf\/blackball\/code-arbitrage-balckball-2023-2024.pdf","created_at":null,"updated_at":null},{"id":4,"discipline":"carambole","discipline_id":2,"title":"R\u00e8glement 4 billes U21 2024-2025","file":"pdf\/carambole\/R\u00e8glement 4 BILLES U21-LBCVL 2024-25 V2.pdf","file_url":"http:\/\/localhost:8000\/pdf\/carambole\/R\u00e8glement 4 BILLES U21-LBCVL 2024-25 V2.pdf","created_at":null,"updated_at":null},{"id":5,"discipline":"carambole","discipline_id":2,"title":"R\u00e8glement challenge Jacques Foulon 2023-2024","file":"pdf\/carambole\/REGLEMENT CHALLENGE JACQUES FOULON Saison 2023-24.pdf","file_url":"http:\/\/localhost:8000\/pdf\/carambole\/REGLEMENT CHALLENGE JACQUES FOULON Saison 2023-24.pdf","created_at":null,"updated_at":null},{"id":27,"discipline":"blackball","discipline_id":1,"title":"R\u00e8gle 8 ball internationale","file":"pdf\/blackball\/13b2e8d3de2664ed618b9ced64c7cf56.pdf","file_url":"http:\/\/localhost:8000\/pdf\/blackball\/13b2e8d3de2664ed618b9ced64c7cf56.pdf","created_at":null,"updated_at":null},{"id":28,"discipline":"snooker","discipline_id":3,"title":"R\u00e8gles officielles du jeu de Snooker","file":"pdf\/snooker\/1203d1c2704f1c4ef9c51c35413d2206.pdf","file_url":"http:\/\/localhost:8000\/pdf\/snooker\/1203d1c2704f1c4ef9c51c35413d2206.pdf","created_at":null,"updated_at":null},{"id":30,"discipline":"americain","discipline_id":4,"title":"R\u00e8gles billard am\u00e9ricain","file":"pdf\/americain\/4a15ace67eb1db30fcfa50aedf0d03f8.pdf","file_url":"http:\/\/localhost:8000\/pdf\/americain\/4a15ace67eb1db30fcfa50aedf0d03f8.pdf","created_at":null,"updated_at":null},{"id":31,"discipline":"americain","discipline_id":4,"title":"Code sportif am\u00e9ricain 2024-2025","file":"pdf\/americain\/9ec905cf4aa7fc40f64bfac56eccb5f9.pdf","file_url":"http:\/\/localhost:8000\/pdf\/americain\/9ec905cf4aa7fc40f64bfac56eccb5f9.pdf","created_at":null,"updated_at":null},{"id":32,"discipline":"blackball","discipline_id":1,"title":"Code sportif blackball 2025-2026","file":"pdf\/blackball\/a2659d0a8e4107b33fb3e76703915fe5.pdf","file_url":"http:\/\/localhost:8000\/pdf\/blackball\/a2659d0a8e4107b33fb3e76703915fe5.pdf","created_at":null,"updated_at":null},{"id":33,"discipline":"blackball","discipline_id":1,"title":"Code sportif blackball 2025-2026 (R\u00e9sum\u00e9 modifications)","file":"pdf\/blackball\/43c8f3a54710da09707ff8bf2a153cb6.pdf","file_url":"http:\/\/localhost:8000\/pdf\/blackball\/43c8f3a54710da09707ff8bf2a153cb6.pdf","created_at":null,"updated_at":null},{"id":34,"discipline":"americain","discipline_id":4,"title":"Code sportif am\u00e9ricain 2025-2026","file":"pdf\/americain\/d80b9b2c57baaa78247bce71a470d6a9.pdf","file_url":"http:\/\/localhost:8000\/pdf\/americain\/d80b9b2c57baaa78247bce71a470d6a9.pdf","created_at":null,"updated_at":null},{"id":35,"discipline":"americain","discipline_id":4,"title":"Code sportif am\u00e9ricain 2025-2026 (r\u00e9sum\u00e9 modifications)","file":"pdf\/americain\/32512862fd6ac04b2214be6be2966ad1.pdf","file_url":"http:\/\/localhost:8000\/pdf\/americain\/32512862fd6ac04b2214be6be2966ad1.pdf","created_at":null,"updated_at":null},{"id":36,"discipline":"snooker","discipline_id":3,"title":"Code sportif snooker 2025-2026","file":"pdf\/snooker\/44c0823b76cf0b99f4350e1a9680720c.pdf","file_url":"http:\/\/localhost:8000\/pdf\/snooker\/44c0823b76cf0b99f4350e1a9680720c.pdf","created_at":null,"updated_at":null},{"id":37,"discipline":"snooker","discipline_id":3,"title":"Code sportif snooker 2025-2026 (r\u00e9sum\u00e9 modifications)","file":"pdf\/snooker\/2b9ca17c1a429b9e9f651080b06edd13.pdf","file_url":"http:\/\/localhost:8000\/pdf\/snooker\/2b9ca17c1a429b9e9f651080b06edd13.pdf","created_at":null,"updated_at":null},{"id":38,"discipline":"carambole","discipline_id":2,"title":"R\u00e9formes 2025-2026 cat\u00e9gories individuelles et \u00e9quipes Carambole","file":"pdf\/carambole\/a190f19f1998a25fe4e4a8d0963bfef4.pdf","file_url":"http:\/\/localhost:8000\/pdf\/carambole\/a190f19f1998a25fe4e4a8d0963bfef4.pdf","created_at":null,"updated_at":null},{"id":40,"discipline":"carambole","discipline_id":2,"title":"Calendrier national carambole 2025-2026","file":"pdf\/carambole\/58bbc07b276a609ac0f4183013f5f651.pdf","file_url":"http:\/\/localhost:8000\/pdf\/carambole\/58bbc07b276a609ac0f4183013f5f651.pdf","created_at":null,"updated_at":null},{"id":43,"discipline":"carambole","discipline_id":2,"title":"Code Arbitrage Carambole 2025-2026","file":"pdf\/carambole\/a52714de00981eb79a00e0649a3b9516.pdf","file_url":"http:\/\/localhost:8000\/pdf\/carambole\/a52714de00981eb79a00e0649a3b9516.pdf","created_at":null,"updated_at":null},{"id":44,"discipline":"carambole","discipline_id":2,"title":"Code sportif Carambole 2025-2026","file":"pdf\/carambole\/9ce7448f02d51da05db06ccabfd51617.pdf","file_url":"http:\/\/localhost:8000\/pdf\/carambole\/9ce7448f02d51da05db06ccabfd51617.pdf","created_at":null,"updated_at":null},{"id":45,"discipline":"blackball","discipline_id":1,"title":"Code sportif TRZ \/ DR4 Blackball r\u00e9gion Centre Val-de-Loirs 2025-2026","file":"pdf\/blackball\/8b896c63dfbcf29cba2ca855e04b25c0.pdf","file_url":"http:\/\/localhost:8000\/pdf\/blackball\/8b896c63dfbcf29cba2ca855e04b25c0.pdf","created_at":null,"updated_at":null},{"id":46,"discipline":"snooker","discipline_id":3,"title":"2025-2026 LBCVL CODE SPORTIF SNOOKER","file":"pdf\/snooker\/13540fa9011009a8dbec059cd0141e45.pdf","file_url":"http:\/\/localhost:8000\/pdf\/snooker\/13540fa9011009a8dbec059cd0141e45.pdf","created_at":null,"updated_at":null},{"id":47,"discipline":"snooker","discipline_id":3,"title":"2025-2026 LBCVL CONVOCATIONS SNOOKER","file":"pdf\/snooker\/5b10bc4745d79d3a3fdd6d4397a31ad5.pdf","file_url":"http:\/\/localhost:8000\/pdf\/snooker\/5b10bc4745d79d3a3fdd6d4397a31ad5.pdf","created_at":null,"updated_at":null}],"meta":{"count":21},"links":[],"error":null}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '39'
-          access-control-allow-origin: '*'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: 'api/v1/documents/{discipline}'
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Retourne les documents pour une discipline donnée.'
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      discipline:
-        custom: []
-        name: discipline
-        description: ''
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      discipline: 1
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 404
-        content: '{"data":null,"meta":[],"links":[],"error":{"code":"discipline_not_found","message":"Discipline not found"}}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '38'
-          access-control-allow-origin: '*'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: 'api/v1/documents/{discipline}/{id}'
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Retourne un document spécifique pour une discipline.'
-      description: "Si le document n'existe pas, retourne une erreur 404."
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      discipline:
-        custom: []
-        name: discipline
-        description: ''
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      id:
-        custom: []
-        name: id
-        description: 'The ID of the {discipline}.'
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      discipline: 1
-      id: architecto
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 500
-        content: |-
-          {
-              "message": "Server Error"
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '37'
-          access-control-allow-origin: '*'
-        description: null
     responseFields: []
     auth: []
     controller: null
@@ -1309,12 +246,12 @@ endpoints:
     uri: api/v1/contact
     metadata:
       custom: []
-      groupName: Endpoints
+      groupName: Public
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Retourne la liste des contacts disponibles.'
-      description: ''
+      title: 'Liste des contacts'
+      description: 'Retourne les informations de contact publiques du club.'
       authenticated: false
       deprecated: false
     headers:
@@ -1331,14 +268,24 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"message":"Une question, une demande, ou simplement envie d''\u00e9changer ?\r\nLe Billard Club de Jou\u00e9-l\u00e8s-Tours est \u00e0 votre \u00e9coute !\r\nQue vous souhaitiez en savoir plus sur nos activit\u00e9s, assister \u00e0 un \u00e9v\u00e9nement, d\u00e9couvrir le billard ou simplement prendre contact, n''h\u00e9sitez pas \u00e0 nous \u00e9crire via ce formulaire.\r\nNous vous r\u00e9pondrons avec plaisir !","email":"contact@bcj.fr","telephone":"06 25 13 35 66","created_at":null,"updated_at":null}],"meta":{"count":1},"links":[],"error":null}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '36'
-          access-control-allow-origin: '*'
-        description: null
+        content: |-
+          {
+            "data": [
+              {
+                "id": 1,
+                "nom": "BCJ37",
+                "email": "contact@bcj37.fr",
+                "telephone": null
+              }
+            ],
+            "meta": {
+              "count": 1
+            },
+            "links": [],
+            "error": null
+          }
+        headers: []
+        description: ''
     responseFields: []
     auth: []
     controller: null

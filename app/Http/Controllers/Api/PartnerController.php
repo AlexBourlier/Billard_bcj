@@ -10,9 +10,30 @@ use Illuminate\Http\JsonResponse;
 class PartnerController extends Controller
 {
     /**
-     * Retourne la liste de tous les partenaires.
+     * Liste des partenaires
      *
-     * @return JsonResponse
+     * Retourne la liste des partenaires publics du club.
+     *
+     * @group Public
+     *
+     * @response 200 {
+     *   "data": [
+     *     {
+     *       "id": 1,
+     *       "name": "Tours Métropole",
+     *       "logo": "partenaires/logo.png",
+     *       "logo_url": "https://example.com/partenaires/logo.png",
+     *       "website_url": "https://www.tours-metropole.fr",
+     *       "created_at": "2025-05-26T14:21:37.000000Z",
+     *       "updated_at": "2025-12-06T20:52:52.000000Z"
+     *     }
+     *   ],
+     *   "meta": {
+     *     "count": 1
+     *   },
+     *   "links": [],
+     *   "error": null
+     * }
      */
     public function index(): JsonResponse
     {
