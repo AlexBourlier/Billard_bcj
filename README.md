@@ -10,13 +10,18 @@ Site officiel du club BCJ37 basé sur Laravel, avec API publique, intégration C
 
 ---
 
-## 📚 Documentation
+## Documentation
 
-- 📄 [Documentation API](docs/api.md)
+- [Documentation API](docs/api.md)
+- Documentation interactive (Scribe) :
+
+```txt
+/docs
+```
 
 ---
 
-## 🏗️ Architecture / Schéma
+## Architecture / Schéma
 
 ### Architecture générale
 
@@ -55,9 +60,14 @@ Le front-end est basé sur **Vite + Tailwind CSS**, optimisé pour la performanc
 
 ### API publique
 
-L’API expose les données nécessaires au front :
+L’API expose les données nécessaires au front et aux intégrations externes.
 
+#### Endpoints principaux
+
+- `/public/site`
 - `/public/home`
+- `/contact`
+- `/partenaires`
 - `/disciplines/{discipline}`
 - `/disciplines/{discipline}/rankings-preview`
 
@@ -104,7 +114,7 @@ L’API expose les données nécessaires au front :
 
 ---
 
-## 🧪 Tests
+## Tests
 
 Le projet dispose d’une couverture de tests complète :
 
@@ -132,7 +142,7 @@ Les tests sont exécutés automatiquement :
 
 ---
 
-## 🔐 Sécurité & bonnes pratiques
+## Sécurité & bonnes pratiques
 
 ### Sécurité backend
 
@@ -172,7 +182,7 @@ Les tests sont exécutés automatiquement :
 
 ---
 
-## ⚡ Performance & maintenance
+## Performance & maintenance
 
 * Cache API avec TTL
 * Invalidation ciblée
@@ -183,7 +193,7 @@ Les tests sont exécutés automatiquement :
 
 ---
 
-## 📊 Analytics & conformité
+## Analytics & conformité
 
 * Utilisation de **Matomo** (auto-hébergé)
 * Aucune dépendance à Google Analytics
@@ -192,7 +202,7 @@ Les tests sont exécutés automatiquement :
 
 ---
 
-## 🚀 Évolutions possibles
+## Évolutions possibles
 
 ### API
 
@@ -214,7 +224,7 @@ Les tests sont exécutés automatiquement :
 
 ---
 
-## 👨‍💻 Développement
+## Développement
 
 ### Installation
 
@@ -237,7 +247,7 @@ npm run dev
 
 ---
 
-## 📄 Licence
+## Licence
 
 Projet interne BCJ37.
 

@@ -2,7 +2,7 @@
 
 ## Base URL
 
-### Local 
+### Local
 
 ```txt
 http://127.0.0.1:8000/api/v1
@@ -10,15 +10,17 @@ http://127.0.0.1:8000/api/v1
 
 ### Production
 
-A définir
+```txt
+À définir
+```
 
 ---
 
-## Format standard des réponses
+# Format standard des réponses
 
-Toutes les réponses API publiques suivent le format suivant :
+Toutes les réponses API publiques respectent le format suivant :
 
-```JSON
+```json
 {
     "data": {},
     "meta": {},
@@ -27,70 +29,114 @@ Toutes les réponses API publiques suivent le format suivant :
 }
 ```
 
-### Erreur standard
+## Format d’erreur standard
 
-```JSON
+```json
 {
-  "data": null,
-  "meta": {},
-  "links": {},
-  "error": {
-    "code": "discipline_not_found",
-    "message": "Discipline not found"
-  }
+    "data": null,
+    "meta": {},
+    "links": {},
+    "error": {  
+        "code": "discipline_not_found",  
+        "message": "Discipline not found"
+    }
 }
 ```
+---
 
-## Endpoint publics
+# Endpoints publics
 
-** GET `/public/site` **
-Retourne les informations globales du site
+## 🔹 GET `/public/site`
+
+Retourne les informations globales du site.
 
 ### Réponse
-```JSON
+
+```json
 {
-  "data": {
-    "site_settings": {},
-    "menus": []
-  },
-  "meta": {
-    "menus_count": 5
-  },
-  "links": [],
-  "error": null
+    "data": {  
+        "site_settings": {},  
+        "menus": []
+    },
+    "meta": {  
+        "menus_count": 5
+    },
+    "links": [],
+    "error": null
 }
 ```
 
-** GET `/public/home` **
-Retourne les données nécessaires à la page d'accueil publique
+---
+
+## 🔹 GET `/public/home`
+
+Retourne les données nécessaires à la page d’accueil.
 
 ### Cache
+
 ```txt
 10 minutes
 ```
 
 ### Réponse
-```JSON
+
+```json
 {
-  "data": {
-    "site_settings": {},
-    "menus": [],
-    "partners": [],
-    "featured_post": {}
-  },
-  "meta": {
-    "menus_count": 5,
-    "partners_count": 8,
-    "has_featured_post": true
-  },
-  "links": [],
-  "error": null
+    "data": {  
+        "site_settings": {},  
+        "menus": [], 
+        "partners": [],  
+        "featured_post": {}
+    },
+    "meta": {  
+        "menus_count": 5,  
+        "partners_count": 8,  
+        "has_featured_post": true
+    },
+    "links": [],
+    "error": null
 }
 ```
 
-## Disciplines
+---
 
-### Disciplines supportées
+## 🔹 GET `/contacts`
+
+Retourne les informations de contact du club.
+
+```json
+{
+    "data": [],
+    "meta": {  
+        "count": 1
+    },
+    "links": [],
+    "error": null
+}
+```
+
+---
+
+## 🔹 GET `/partenaires`
+
+Retourne la liste des partenaires.
+
+```json
+{
+    "data": [],
+    "meta": {  
+        "count": 8
+    },
+    "links": [],
+    "error": null
+}
+```
+
+---
+
+# Disciplines
+
+## Disciplines supportées
 
 ```txt
 blackball
@@ -99,150 +145,128 @@ snooker
 carambole
 ```
 
-** GET `/disciplines/{discipline}` **
-Retourne les contenus liés à une discipline
+---
 
-#### Paramètres URL 
+## 🔹 GET `/disciplines/{discipline}`
+
+Retourne les contenus d’une discipline.
+
+### Paramètres
 
 | Nom        | Type   | Obligatoire | Description           |
-| ---------- | ------ | ----------: | --------------------- |
-| discipline | string |         oui | Slug de la discipline |
+| ---------- | ------ | ----------- | --------------------- |
+| discipline | string | oui         | Slug de la discipline |
 
-#### Exemple
+### Exemple
 
-** GET `/disciplines/blackball` **
+```txt
+GET /disciplines/blackball
+```
 
-#### Cache
+### Cache
 
 ```txt
 10 minutes
 ```
 
-#### Réponse
-```JSON
+### Réponse
+
+```json
 {
-  "data": {
-    "posts": [],
-    "calendar": [],
-    "documents": [],
-    "rankings": []
-  },
-  "meta": {
-    "discipline": "blackball",
-    "posts_count": 0,
-    "calendar_count": 0,
-    "documents_count": 0,
-    "rankings_count": 0
-  },
-  "links": [],
-  "error": null
-}
-```
-
-#### Erreur discipline inconnue
-
-```JSON
-{
-  "data": null,
-  "meta": {},
-  "links": [],
-  "error": {
-    "code": "discipline_not_found",
-    "message": "Discipline not found"
-  }
-}
-```
-
-** GET `/disciplines/{discipline}/rankings-preview` **
-Retourne un aperçu des classements CueScore pour une discipline.
-
-#### Paramètres URL
-| Nom        | Type   | Obligatoire | Description           |
-| ---------- | ------ | ----------: | --------------------- |
-| discipline | string |         oui | Slug de la discipline |
-
-#### Paramètres query
-| Nom   |    Type | Défaut | Min | Max | Description                                                      |
-| ----- | ------: | -----: | --: | --: | ---------------------------------------------------------------- |
-| limit | integer |      5 |   1 |  10 | Nombre maximum d’entrées individuelles retournées par classement |
-
-#### Exemple
-`GET /disciplines/blackball/rankings-preview?limit=10`
-
-#### Cache
-`5 minutes`
-
-#### Réponse
-```JSON
-{
-  "data": {
-    "national": [
-      {
-        "ranking": {
-          "id": 1,
-          "name": "FFB - Blackball - TN - Master",
-          "cuescore_id": "123456",
-          "url": "https://cuescore.com/ranking/example",
-          "source_type": "ranking",
-          "discipline": "blackball",
-          "scope": "national",
-          "ranking_type": "individual",
-          "team_category": null,
-          "season": "2025-2026",
-          "is_active": true,
-          "sort_order": 1
-        },
-        "entries": [],
-        "meta": []
-      }
-    ],
-    "regional": [],
-    "départemental": []
-  },
-  "meta": {
-    "discipline": "blackball",
-    "count": 1,
-    "limit": 10,
-    "rankings_supported": true
-  },
-  "links": [],
-  "error": null
-}
-```
-
-### Cas particulier : carambole
-Les classements CueScore ne sont pas supportés pour le carambole
-
-`GET /discipline/carambole/rankings-preview`
-
-```JSON
-{
-  "data": null,
-  "meta": {
-    "discipline": "carambole",
-    "rankings_supported": false
-  },
-  "links": [],
-  "error": null
+    "data": {  
+        "posts": [],  
+        "calendar": [],  
+        "documents": [],  
+        "rankings": []
+    },
+    "meta": {  
+        "discipline": "blackball",  
+        "posts_count": 0,  
+        "calendar_count": 0,  
+        "documents_count": 0,  
+        "rankings_count": 0
+    },
+    "links": [],
+    "error": null
 }
 ```
 
 ---
 
-## Cache API
+## 🔹 GET `/disciplines/{discipline}/rankings-preview`
 
-### Clés de cache
-Les clés sont centralisées dans : 
+Retourne un aperçu des classements CueScore.
 
-```php
-App\Support\CacheKeys
-```
-### Clés principales
+### Paramètres URL
+
+| Nom        | Type   | Obligatoire | Description |
+| ---------- | ------ | ----------- | ----------- |
+| discipline | string | oui         | Slug        |
+
+### Query
+
+| Nom   | Type    | Défaut | Min | Max | Description        |
+| ----- | ------- | ------- | --- | --- | ------------------ |
+| limit | integer | 5       | 1   | 10  | Nombre d’entrées |
+
+### Exemple
 
 ```txt
-public_home
-discipline:{slug}
-discipline:{slug}:rankings_preview:limit:{limit}
+GET /disciplines/blackball/rankings-preview?limit=10
+```
+
+### Cache
+
+```txt
+5 minutes
+```
+
+### Réponse
+
+```json
+{
+    "data": {  
+        "national": [],  
+        "regional": [],  
+        "departemental": []
+    },
+    "meta": {  
+        "discipline": "blackball",  
+        "count": 1, 
+        "limit": 10,  
+        "rankings_supported": true
+    },
+    "links": [],
+    "error": null
+}
+```
+---
+
+## Cas particulier : carambole
+
+```txt
+GET /disciplines/carambole/rankings-preview
+```
+
+```json
+{
+    "data": null
+    "meta": {
+        "discipline": "carambole",
+        "rankings_supported": false
+        },
+    "links": [],
+    "error": null
+}
+```
+---
+
+# Cache API
+
+## Clés
+
+```txt
+App\Support\CacheKeys
 ```
 
 ### Exemples
@@ -251,102 +275,103 @@ discipline:{slug}:rankings_preview:limit:{limit}
 public_home
 discipline:blackball
 discipline:blackball:rankings_preview:limit:5
-discipline:blackball:rankings_preview:limit:10
 ```
+---
 
-### TTL
+## TTL
 
-| Endpoint                                     |      Durée |
-| -------------------------------------------- | ---------: |
-| `/public/home`                               | 10 minutes |
-| `/disciplines/{discipline}`                  | 10 minutes |
-| `/disciplines/{discipline}/rankings-preview` |  5 minutes |
+| Endpoint                      | Durée |
+| ----------------------------- | ------ |
+| `/public/home`              | 10 min |
+| `/disciplines/{discipline}` | 10 min |
+| `/rankings-preview`         | 5 min  |
 
-### Invalidation
-L'invalidation est gérée par : 
+---
 
-```php
+## Invalidation
+
+```txt
 App\Support\ApiCacheInvalidator
 ```
 
-#### Méthodes disponibles
+### Méthodes
 
-```php
+```txt
 publicHome()
-discipline(string $discipline)
-rankingsPreview(string $discipline)
-disciplinePage(string $discipline)
+discipline()
+rankingsPreview()
+disciplinePage()
 allPublic()
 ```
 
-#### Comportement
-Lorsqu'un import CueScore réussit : 
+### Comportement
 
 ```txt
-1. Le cache discipline est invalidé
-2. Le cache rankings-preview est invalidé
-3. Le cache rankings-preview par défaut est préchauffé
+Import CueScore réussi :
+   - invalidation discipline
+   - invalidation rankings
+   - preview
+   - warmup preview (limit=5)
 ```
----
-### Warmup
-Le Warmup est géré par : 
 
-```php
+---
+
+## Warmup
+
+```txt
 App\Support\ApiCacheWarmer
 ```
 
-Après un import CueScore réussi, l'API préchauffe le cache : 
+Clé préchauffée :
 
-```php
+```txt
 discipline:{slug}:rankings_preview:limit:5
 ```
 
-Objectif : 
+Objectif :
 
 ```txt
-Réduire la latence du prochain appel frontend
+Réduire la latence du premier appel
 ```
 
 ---
 
-## CueScore
+# CueScore
 
-### Import CueScore
-L'import CueScore est géré par : 
+## Import
 
-```php
+```txt
 App\Services\CueScore\CueScoreRankingImporter
 ```
 
-### Comportement après import réussi
+### Succès
 
 ```txt
-fetch actif créé
-entries enregistrées
-cache discipline invalidé
-cache rankings-preview invalidé
-warmup rankings-preview exécuté
+- fetch actif créé
+- entries enregistrées
+- cache invalidé
+- warmup exécuté
 ```
 
-### Comportement après import échoué
+### Échec
 
 ```txt
-fetch créé avec status failed
-cache existant conservé
-pas de warmup
+- fetch en failed
+- cache conservé
+- aucun warmup
 ```
 
 ---
 
-## Tests
+# Tests
 
-### Lancer tous les tests
+## Tous les tests
 
-```bash
+```txt
 php artisan test
 ```
 
-### Tests par catégorie
+## Par type
 
 ```bash
 php artisan test tests/Unit
@@ -354,29 +379,19 @@ php artisan test tests/Integration
 php artisan test tests/Feature
 ```
 
-### Tests par catégorie
+## Cache
 
 ```bash
-php artisan test tests/Unit
-php artisan test tests/Integration
-php artisan test tests/Feature
+php artisan test tests/Feature/ApiCache*
 ```
 
-### Tests cache
+## CueScore
 
 ```bash
-php artisan test tests/Feature/ApiCacheTest.php
-php artisan test tests/Feature/ApiCacheInvalidatorTest.php
-php artisan test tests/Feature/ApiCacheWithCueScoreInvalidationTest.php
+php artisan test tests/Feature/CueScore*
 ```
 
-### Tests CueScore API
-
-```bash
-php artisan test tests/Feature/CueScoreRankingsPreviewApiTest.php
-```
-
-### Dernier résultat connu 
+### Résultat
 
 ```txt
 172 tests passed
@@ -384,8 +399,9 @@ php artisan test tests/Feature/CueScoreRankingsPreviewApiTest.php
 
 ---
 
-## GitHub Actions
-Les tests sont organisés par catégories dans la CI: 
+# CI (GitHub Actions)
+
+Organisation des tests :
 
 ```txt
 Unit tests
@@ -397,11 +413,9 @@ Other feature tests
 
 ---
 
-## Notes techniques
+# Notes techniques
 
-### Gestion du paramètre `limit`
-
-Le paramètre `limit` est borné côté backend :
+## Paramètre `limit`
 
 ```txt
 min: 1
@@ -409,15 +423,15 @@ max: 10
 default: 5
 ```
 
-Cela garantit que toutes les clés de cache générées sont couvertes par l'invalidation.
+Garantit la cohérence des clés de cache.
 
 ---
 
-### Compatibilité cache
+## Compatibilité cache
 
-Le système acuel fonctionne sans cache tags.
+Sans cache tags.
 
-Drivers compatibles : 
+Drivers compatibles :
 
 ```txt
 array
@@ -427,29 +441,26 @@ redis
 memcached
 ```
 
-Les cache tags pourront être ajoutés plus tard si Redis ou Memcached est utilisé. 
-
 ---
 
-## Evolutions possibles
+# Évolutions possibles
 
-### Cache
+## Cache
 
-* Passage à Redis
-* Cache tags par discipline
+* Redis
+* Cache tags
 * Warmup multi-limits
-* Mesure cache hit/miss
+* Metrics hit/miss
 
-### API
+## API
 
-* Documentation OpenAPI / Swagger
-* Documentation Scribe
-* Pagination plus avancée
+* OpenAPI / Swagger
+* Pagination avancée
 * Rate limiting
 
-### CueScore
+## CueScore
 
-* Retry en cas d'échec API
+* Retry
 * Timeout explicite
-* Fallback sur dernier cache valide
-* Monitoring des imports
+* Fallback cache
+* Monitoring imports
