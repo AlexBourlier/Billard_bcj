@@ -9,6 +9,18 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+/**
+ * Contrôleur API pour l'exposition des classements CueScore.
+ *
+ * Permet de :
+ * - lister les classements disponibles
+ * - consulter un classement
+ * - récupérer les données club (individuelles ou équipes)
+ * - construire des vues agrégées filtrées
+ *
+ * Les réponses respectent le format standard :
+ * data / meta / links / error
+ */
 class CueScoreController extends Controller
 {
     public function __construct(
@@ -16,6 +28,43 @@ class CueScoreController extends Controller
     ) {
     }
 
+    /**
+     * Liste des classements CueScore
+     *
+     * Retourne les classements CueScore disponibles avec filtres optionnels.
+     *
+     * @group CueScore
+     *
+     * @queryParam discipline string Filtrer par discipline. Exemple : blackball
+     * @queryParam scope string Filtrer par scope. Exemple : national
+     * @queryParam ranking_type string Filtrer par type de classement. Exemple : individual
+     * @queryParam team_category string Filtrer par catégorie équipe. Exemple : DN1
+     * @queryParam is_active boolean Filtrer les classements actifs/inactifs. Exemple : true
+     *
+     * @response 200 {
+     *   "data": [
+     *     {
+     *       "id": 1,
+     *       "name": "FFB - Blackball - TN - Master",
+     *       "cuescore_id": "123456",
+     *       "url": "https://cuescore.com/ranking/example",
+     *       "source_type": "ranking",
+     *       "discipline": "blackball",
+     *       "scope": "national",
+     *       "ranking_type": "individual",
+     *       "team_category": null,
+     *       "season": "2025-2026",
+     *       "is_active": true,
+     *       "sort_order": 1
+     *     }
+     *   ],
+     *   "meta": {
+     *     "count": 1
+     *   },
+     *   "links": [],
+     *   "error": null
+     * }
+     */
     public function index(Request $request): JsonResponse
     {
         $rankings = $this->applyRankingFilters(
@@ -36,6 +85,43 @@ class CueScoreController extends Controller
         ]);
     }
 
+    /**
+     * Détail d’un classement CueScore
+     *
+     * Retourne les informations d’un classement CueScore avec son fetch actif.
+     *
+     * @group CueScore
+     *
+     * @urlParam ranking integer required Identifiant du classement CueScore local. Exemple : 1
+     *
+     * @response 200 {
+     *   "data": {
+     *     "id": 1,
+     *     "name": "FFB - Blackball - TN - Master",
+     *     "cuescore_id": "123456",
+     *     "url": "https://cuescore.com/ranking/example",
+     *     "source_type": "ranking",
+     *     "discipline": "blackball",
+     *     "scope": "national",
+     *     "ranking_type": "individual",
+     *     "team_category": null,
+     *     "season": "2025-2026",
+     *     "is_active": true,
+     *     "sort_order": 1,
+     *     "active_fetch": {
+     *       "id": 10,
+     *       "status": "success",
+     *       "fetched_at": "2026-04-25T10:00:00+00:00",
+     *       "http_status": 200,
+     *       "records_count": 120,
+     *       "is_active": true
+     *     }
+     *   },
+     *   "meta": [],
+     *   "links": [],
+     *   "error": null
+     * }
+     */
     public function show(CueScoreRanking $ranking): JsonResponse
     {
         $activeFetch = $this->clubRankingService->getActiveFetch($ranking);
@@ -53,6 +139,57 @@ class CueScoreController extends Controller
         ]);
     }
 
+    /**
+     * Données club d’un classement
+     *
+     * Retourne les données du club pour un classement CueScore.
+     *
+     * Pour un classement individuel, seules les entrées correspondant à des licenciés confirmés sont retournées.
+     * Pour un classement équipe, les équipes sont retournées si au moins une équipe du club est détectée.
+     *
+     * @group CueScore
+     *
+     * @urlParam ranking integer required Identifiant du classement CueScore local. Exemple : 1
+     *
+     * @response 200 {
+     *   "data": [
+     *     {
+     *       "rank_position": 1,
+     *       "participant_name": "John Doe",
+     *       "participant_external_id": "123456",
+     *       "participant_url": "https://cuescore.com/player/John+Doe/123456",
+     *       "points": "1200.00",
+     *       "played": null,
+     *       "wins": null,
+     *       "losses": null,
+     *       "ties": null,
+     *       "matching": {
+     *         "method": "exact_normalized",
+     *         "confidence_score": 100,
+     *         "is_confirmed": true
+     *       },
+     *       "licencie": {
+     *         "id": 1,
+     *         "licence": "123456 A",
+     *         "nom": "DOE",
+     *         "prenom": "JOHN"
+     *       }
+     *     }
+     *   ],
+     *   "meta": {
+     *     "count": 1,
+     *     "ranking_id": 1,
+     *     "ranking_name": "FFB - Blackball - TN - Master",
+     *     "fetch_id": 10,
+     *     "discipline": "blackball",
+     *     "scope": "national",
+     *     "ranking_type": "individual",
+     *     "team_category": null
+     *   },
+     *   "links": [],
+     *   "error": null
+     * }
+     */
     public function club(CueScoreRanking $ranking): JsonResponse
     {
         $activeFetch = $this->clubRankingService->getActiveFetch($ranking);
@@ -79,6 +216,52 @@ class CueScoreController extends Controller
         ]);
     }
 
+    /**
+     * Données équipes d’un classement
+     *
+     * Retourne les données équipes d’un classement CueScore.
+     *
+     * Les équipes appartenant au club sont identifiées via les règles de matching club.
+     *
+     * @group CueScore
+     *
+     * @urlParam ranking integer required Identifiant du classement CueScore local. Exemple : 1
+     *
+     * @response 200 {
+     *   "data": [
+     *     {
+     *       "rank_position": 1,
+     *       "team_name": "JOUÉ LÈS TOURS 1 DN1",
+     *       "team_external_id": "123456",
+     *       "team_url": "https://cuescore.com/team/example",
+     *       "points": "76.00",
+     *       "played": 16,
+     *       "wins": 13,
+     *       "losses": 1,
+     *       "ties": 2,
+     *       "is_club_team": true,
+     *       "additional_data": {
+     *         "frame_wins": 193,
+     *         "frame_score": 66,
+     *         "frame_losses": 127
+     *       }
+     *     }
+     *   ],
+     *   "meta": {
+     *     "count": 1,
+     *     "ranking_id": 1,
+     *     "ranking_name": "FFB - Blackball - Equipes - DN1",
+     *     "fetch_id": 10,
+     *     "discipline": "blackball",
+     *     "scope": "national",
+     *     "ranking_type": "team",
+     *     "team_category": "DN1",
+     *     "club_team_present": true
+     *   },
+     *   "links": [],
+     *   "error": null
+     * }
+     */
     public function teams(CueScoreRanking $ranking): JsonResponse
     {
         $activeFetch = $this->clubRankingService->getActiveFetch($ranking);
@@ -103,6 +286,58 @@ class CueScoreController extends Controller
         ]);
     }
 
+    /**
+     * Vue club des classements CueScore
+     *
+     * Retourne une vue agrégée des classements club selon des filtres optionnels.
+     *
+     * @group CueScore
+     *
+     * @queryParam discipline string Filtrer par discipline. Exemple : blackball
+     * @queryParam scope string Filtrer par scope. Exemple : national
+     * @queryParam ranking_type string Filtrer par type de classement. Exemple : individual
+     *
+     * @response 200 {
+     *   "data": [
+     *     {
+     *       "ranking": {
+     *         "id": 1,
+     *         "name": "FFB - Blackball - TN - Master",
+     *         "cuescore_id": "123456",
+     *         "url": "https://cuescore.com/ranking/example",
+     *         "source_type": "ranking",
+     *         "discipline": "blackball",
+     *         "scope": "national",
+     *         "ranking_type": "individual",
+     *         "team_category": null,
+     *         "season": "2025-2026",
+     *         "is_active": true,
+     *         "sort_order": 1
+     *       },
+     *       "fetch": {
+     *         "id": 10,
+     *         "status": "success",
+     *         "fetched_at": "2026-04-25T10:00:00+00:00",
+     *         "http_status": 200,
+     *         "records_count": 120,
+     *         "is_active": true
+     *       },
+     *       "count": 1,
+     *       "data": []
+     *     }
+     *   ],
+     *   "meta": {
+     *     "count": 1,
+     *     "filters": {
+     *       "discipline": "blackball",
+     *       "scope": "national",
+     *       "ranking_type": "individual"
+     *     }
+     *   },
+     *   "links": [],
+     *   "error": null
+     * }
+     */
     public function clubOverview(Request $request): JsonResponse
     {
         return $this->clubOverviewFromFilters([
@@ -112,6 +347,52 @@ class CueScoreController extends Controller
         ]);
     }
 
+    /**
+     * Vue club par discipline, scope et type
+     *
+     * Retourne une vue agrégée des classements club à partir des paramètres d’URL.
+     *
+     * @group CueScore
+     *
+     * @urlParam discipline string required Slug de la discipline. Exemple : blackball
+     * @urlParam scope string required Scope du classement. Exemple : national
+     * @urlParam rankingType string required Type du classement. Exemple : individual
+     *
+     * @response 200 {
+     *   "data": [
+     *     {
+     *       "ranking": {
+     *         "id": 1,
+     *         "name": "FFB - Blackball - TN - Master",
+     *         "discipline": "blackball",
+     *         "scope": "national",
+     *         "ranking_type": "individual",
+     *         "is_active": true
+     *       },
+     *       "fetch": {
+     *         "id": 10,
+     *         "status": "success",
+     *         "fetched_at": "2026-04-25T10:00:00+00:00",
+     *         "http_status": 200,
+     *         "records_count": 120,
+     *         "is_active": true
+     *       },
+     *       "count": 1,
+     *       "data": []
+     *     }
+     *   ],
+     *   "meta": {
+     *     "count": 1,
+     *     "filters": {
+     *       "discipline": "blackball",
+     *       "scope": "national",
+     *       "ranking_type": "individual"
+     *     }
+     *   },
+     *   "links": [],
+     *   "error": null
+     * }
+     */
     public function byDisciplineScopeAndType(string $discipline, string $scope, string $rankingType): JsonResponse
     {
         return $this->clubOverviewFromFilters([
@@ -121,6 +402,14 @@ class CueScoreController extends Controller
         ]);
     }
 
+    /**
+     * Applique les filtres sur une requête de classement.
+     *
+     * @param Builder $query
+     * @param Request $request
+     * @param bool $forceActive
+     * @return Builder
+     */
     private function applyRankingFilters(Builder $query, Request $request, bool $forceActive): Builder
     {
         if ($forceActive) {
@@ -151,6 +440,12 @@ class CueScoreController extends Controller
         return $query;
     }
 
+    /**
+     * Sérialise un modèle CueScoreRanking.
+     *
+     * @param CueScoreRanking $ranking
+     * @return array
+     */
     private function serializeRanking(CueScoreRanking $ranking): array
     {
         return [
@@ -169,6 +464,12 @@ class CueScoreController extends Controller
         ];
     }
 
+    /**
+     * Sérialise un fetch actif CueScore.
+     *
+     * @param mixed $fetch
+     * @return array|null
+     */
     private function serializeFetch($fetch): ?array
     {
         if ($fetch === null) {
@@ -185,6 +486,13 @@ class CueScoreController extends Controller
         ];
     }
 
+    /**
+     * Construit les métadonnées d’un classement.
+     *
+     * @param CueScoreRanking $ranking
+     * @param int $fetchId
+     * @return array
+     */
     private function buildRankingMeta(CueScoreRanking $ranking, int $fetchId): array
     {
         return [
@@ -198,6 +506,13 @@ class CueScoreController extends Controller
         ];
     }
 
+    /**
+     * Retourne une réponse vide pour un classement sans données.
+     *
+     * @param CueScoreRanking $ranking
+     * @param string $message
+     * @return JsonResponse
+     */
     private function emptyRankingResponse(CueScoreRanking $ranking, string $message): JsonResponse
     {
         return response()->json([
@@ -213,6 +528,12 @@ class CueScoreController extends Controller
         ]);
     }
 
+    /**
+     * Construit une vue agrégée des classements avec filtres.
+     *
+     * @param array $filters
+     * @return JsonResponse
+     */
     private function clubOverviewFromFilters(array $filters): JsonResponse
     {
         $query = CueScoreRanking::query()

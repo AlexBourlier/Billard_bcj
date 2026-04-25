@@ -1,0 +1,103 @@
+name: Licenciés
+description: |-
+  La recherche est partielle (LIKE %value%).
+  Les résultats sont dédupliqués et limités aux champs utiles.
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/licencies
+    metadata:
+      custom: []
+      groupName: Licenciés
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Retourne la liste complète des licenciés.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":[{"id":1,"licence":"191100 S","nom":"ARROUAS","prenom":"ISABELLE","url":null},{"id":2,"licence":"190399 F","nom":"AUCHART","prenom":"THIERRY","url":null},{"id":3,"licence":"018952 Y","nom":"AUGER","prenom":"WILLIAM","url":null},{"id":4,"licence":"185211 R","nom":"BAILLON","prenom":"DIDIER","url":null},{"id":5,"licence":"126663 R","nom":"BARBIER","prenom":"JEAN FRANCOIS","url":null},{"id":6,"licence":"165139 Z","nom":"BARICAULT","prenom":"JEAN CHRISTOPHE","url":null},{"id":7,"licence":"173547 N","nom":"BARRAS","prenom":"MICHEL","url":null},{"id":8,"licence":"111666 W","nom":"BONNET","prenom":"MICHEL","url":null},{"id":9,"licence":"188587 L","nom":"BOUATTAOUN","prenom":"TARIK","url":null},{"id":10,"licence":"177407 J","nom":"BOURLIER","prenom":"ALEXANDRE","url":null},{"id":11,"licence":"137219 R","nom":"BOUTEILLE","prenom":"MATHEO","url":null},{"id":12,"licence":"180469 M","nom":"BOUYCHOU","prenom":"CYRIL","url":null},{"id":13,"licence":"148836 D","nom":"BRUNEAU","prenom":"MARTIN","url":null},{"id":14,"licence":"141625 D","nom":"BUSCETTI","prenom":"ALEXANDRE","url":null},{"id":15,"licence":"179777 K","nom":"BUZIAUX","prenom":"NANCY","url":null},{"id":16,"licence":"157681 S","nom":"CADINOT","prenom":"GREGORY","url":null},{"id":17,"licence":"174450 V","nom":"CARVALHO","prenom":"RAUL","url":null},{"id":18,"licence":"183753 G","nom":"CESVRE","prenom":"JEAN LOUIS","url":null},{"id":19,"licence":"183253 N","nom":"CHAS","prenom":"THIERRY","url":null},{"id":20,"licence":"131348 W","nom":"CHAUVIN","prenom":"ROLAND","url":null},{"id":21,"licence":"111518 E","nom":"CHERAMY","prenom":"DAVID","url":null},{"id":22,"licence":"141681 H","nom":"CHEVE","prenom":"BENJAMIN","url":null},{"id":23,"licence":"155556 H","nom":"CHRISTIDIS","prenom":"ELIE","url":null},{"id":24,"licence":"157999 N","nom":"COLDRICK","prenom":"PAUL","url":null},{"id":25,"licence":"159105 Q","nom":"CONCHON","prenom":"JEAN PIERRE","url":null},{"id":26,"licence":"104860 C","nom":"COSTARD","prenom":"ALAIN","url":null},{"id":27,"licence":"104861 D","nom":"COUTARD","prenom":"BRUNO","url":null},{"id":28,"licence":"181887 D","nom":"CROUZAT REYNES","prenom":"NICOLAS","url":null},{"id":29,"licence":"173585 E","nom":"DA COSTA","prenom":"CLEMENT","url":null},{"id":30,"licence":"173661 M","nom":"DA COSTA","prenom":"DAVID","url":null},{"id":31,"licence":"185890 E","nom":"DA CRUZ PEREIRA","prenom":"LUIS","url":null},{"id":32,"licence":"193794 W","nom":"DA SILVA FERREIRA","prenom":"JORGE","url":null},{"id":33,"licence":"020779 F","nom":"DANEL","prenom":"MICHEL","url":null},{"id":34,"licence":"162426 A","nom":"DENIS","prenom":"DIDIER","url":null},{"id":35,"licence":"150158 Q","nom":"DEROT","prenom":"JEAN YVES","url":null},{"id":36,"licence":"124564 Y","nom":"DEVAUD","prenom":"MARCEL","url":null},{"id":37,"licence":"192805 W","nom":"DHAOUADI","prenom":"TAHER","url":null},{"id":38,"licence":"181485 R","nom":"DOMMERY","prenom":"VITAL","url":null},{"id":39,"licence":"151465 L","nom":"DOS REIS VENDAS","prenom":"JOSE","url":null},{"id":40,"licence":"177415 S","nom":"DUBAN","prenom":"GUYLAINE","url":null},{"id":41,"licence":"187565 A","nom":"DUSSOUCHAUD","prenom":"DAVID","url":null},{"id":42,"licence":"190158 T","nom":"EL ATTARI","prenom":"ZAKARIA","url":null},{"id":43,"licence":"153043 B","nom":"FAGE","prenom":"PHILIPPE","url":null},{"id":44,"licence":"116369 T","nom":"FAURIE","prenom":"CHRISTOPHE","url":null},{"id":45,"licence":"180354 M","nom":"FERASSE","prenom":"CHRISTOPHE","url":null},{"id":46,"licence":"138473 X","nom":"FRAYSSE","prenom":"FREDERIC","url":null},{"id":47,"licence":"109197 X","nom":"GANNAT","prenom":"DARIUS","url":null},{"id":48,"licence":"181362 H","nom":"GOUAS","prenom":"ALINE","url":null},{"id":49,"licence":"173548 P","nom":"GOUAS","prenom":"PATRICK","url":null},{"id":50,"licence":"177408 K","nom":"GUEGAN","prenom":"JEAN MARIE","url":null},{"id":51,"licence":"177932 E","nom":"HERISSON","prenom":"JEROME","url":null},{"id":52,"licence":"177885 D","nom":"HERISSON","prenom":"MATHEO","url":null},{"id":53,"licence":"180470 N","nom":"HERITIER","prenom":"CELINE","url":null},{"id":54,"licence":"156524 K","nom":"JUSSY","prenom":"JEROME","url":null},{"id":55,"licence":"156527 N","nom":"L ANTHOEN","prenom":"JEROME","url":null},{"id":56,"licence":"121547 X","nom":"LAMBERT","prenom":"CHRISTOPHE","url":null},{"id":57,"licence":"151779 C","nom":"LARCHET","prenom":"GUY","url":null},{"id":58,"licence":"152188 X","nom":"LAVAL","prenom":"OPHELIE","url":null},{"id":59,"licence":"154187 V","nom":"LE NOACH","prenom":"PATRICK","url":null},{"id":60,"licence":"182214 J","nom":"LEFEBVRE","prenom":"ALEXANDRE","url":null},{"id":61,"licence":"182217 M","nom":"LEFEBVRE","prenom":"FABIEN","url":null},{"id":62,"licence":"182215 K","nom":"LEFEBVRE","prenom":"PAUL ANTOINE","url":null},{"id":63,"licence":"166523 D","nom":"LEGROS","prenom":"PHILIPPE","url":null},{"id":64,"licence":"192244 L","nom":"LEGUY","prenom":"PATRICIA","url":null},{"id":65,"licence":"185892 G","nom":"LEMOIGNE","prenom":"DOMINIQUE","url":null},{"id":66,"licence":"103443 P","nom":"LEMOIGNE","prenom":"GERARD","url":null},{"id":67,"licence":"184162 B","nom":"LENEEZ","prenom":"QUENTIN","url":null},{"id":68,"licence":"141677 D","nom":"LEON","prenom":"MICHEL","url":null},{"id":69,"licence":"018276 Y","nom":"LEROUX","prenom":"ERIC","url":null},{"id":70,"licence":"104868 K","nom":"LEROUX","prenom":"JULIEN","url":null},{"id":71,"licence":"175790 B","nom":"LISSY","prenom":"MICHEL","url":null},{"id":72,"licence":"175398 A","nom":"LOYAU TULASNE","prenom":"THIERRY","url":null},{"id":73,"licence":"182058 P","nom":"MAHFOUDI","prenom":"ANASS","url":null},{"id":74,"licence":"188153 P","nom":"MAILLET","prenom":"CLAUDE","url":null},{"id":75,"licence":"177469 B","nom":"MAILLET","prenom":"ISABELLE","url":null},{"id":76,"licence":"184356 M","nom":"MAILLET","prenom":"JEAN MARC","url":null},{"id":77,"licence":"170602 M","nom":"MAILLET","prenom":"MICHAEL","url":null},{"id":78,"licence":"177470 C","nom":"MAILLET","prenom":"PATRICE","url":null},{"id":79,"licence":"018278 A","nom":"MARAIS","prenom":"JEAN CLAUDE","url":null},{"id":80,"licence":"133947 V","nom":"MARILLAUD","prenom":"PIERRE","url":null},{"id":81,"licence":"119340 A","nom":"MERCIER","prenom":"JEAN MARIE","url":null},{"id":82,"licence":"144532 Y","nom":"MICHEZ","prenom":"BASTIEN","url":null},{"id":83,"licence":"182056 M","nom":"MOUSSAMIH","prenom":"OMAR","url":null},{"id":84,"licence":"187521 C","nom":"NEERMAL","prenom":"SABINE","url":null},{"id":85,"licence":"177784 T","nom":"OLMEDA","prenom":"CHRISTIAN","url":null},{"id":86,"licence":"178096 H","nom":"ORTEGA","prenom":"BEATRICE","url":null},{"id":87,"licence":"168356 W","nom":"PALLUS","prenom":"CLAUDE","url":null},{"id":88,"licence":"131351 Z","nom":"PARIS","prenom":"MICHEL","url":null},{"id":89,"licence":"158309 A","nom":"PASCUTTO","prenom":"FABRICE","url":null},{"id":90,"licence":"146692 A","nom":"PELLISSIER","prenom":"SIMON","url":null},{"id":91,"licence":"013898 O","nom":"PERENNES","prenom":"JEAN YVES","url":null},{"id":92,"licence":"160792 Z","nom":"PIERROT","prenom":"TRISTAN","url":null},{"id":93,"licence":"177414 R","nom":"PIRES","prenom":"NICOLAS","url":null},{"id":94,"licence":"171306 C","nom":"PORTEVIN","prenom":"HUGO","url":null},{"id":95,"licence":"173909 G","nom":"RAINEAU","prenom":"THOMAS","url":null},{"id":96,"licence":"189149 X","nom":"RAVARD","prenom":"CHRISTOPHE","url":null},{"id":97,"licence":"166335 Z","nom":"REFAUVELET","prenom":"CHRISTIAN","url":null},{"id":98,"licence":"192118 Z","nom":"REMY","prenom":"NICOLAS","url":null},{"id":99,"licence":"189109 D","nom":"RETHIERE","prenom":"JEAN","url":null},{"id":100,"licence":"111670 A","nom":"RIBERA","prenom":"ANDREE","url":null},{"id":101,"licence":"122178 E","nom":"RIMPOT","prenom":"HENRI","url":null},{"id":102,"licence":"179958 G","nom":"ROBUCHON","prenom":"PHILIPPE","url":null},{"id":103,"licence":"182184 B","nom":"RUSSEIL","prenom":"MORGAN","url":null},{"id":104,"licence":"178088 Z","nom":"SKNOEZECK","prenom":"MAE","url":null},{"id":105,"licence":"110008 C","nom":"SKNOEZECK","prenom":"YVAN","url":null},{"id":106,"licence":"182458 Z","nom":"SOARES","prenom":"JOSE MANUEL","url":null},{"id":107,"licence":"178141 G","nom":"SOUVERAIN","prenom":"MICKAEL","url":null},{"id":108,"licence":"185893 H","nom":"SOW","prenom":"AMADOU","url":null},{"id":109,"licence":"157854 F","nom":"STORME","prenom":"ANTOINE","url":null},{"id":110,"licence":"179957 F","nom":"TOTAL","prenom":"GILLES","url":null},{"id":111,"licence":"145093 N","nom":"VACHER","prenom":"JEAN RENE","url":null},{"id":112,"licence":"018282 E","nom":"VIET","prenom":"CHRISTIAN","url":null},{"id":113,"licence":"192243 K","nom":"WADEY","prenom":"SOLVEGUE","url":null},{"id":114,"licence":"179413 P","nom":"WAGON","prenom":"DJINO","url":null},{"id":115,"licence":"179294 K","nom":"WAGON","prenom":"PIEDADE","url":null},{"id":116,"licence":"178350 J","nom":"WAGON","prenom":"TITO","url":null}],"meta":{"count":116},"links":[],"error":null}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '59'
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/licencies/search/{name}'
+    metadata:
+      custom: []
+      groupName: Licenciés
+      groupDescription: |-
+        La recherche est partielle (LIKE %value%).
+        Les résultats sont dédupliqués et limités aux champs utiles.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Recherche des licenciés par nom, prénom ou numéro de licence.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      name:
+        custom: []
+        name: name
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      name: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":[],"meta":{"search":"architecto","count":0},"links":[],"error":null}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '58'
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

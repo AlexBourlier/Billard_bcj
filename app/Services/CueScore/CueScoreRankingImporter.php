@@ -9,6 +9,17 @@ use App\Support\ApiCacheInvalidator;
 use App\Support\ApiCacheWarmer;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Service responsable de l'import d'un classement CueScore.
+ *
+ * Ce service :
+ * - récupère les données depuis l'API CueScore
+ * - sélectionne le bon parseur selon le type de classement
+ * - désactive les anciens fetchs actifs
+ * - crée un nouveau fetch
+ * - stocke les entrées associées
+ * - invalide puis préchauffe le cache API après un import réussi
+ */
 class CueScoreRankingImporter
 {
     public function __construct(
@@ -19,6 +30,28 @@ class CueScoreRankingImporter
     ) {
     }
 
+    /**
+     * Importe les données d'un classement CueScore.
+     *
+     * La stratégie dépend de la source et du type de classement :
+     * - ranking + individual : participants d'un classement
+     * - tournament + team : standings d'équipes
+     * - tournament + individual : résultats individuels de tournoi
+     *
+     * L'opération d'écriture est transactionnelle :
+     * - les anciens fetchs sont désactivés
+     * - le nouveau fetch est créé
+     * - les entrées sont insérées
+     *
+     * En cas d'import réussi, le cache public lié à la discipline est invalidé
+     * puis le preview des classements est préchauffé.
+     *
+     * @param CueScoreRanking $ranking Classement à importer
+     *
+     * @return CueScoreRankingFetch Fetch créé pour cet import
+     *
+     * @throws \RuntimeException Lorsque le type de classement CueScore n'est pas supporté
+     */
     public function import(CueScoreRanking $ranking): CueScoreRankingFetch
     {
         $response = $ranking->source_type === 'ranking'

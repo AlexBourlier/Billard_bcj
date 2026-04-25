@@ -7,8 +7,28 @@ use App\Models\CueScorePlayerMapping;
 use App\Models\CueScoreRanking;
 use Illuminate\Support\Collection;
 
+/**
+ * Service métier dédié à l'extraction des données club depuis les classements CueScore.
+ *
+ * Ce service ne récupère pas les données depuis CueScore directement.
+ * Il travaille uniquement à partir des données déjà importées :
+ * - rankings
+ * - fetchs
+ * - entries
+ * - mappings joueurs/licenciés
+ * - règles de matching club
+ *
+ * Il permet de produire des réponses exploitables par l'API publique.
+ */
 class CueScoreClubRankingService
 {
+    /**
+     * Retourne le dernier fetch actif d'un classement CueScore.
+     *
+     * @param CueScoreRanking $ranking
+     *
+     * @return mixed
+     */
     public function getActiveFetch(CueScoreRanking $ranking)
     {
         return $ranking->fetches()
@@ -17,6 +37,22 @@ class CueScoreClubRankingService
             ->first();
     }
 
+    /**
+     * Construit les données club pour un classement individuel.
+     *
+     * Seules les entrées correspondant à un joueur confirmé du club sont conservées.
+     * Le lien entre un participant CueScore et un licencié local est déterminé via
+     * CueScorePlayerMapping.
+     *
+     * @param CueScoreRanking $ranking Classement concerné
+     * @param int $fetchId Identifiant du fetch utilisé
+     * @param int|null $limit Nombre maximum d'entrées à retourner
+     *
+     * @return array{
+     *     data: Collection,
+     *     meta: array
+     * }
+     */
     public function buildIndividualRankingData(CueScoreRanking $ranking, int $fetchId, ?int $limit = null): array
     {
         $entries = $ranking->entries()
@@ -83,6 +119,22 @@ class CueScoreClubRankingService
         ];
     }
 
+    /**
+     * Construit les données club pour un classement par équipes.
+     *
+     * Contrairement aux classements individuels, toutes les équipes du classement
+     * sont retournées uniquement si au moins une équipe du club est détectée.
+     *
+     * La détection repose sur les règles actives de ClubMatchingRule.
+     *
+     * @param CueScoreRanking $ranking Classement concerné
+     * @param int $fetchId Identifiant du fetch utilisé
+     *
+     * @return array{
+     *     data: Collection,
+     *     meta: array{club_team_present: bool}
+     * }
+     */
     public function buildTeamRankingData(CueScoreRanking $ranking, int $fetchId): array
     {
         $entries = $ranking->entries()
@@ -132,6 +184,21 @@ class CueScoreClubRankingService
         ];
     }
 
+    /**
+     * Détermine si un nom d'équipe correspond aux règles de matching du club.
+     *
+     * Modes supportés :
+     * - contains
+     * - equals
+     * - starts_with
+     *
+     * Les comparaisons sont effectuées après normalisation du texte.
+     *
+     * @param string|null $teamName Nom d'équipe CueScore
+     * @param Collection $rules Règles actives de matching club
+     *
+     * @return bool
+     */
     public function teamMatchesClubRules(?string $teamName, Collection $rules): bool
     {
         $teamName = $this->normalizeClubText($teamName);
@@ -159,6 +226,22 @@ class CueScoreClubRankingService
         return false;
     }
 
+    /**
+     * Normalise un texte utilisé pour le matching club.
+     *
+     * La normalisation :
+     * - convertit en minuscules
+     * - supprime les accents courants
+     * - remplace apostrophes et tirets par des espaces
+     * - compacte les espaces multiples
+     *
+     * Cela permet de rendre le matching robuste face aux variations d'écriture
+     * dans CueScore.
+     *
+     * @param string|null $value
+     *
+     * @return string
+     */
     public function normalizeClubText(?string $value): string
     {
         if ($value === null) {
