@@ -40,7 +40,7 @@ class ApiCacheInvalidatorTest extends TestCase
 
     public function test_it_invalidates_all_rankings_preview_limits_for_a_discipline(): void
     {
-        for ($limit = 1; $limit <= 10; $limit++) {
+        for ($limit = 1; $limit <= 10; $limit++){
             Cache::put(
                 CacheKeys::rankingsPreview('blackball', $limit),
                 ['cached' => true],
@@ -61,7 +61,7 @@ class ApiCacheInvalidatorTest extends TestCase
     {
         Cache::put(CacheKeys::discipline('blackball'), ['cached' => true], now()->addMinutes(10));
 
-        for ($limit = 1; $limit <= 10; $limit++) {
+        for ($limit = 1; $limit <= 10; $limit++){
             Cache::put(
                 CacheKeys::rankingsPreview('blackball', $limit),
                 ['cached' => true],

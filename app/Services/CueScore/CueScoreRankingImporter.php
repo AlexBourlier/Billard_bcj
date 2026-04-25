@@ -6,6 +6,7 @@ use App\Models\CueScoreRanking;
 use App\Models\CueScoreRankingEntry;
 use App\Models\CueScoreRankingFetch;
 use App\Support\ApiCacheInvalidator;
+use App\Support\ApiCacheWarmer;
 use Illuminate\Support\Facades\DB;
 
 class CueScoreRankingImporter
@@ -14,6 +15,7 @@ class CueScoreRankingImporter
         private readonly CueScoreApiClient $client,
         private readonly CueScoreEntryParser $parser,
         private readonly ApiCacheInvalidator $cacheInvalidator,
+        private readonly ApiCacheWarmer $cacheWarmer,
     ) {
     }
 
@@ -68,6 +70,7 @@ class CueScoreRankingImporter
 
             if ($fetch->is_active) {
                 $this->cacheInvalidator->disciplinePage($ranking->discipline);
+                $this->cacheWarmer->disciplinePage($ranking->discipline);
             }
 
             return $fetch;

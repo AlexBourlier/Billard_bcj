@@ -17,7 +17,7 @@ class ApiCacheWithCueScoreInvalidationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_cache_is_invalidated_after_successful_cuescore_import(): void
+    public function test_cache_is_invalidated_and_rankings_preview_is_warmed_after_successful_cuescore_import(): void
     {
         Cache::flush();
 
@@ -65,6 +65,9 @@ class ApiCacheWithCueScoreInvalidationTest extends TestCase
         app(CueScoreRankingImporter::class)->import($ranking);
 
         $this->assertFalse(Cache::has(CacheKeys::discipline('blackball')));
-        $this->assertFalse(Cache::has(CacheKeys::rankingsPreview('blackball', 5)));
+
+        $this->assertTrue(
+            Cache::has(CacheKeys::rankingsPreview('blackball', 5))
+        );
     }
 }
