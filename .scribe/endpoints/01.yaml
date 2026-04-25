@@ -1,0 +1,207 @@
+name: Calendars
+description: |-
+
+  Expose les endpoints publics permettant de :
+  - récupérer la liste des calendriers actifs
+  - filtrer par discipline
+  - récupérer un calendrier détaillé avec ses événements
+
+  Les réponses respectent le format standard :
+  data / meta / links / error
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/calendrier
+    metadata:
+      custom: []
+      groupName: Calendars
+      groupDescription: |-
+
+        Expose les endpoints publics permettant de :
+        - récupérer la liste des calendriers actifs
+        - filtrer par discipline
+        - récupérer un calendrier détaillé avec ses événements
+
+        Les réponses respectent le format standard :
+        data / meta / links / error
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Retourne la liste de tous les calendriers actifs.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":[{"id":12,"discipline":"americain","scope":"departemental","name":"Americain - Departemental","slug":"americain-departemental","source_type":"cuescore","is_active":true,"display_name":"Americain - Departemental"},{"id":9,"discipline":"americain","scope":"international","name":"Americain - International","slug":"americain-international","source_type":"cuescore","is_active":true,"display_name":"Americain - International"},{"id":10,"discipline":"americain","scope":"national","name":"Americain - National","slug":"americain-national","source_type":"cuescore","is_active":true,"display_name":"Americain - National"},{"id":11,"discipline":"americain","scope":"regional","name":"Americain - Regional","slug":"americain-regional","source_type":"cuescore","is_active":true,"display_name":"Americain - Regional"},{"id":16,"discipline":"blackball","scope":"departemental","name":"Blackball - Departemental","slug":"blackball-departemental","source_type":"cuescore","is_active":true,"display_name":"Blackball - Departemental"},{"id":13,"discipline":"blackball","scope":"international","name":"Blackball - International","slug":"blackball-international","source_type":"cuescore","is_active":true,"display_name":"Blackball - International"},{"id":14,"discipline":"blackball","scope":"national","name":"Blackball - National","slug":"blackball-national","source_type":"cuescore","is_active":true,"display_name":"Blackball - National"},{"id":15,"discipline":"blackball","scope":"regional","name":"Blackball - Regional","slug":"blackball-regional","source_type":"cuescore","is_active":true,"display_name":"Blackball - Regional"},{"id":4,"discipline":"carambole","scope":"departemental","name":"Carambole - Departemental","slug":"carambole-departemental","source_type":"manual","is_active":true,"display_name":"Carambole - Departemental"},{"id":1,"discipline":"carambole","scope":"international","name":"Carambole - International","slug":"carambole-international","source_type":"manual","is_active":true,"display_name":"Carambole - International"},{"id":2,"discipline":"carambole","scope":"national","name":"Carambole - National","slug":"carambole-national","source_type":"manual","is_active":true,"display_name":"Carambole - National"},{"id":3,"discipline":"carambole","scope":"regional","name":"Carambole - Regional","slug":"carambole-regional","source_type":"manual","is_active":true,"display_name":"Carambole - Regional"},{"id":8,"discipline":"snooker","scope":"departemental","name":"Snooker - Departemental","slug":"snooker-departemental","source_type":"cuescore","is_active":true,"display_name":"Snooker - Departemental"},{"id":5,"discipline":"snooker","scope":"international","name":"Snooker - International","slug":"snooker-international","source_type":"cuescore","is_active":true,"display_name":"Snooker - International"},{"id":6,"discipline":"snooker","scope":"national","name":"Snooker - National","slug":"snooker-national","source_type":"cuescore","is_active":true,"display_name":"Snooker - National"},{"id":7,"discipline":"snooker","scope":"regional","name":"Snooker - Regional","slug":"snooker-regional","source_type":"cuescore","is_active":true,"display_name":"Snooker - Regional"}],"meta":{"count":16},"links":[],"error":null}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '42'
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/calendrier/{discipline}'
+    metadata:
+      custom: []
+      groupName: Calendars
+      groupDescription: |-
+
+        Expose les endpoints publics permettant de :
+        - récupérer la liste des calendriers actifs
+        - filtrer par discipline
+        - récupérer un calendrier détaillé avec ses événements
+
+        Les réponses respectent le format standard :
+        data / meta / links / error
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Retourne les calendriers actifs pour une discipline donnée.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      discipline:
+        custom: []
+        name: discipline
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      discipline: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 404
+        content: |-
+          {
+              "message": "Discipline invalide."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '41'
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/calendrier/{discipline}/{scope}'
+    metadata:
+      custom: []
+      groupName: Calendars
+      groupDescription: |-
+
+        Expose les endpoints publics permettant de :
+        - récupérer la liste des calendriers actifs
+        - filtrer par discipline
+        - récupérer un calendrier détaillé avec ses événements
+
+        Les réponses respectent le format standard :
+        data / meta / links / error
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Retourne un calendrier spécifique (discipline + scope) avec ses événements.'
+      description: |-
+        Inclut :
+        - les informations du calendrier
+        - la liste des événements associés
+        - les liens liés aux événements
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      discipline:
+        custom: []
+        name: discipline
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      scope:
+        custom: []
+        name: scope
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      discipline: architecto
+      scope: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 404
+        content: |-
+          {
+              "message": "Discipline invalide."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '40'
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

@@ -10,12 +10,10 @@ use App\Models\Calendar;
 use App\Models\CueScoreRanking;
 use App\Models\Document;
 use App\Models\Post;
-use App\Services\CueScoreClubRankingService;
 use App\Services\CueScore\CueScoreRankingsPreviewBuilder;
+use App\Support\CacheKeys;
 use App\Support\DisciplineMapper;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Collection;
-use App\Support\CacheKeys;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -37,25 +35,49 @@ class DisciplineController extends Controller
     private const PREVIEW_LIMIT_DEFAULT = 5;
 
     public function __construct(
-        private CueScoreClubRankingService $clubRankingService,
         private CueScoreRankingsPreviewBuilder $rankingsPreviewBuilder,
     ) {
     }
 
     /**
-     * Retourne les données publiques d’une discipline.
+     * Détail d'une discipline
+     *
+     * Retourne les données publiques nécessaires à la page d’une discipline :
+     * articles, événements calendrier, documents et classements actifs.
+     *
+     * @group Disciplines
      *
      * La réponse est mise en cache pendant 10 minutes.
      *
-     * Contenu retourné :
-     * - posts
-     * - événements calendrier
-     * - documents
-     * - classements actifs, sauf pour la carambole
+     * @urlParam discipline string required Slug de la discipline. Exemple : blackball
      *
-     * @param string $discipline Slug de la discipline
+     * @response 200 {
+     *   "data": {
+     *     "posts": [],
+     *     "calendar": [],
+     *     "documents": [],
+     *     "rankings": []
+     *   },
+     *   "meta": {
+     *     "discipline": "blackball",
+     *     "posts_count": 0,
+     *     "calendar_count": 0,
+     *     "documents_count": 0,
+     *     "rankings_count": 0
+     *   },
+     *   "links": [],
+     *   "error": null
+     * }
      *
-     * @return JsonResponse
+     * @response 404 {
+     *   "data": null,
+     *   "meta": [],
+     *   "links": [],
+     *   "error": {
+     *     "code": "discipline_not_found",
+     *     "message": "Discipline not found"
+     *   }
+     * }
      */
     public function show(string $discipline): JsonResponse
     {
@@ -123,18 +145,86 @@ class DisciplineController extends Controller
     }
 
     /**
-     * Retourne un aperçu des classements CueScore pour une discipline.
+     * Aperçu des classements CueScore
+     *
+     * Retourne un aperçu des classements CueScore pour une discipline donnée.
+     *
+     * @group Disciplines
      *
      * La réponse est mise en cache pendant 5 minutes.
      *
-     * Le paramètre query `limit` contrôle le nombre d’entrées individuelles
-     * retournées par classement. Il est borné entre 1 et 10.
+     * Le paramètre `limit` contrôle le nombre d’entrées individuelles retournées
+     * par classement. Il est borné entre 1 et 10.
      *
-     * La construction de la réponse est déléguée à CueScoreRankingsPreviewBuilder.
+     * @urlParam discipline string required Slug de la discipline. Exemple : blackball
      *
-     * @param string $discipline Slug de la discipline
+     * @queryParam limit integer Nombre maximum d’entrées individuelles par classement. Min: 1. Max: 10. Default: 5. Exemple : 5
      *
-     * @return JsonResponse
+     * @response 200 {
+     *   "data": {
+     *     "national": [
+     *       {
+     *         "ranking": {
+     *           "id": 1,
+     *           "name": "Classement national",
+     *           "cuescore_id": "123456",
+     *           "url": "https://cuescore.com/ranking/example",
+     *           "source_type": "ranking",
+     *           "discipline": "blackball",
+     *           "scope": "national",
+     *           "ranking_type": "individual",
+     *           "team_category": null,
+     *           "season": "2025-2026",
+     *           "is_active": true,
+     *           "sort_order": 1
+     *         },
+     *         "entries": [
+     *           {
+     *             "rank_position": 1,
+     *             "participant_name": "John Doe",
+     *             "participant_external_id": "123456",
+     *             "participant_url": "https://cuescore.com/player/John+Doe/123456",
+     *             "points": "1200.00",
+     *             "played": null,
+     *             "wins": null,
+     *             "losses": null,
+     *             "ties": null,
+     *             "matching": {
+     *               "method": "exact_normalized",
+     *               "confidence_score": 100,
+     *               "is_confirmed": true
+     *             },
+     *             "licencie": {
+     *               "id": 1,
+     *               "licence": "123456 A",
+     *               "nom": "DOE",
+     *               "prenom": "JOHN"
+     *             }
+     *           }
+     *         ],
+     *         "meta": []
+     *       }
+     *     ]
+     *   },
+     *   "meta": {
+     *     "discipline": "blackball",
+     *     "count": 1,
+     *     "limit": 5,
+     *     "rankings_supported": true
+     *   },
+     *   "links": [],
+     *   "error": null
+     * }
+     *
+     * @response 404 {
+     *   "data": null,
+     *   "meta": [],
+     *   "links": [],
+     *   "error": {
+     *     "code": "discipline_not_found",
+     *     "message": "Discipline not found"
+     *   }
+     * }
      */
     public function rankingsPreview(string $discipline): JsonResponse
     {

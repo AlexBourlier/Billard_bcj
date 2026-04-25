@@ -10,6 +10,8 @@ use Illuminate\Http\JsonResponse;
 
 /**
  * Contrôleur API pour la gestion des calendriers.
+ * 
+ * @group Calendars
  *
  * Expose les endpoints publics permettant de :
  * - récupérer la liste des calendriers actifs
