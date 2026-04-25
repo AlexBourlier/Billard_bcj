@@ -8,8 +8,24 @@ use App\Http\Resources\CalendarResource;
 use App\Models\Calendar;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * Contrôleur API pour la gestion des calendriers.
+ *
+ * Expose les endpoints publics permettant de :
+ * - récupérer la liste des calendriers actifs
+ * - filtrer par discipline
+ * - récupérer un calendrier détaillé avec ses événements
+ *
+ * Les réponses respectent le format standard :
+ * data / meta / links / error
+ */
 class CalendarController extends Controller
 {
+    /**
+     * Retourne la liste de tous les calendriers actifs.
+     *
+     * @return JsonResponse
+     */
     public function index(): JsonResponse
     {
         $calendars = Calendar::query()
@@ -27,6 +43,13 @@ class CalendarController extends Controller
         ]);
     }
 
+    /**
+     * Retourne les calendriers actifs pour une discipline donnée.
+     *
+     * @param string $discipline Slug de la discipline
+     *
+     * @return JsonResponse
+     */
     public function byDiscipline(string $discipline): JsonResponse
     {
         $this->abortIfInvalidDiscipline($discipline);
@@ -49,6 +72,19 @@ class CalendarController extends Controller
         ]);
     }
 
+    /**
+     * Retourne un calendrier spécifique (discipline + scope) avec ses événements.
+     *
+     * Inclut :
+     * - les informations du calendrier
+     * - la liste des événements associés
+     * - les liens liés aux événements
+     *
+     * @param string $discipline Slug de la discipline
+     * @param string $scope Scope du calendrier (ex: national, régional)
+     *
+     * @return JsonResponse
+     */
     public function byDisciplineAndScope(string $discipline, string $scope): JsonResponse
     {
         $this->abortIfInvalidDiscipline($discipline);
@@ -76,6 +112,15 @@ class CalendarController extends Controller
         ]);
     }
 
+    /**
+     * Vérifie la validité d'une discipline.
+     *
+     * Déclenche une erreur 404 si la discipline est invalide.
+     *
+     * @param string $discipline
+     *
+     * @return void
+     */
     private function abortIfInvalidDiscipline(string $discipline): void
     {
         abort_unless(
@@ -85,6 +130,15 @@ class CalendarController extends Controller
         );
     }
 
+    /**
+     * Vérifie la validité d'un scope de calendrier.
+     *
+     * Déclenche une erreur 404 si le scope est invalide.
+     *
+     * @param string $scope
+     *
+     * @return void
+     */
     private function abortIfInvalidScope(string $scope): void
     {
         abort_unless(
