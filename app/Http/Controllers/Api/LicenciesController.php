@@ -7,10 +7,23 @@ use App\Models\LicenseImportSnapshot;
 use App\Models\Licencies;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * Contrôleur API pour la gestion des licenciés.
+ *
+ * Permet de :
+ * - lister les licenciés
+ * - rechercher par nom / prénom / numéro de licence
+ * - récupérer les lots d’import valides
+ *
+ * Les réponses respectent le format standard :
+ * data / meta / links / error
+ */
 class LicenciesController extends Controller
 {
     /**
-     * Display a listing of licencies.
+     * Retourne la liste complète des licenciés.
+     *
+     * @return JsonResponse
      */
     public function index(): JsonResponse
     {
@@ -26,6 +39,16 @@ class LicenciesController extends Controller
         ]);
     }
 
+    /**
+     * Recherche des licenciés par nom, prénom ou numéro de licence.
+     *
+     * La recherche est partielle (LIKE %value%).
+     * Les résultats sont dédupliqués et limités aux champs utiles.
+     *
+     * @param string $name Terme de recherche
+     *
+     * @return JsonResponse
+     */
     public function searchByName(string $name): JsonResponse
     {
         $licencies = Licencies::query()
@@ -50,7 +73,11 @@ class LicenciesController extends Controller
     }
 
     /**
-     * Display batches of license imports.
+     * Retourne la liste des identifiants de batch d’import valides.
+     *
+     * Permet d’identifier les imports de licences exploitables.
+     *
+     * @return JsonResponse
      */
     public function batches(): JsonResponse
     {
