@@ -1,0 +1,791 @@
+openapi: 3.0.3
+
+info:
+  title: API BCJ37
+  version: 1.0.0
+  description: API publique du site BCJ37.
+
+servers:
+  - url: http://127.0.0.1:8000/api/v1
+    description: Local
+  - url: https://bcj37.fr/api/v1
+    description: Production
+
+tags:
+  - name: Public
+  - name: Disciplines
+  - name: Articles
+  - name: Documents
+  - name: Calendriers
+  - name: CueScore
+
+paths:
+  /public/site:
+    get:
+      tags: [Public]
+      summary: Informations globales du site
+      responses:
+        "200":
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PublicSiteResponse"
+
+  /public/home:
+    get:
+      tags: [Public]
+      summary: Données de la page d’accueil
+      description: Réponse mise en cache pendant 10 minutes.
+      responses:
+        "200":
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PublicHomeResponse"
+
+  /contacts:
+    get:
+      tags: [Public]
+      summary: Liste des contacts
+      responses:
+        "200":
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CollectionResponse"
+
+  /partenaires:
+    get:
+      tags: [Public]
+      summary: Liste des partenaires
+      responses:
+        "200":
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CollectionResponse"
+
+  /disciplines/{discipline}:
+    get:
+      tags: [Disciplines]
+      summary: Détail d’une discipline
+      parameters:
+        - $ref: "#/components/parameters/Discipline"
+      responses:
+        "200":
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DisciplineResponse"
+        "404":
+          description: Discipline introuvable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /disciplines/{discipline}/rankings-preview:
+    get:
+      tags: [Disciplines]
+      summary: Aperçu des classements CueScore
+      description: Réponse mise en cache pendant 5 minutes.
+      parameters:
+        - $ref: "#/components/parameters/Discipline"
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 10
+            default: 5
+          description: Nombre maximum d’entrées individuelles par classement.
+      responses:
+        "200":
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RankingsPreviewResponse"
+        "404":
+          description: Discipline introuvable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /posts:
+    get:
+      tags: [Articles]
+      summary: Liste paginée des articles
+      parameters:
+        - $ref: "#/components/parameters/PerPage"
+      responses:
+        "200":
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedPostsResponse"
+
+  /posts/{id}:
+    get:
+      tags: [Articles]
+      summary: Détail d’un article
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Identifiant de l’article.
+      responses:
+        "200":
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PostResponse"
+
+  /posts/slug/{slug}:
+    get:
+      tags: [Articles]
+      summary: Article par slug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Slug de l’article.
+      responses:
+        "200":
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PostResponse"
+
+  /posts/discipline/{discipline}:
+    get:
+      tags: [Articles]
+      summary: Articles par discipline
+      parameters:
+        - $ref: "#/components/parameters/Discipline"
+        - $ref: "#/components/parameters/PerPage"
+      responses:
+        "200":
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedPostsResponse"
+        "404":
+          description: Discipline introuvable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /posts/favoris:
+    get:
+      tags: [Articles]
+      summary: Articles favoris
+      parameters:
+        - $ref: "#/components/parameters/PerPage"
+      responses:
+        "200":
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedPostsResponse"
+
+  /posts/decade/{year}:
+    get:
+      tags: [Articles]
+      summary: Articles par décennie
+      parameters:
+        - $ref: "#/components/parameters/Year"
+        - $ref: "#/components/parameters/PerPage"
+      responses:
+        "200":
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedPostsResponse"
+
+  /posts/year/{year}:
+    get:
+      tags: [Articles]
+      summary: Articles par année
+      parameters:
+        - $ref: "#/components/parameters/Year"
+        - $ref: "#/components/parameters/PerPage"
+      responses:
+        "200":
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedPostsResponse"
+
+  /documents:
+    get:
+      tags: [Documents]
+      summary: Liste des documents
+      responses:
+        "200":
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CollectionResponse"
+
+  /documents/{discipline}:
+    get:
+      tags: [Documents]
+      summary: Documents par discipline
+      parameters:
+        - $ref: "#/components/parameters/Discipline"
+      responses:
+        "200":
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CollectionResponse"
+        "404":
+          description: Discipline introuvable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /documents/{discipline}/{id}:
+    get:
+      tags: [Documents]
+      summary: Détail d’un document
+      parameters:
+        - $ref: "#/components/parameters/Discipline"
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Identifiant du document.
+      responses:
+        "200":
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SingleDocumentResponse"
+        "404":
+          description: Document ou discipline introuvable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /calendars:
+    get:
+      tags: [Calendriers]
+      summary: Liste des calendriers
+      responses:
+        "200":
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CollectionResponse"
+
+  /calendars/{discipline}:
+    get:
+      tags: [Calendriers]
+      summary: Calendriers par discipline
+      parameters:
+        - $ref: "#/components/parameters/Discipline"
+      responses:
+        "200":
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CollectionResponse"
+
+  /calendars/{discipline}/{scope}:
+    get:
+      tags: [Calendriers]
+      summary: Calendrier par discipline et scope
+      parameters:
+        - $ref: "#/components/parameters/Discipline"
+        - name: scope
+          in: path
+          required: true
+          schema:
+            type: string
+            example: national
+      responses:
+        "200":
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CalendarDetailResponse"
+
+  /cuescore/rankings:
+    get:
+      tags: [CueScore]
+      summary: Liste des classements CueScore
+      parameters:
+        - name: discipline
+          in: query
+          schema:
+            type: string
+            example: blackball
+        - name: scope
+          in: query
+          schema:
+            type: string
+            example: national
+        - name: ranking_type
+          in: query
+          schema:
+            type: string
+            example: individual
+        - name: team_category
+          in: query
+          schema:
+            type: string
+            example: DN1
+        - name: is_active
+          in: query
+          schema:
+            type: boolean
+            example: true
+      responses:
+        "200":
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CollectionResponse"
+
+  /cuescore/rankings/{ranking}:
+    get:
+      tags: [CueScore]
+      summary: Détail d’un classement CueScore
+      parameters:
+        - $ref: "#/components/parameters/Ranking"
+      responses:
+        "200":
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CueScoreRankingResponse"
+
+  /cuescore/rankings/{ranking}/club:
+    get:
+      tags: [CueScore]
+      summary: Données club d’un classement
+      parameters:
+        - $ref: "#/components/parameters/Ranking"
+      responses:
+        "200":
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CollectionResponse"
+
+  /cuescore/rankings/{ranking}/teams:
+    get:
+      tags: [CueScore]
+      summary: Données équipes d’un classement
+      parameters:
+        - $ref: "#/components/parameters/Ranking"
+      responses:
+        "200":
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CollectionResponse"
+
+components:
+  parameters:
+    Discipline:
+      name: discipline
+      in: path
+      required: true
+      schema:
+        type: string
+        enum: [blackball, americain, snooker, carambole]
+      description: Slug de la discipline.
+
+    PerPage:
+      name: per_page
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 10
+      description: Nombre d’éléments par page.
+
+    Year:
+      name: year
+      in: path
+      required: true
+      schema:
+        type: integer
+        example: 2026
+
+    Ranking:
+      name: ranking
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: Identifiant local du classement CueScore.
+
+  schemas:
+    StandardMeta:
+      type: object
+      additionalProperties: true
+
+    ErrorObject:
+      type: object
+      nullable: true
+      properties:
+        code:
+          type: string
+          example: discipline_not_found
+        message:
+          type: string
+          example: Discipline not found
+
+    ErrorResponse:
+      type: object
+      properties:
+        data:
+          nullable: true
+          example: null
+        meta:
+          type: object
+        links:
+          type: array
+          items: {}
+        error:
+          $ref: "#/components/schemas/ErrorObject"
+
+    CollectionResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        meta:
+          type: object
+          properties:
+            count:
+              type: integer
+              example: 1
+        links:
+          type: array
+          items: {}
+        error:
+          nullable: true
+          example: null
+
+    PublicSiteResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            site_settings:
+              type: object
+              nullable: true
+            menus:
+              type: array
+              items:
+                type: object
+        meta:
+          type: object
+          properties:
+            menus_count:
+              type: integer
+        links:
+          type: array
+          items: {}
+        error:
+          nullable: true
+
+    PublicHomeResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            site_settings:
+              type: object
+              nullable: true
+            menus:
+              type: array
+              items:
+                type: object
+            partners:
+              type: array
+              items:
+                type: object
+            featured_post:
+              type: object
+              nullable: true
+        meta:
+          type: object
+          properties:
+            menus_count:
+              type: integer
+            partners_count:
+              type: integer
+            has_featured_post:
+              type: boolean
+        links:
+          type: array
+          items: {}
+        error:
+          nullable: true
+
+    DisciplineResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            posts:
+              type: array
+              items:
+                type: object
+            calendar:
+              type: array
+              items:
+                type: object
+            documents:
+              type: array
+              items:
+                type: object
+            rankings:
+              type: array
+              nullable: true
+              items:
+                type: object
+        meta:
+          type: object
+          properties:
+            discipline:
+              type: string
+            posts_count:
+              type: integer
+            calendar_count:
+              type: integer
+            documents_count:
+              type: integer
+            rankings_count:
+              type: integer
+              nullable: true
+        links:
+          type: array
+          items: {}
+        error:
+          nullable: true
+
+    RankingsPreviewResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          nullable: true
+          additionalProperties:
+            type: array
+            items:
+              type: object
+              properties:
+                ranking:
+                  type: object
+                entries:
+                  type: array
+                  items:
+                    type: object
+                meta:
+                  type: object
+        meta:
+          type: object
+          properties:
+            discipline:
+              type: string
+            count:
+              type: integer
+            limit:
+              type: integer
+            rankings_supported:
+              type: boolean
+        links:
+          type: array
+          items: {}
+        error:
+          nullable: true
+
+    PostResponse:
+      type: object
+      properties:
+        data:
+          type: object
+        meta:
+          type: object
+        links:
+          type: array
+          items: {}
+        error:
+          nullable: true
+
+    PaginatedPostsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        meta:
+          type: object
+          properties:
+            count:
+              type: integer
+            current_page:
+              type: integer
+            last_page:
+              type: integer
+            per_page:
+              type: integer
+            from:
+              type: integer
+              nullable: true
+            to:
+              type: integer
+              nullable: true
+            total:
+              type: integer
+        links:
+          type: object
+          properties:
+            first:
+              type: string
+              nullable: true
+            last:
+              type: string
+              nullable: true
+            prev:
+              type: string
+              nullable: true
+            next:
+              type: string
+              nullable: true
+        error:
+          nullable: true
+
+    SingleDocumentResponse:
+      type: object
+      properties:
+        data:
+          type: object
+        meta:
+          type: object
+          properties:
+            discipline:
+              type: string
+            document_id:
+              type: integer
+        links:
+          type: array
+          items: {}
+        error:
+          nullable: true
+
+    CalendarDetailResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            calendar:
+              type: object
+            events:
+              type: array
+              items:
+                type: object
+        meta:
+          type: object
+          properties:
+            discipline:
+              type: string
+            scope:
+              type: string
+            count:
+              type: integer
+        links:
+          type: array
+          items: {}
+        error:
+          nullable: true
+
+    CueScoreRankingResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+            cuescore_id:
+              type: string
+            url:
+              type: string
+            source_type:
+              type: string
+            discipline:
+              type: string
+            scope:
+              type: string
+            ranking_type:
+              type: string
+            team_category:
+              type: string
+              nullable: true
+            season:
+              type: string
+            is_active:
+              type: boolean
+            sort_order:
+              type: integer
+            active_fetch:
+              type: object
+              nullable: true
+        meta:
+          type: object
+        links:
+          type: array
+          items: {}
+        error:
+          nullable: true
