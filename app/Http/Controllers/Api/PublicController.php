@@ -15,8 +15,29 @@ use App\Support\CacheKeys;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
 
+/**
+ * Contrôleur API pour les données publiques globales du site.
+ *
+ * Expose les informations nécessaires aux pages publiques :
+ * - paramètres du site
+ * - menus actifs
+ * - partenaires
+ * - article mis en avant
+ *
+ * Les réponses respectent le format standard :
+ * data / meta / links / error
+ */
 class PublicController extends Controller
 {
+    /**
+     * Retourne les informations globales du site.
+     *
+     * Inclut :
+     * - paramètres du site
+     * - menus actifs
+     *
+     * @return JsonResponse
+     */
     public function site(): JsonResponse
     {
         $siteSettings = SiteSetting::query()->first();
@@ -39,6 +60,19 @@ class PublicController extends Controller
         ]);
     }
 
+    /**
+     * Retourne les données nécessaires à la page d’accueil publique.
+     *
+     * La réponse est mise en cache pendant 10 minutes.
+     *
+     * Inclut :
+     * - paramètres du site
+     * - menus actifs
+     * - partenaires
+     * - article favori ou dernier article publié en fallback
+     *
+     * @return JsonResponse
+     */
     public function home(): JsonResponse
     {
         $response = Cache::remember(
