@@ -11,6 +11,7 @@ use App\Models\CueScoreRanking;
 use App\Models\Document;
 use App\Models\Post;
 use App\Services\CueScoreClubRankingService;
+use App\Services\CueScore\CueScoreRankingsPreviewBuilder;
 use App\Support\DisciplineMapper;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
@@ -19,8 +20,14 @@ use Illuminate\Support\Facades\Cache;
 
 class DisciplineController extends Controller
 {
+
+    private const PREVIEW_LIMIT_MIN = 1;
+    private const PREVIEW_LIMIT_MAX = 10;
+    private const PREVIEW_LIMIT_DEFAULT = 5;
+
     public function __construct(
-        private CueScoreClubRankingService $clubRankingService
+        private CueScoreClubRankingService $clubRankingService,
+        private CueScoreRankingsPreviewBuilder $rankingsPreviewBuilder,
     ) {
     }
 
@@ -100,90 +107,7 @@ class DisciplineController extends Controller
         $response = Cache::remember(
             CacheKeys::rankingsPreview($discipline, $limit),
             now()->addMinutes(5),
-            function () use ($discipline, $limit) {
-                if ($discipline === 'carambole') {
-                    return [
-                        'data' => null,
-                        'meta' => [
-                            'discipline' => $discipline,
-                            'rankings_supported' => false,
-                        ],
-                        'links' => [],
-                        'error' => null,
-                    ];
-                }
-
-                $rankings = CueScoreRanking::query()
-                    ->where('discipline', $discipline)
-                    ->where('is_active', true)
-                    ->orderBy('scope')
-                    ->orderBy('ranking_type')
-                    ->orderBy('sort_order')
-                    ->orderBy('id')
-                    ->get();
-
-                $grouped = $rankings
-                    ->map(function (CueScoreRanking $ranking) use ($limit) {
-                        $activeFetch = $this->clubRankingService->getActiveFetch($ranking);
-
-                        if ($activeFetch === null) {
-                            return null;
-                        }
-
-                        $rankingData = $ranking->ranking_type === 'team'
-                            ? $this->clubRankingService->buildTeamRankingData($ranking, $activeFetch->id)
-                            : $this->clubRankingService->buildIndividualRankingData(
-                                $ranking,
-                                $activeFetch->id,
-                                $limit
-                            );
-
-                        if ($rankingData['data']->isEmpty()) {
-                            return null;
-                        }
-
-                        return [
-                            'scope' => $ranking->scope,
-                            'ranking' => [
-                                'id' => $ranking->id,
-                                'name' => $ranking->name,
-                                'cuescore_id' => $ranking->cuescore_id,
-                                'url' => $ranking->url,
-                                'source_type' => $ranking->source_type,
-                                'discipline' => $ranking->discipline,
-                                'scope' => $ranking->scope,
-                                'ranking_type' => $ranking->ranking_type,
-                                'team_category' => $ranking->team_category,
-                                'season' => $ranking->season,
-                                'is_active' => (bool) $ranking->is_active,
-                                'sort_order' => $ranking->sort_order,
-                            ],
-                            'entries' => $rankingData['data']->values(),
-                            'meta' => $rankingData['meta'],
-                        ];
-                    })
-                    ->filter()
-                    ->groupBy('scope')
-                    ->map(function (Collection $items) {
-                        return $items->map(function (array $item) {
-                            unset($item['scope']);
-
-                            return $item;
-                        })->values();
-                    });
-
-                return [
-                    'data' => $grouped,
-                    'meta' => [
-                        'discipline' => $discipline,
-                        'count' => $grouped->flatten(1)->count(),
-                        'limit' => $limit,
-                        'rankings_supported' => true,
-                    ],
-                    'links' => [],
-                    'error' => null,
-                ];
-            }
+            fn () => $this->rankingsPreviewBuilder->build($discipline, $limit)
         );
 
         return response()->json($response);
@@ -191,13 +115,10 @@ class DisciplineController extends Controller
 
     private function getPreviewLimit(): int
     {
-        $limit = (int) request('limit', 5);
-
-        if ($limit < 1) {
-            return 5;
-        }
-
-        return min($limit, 10);
+        return max(
+            self::PREVIEW_LIMIT_MIN,
+            min((int) request('limit', self::PREVIEW_LIMIT_DEFAULT), self::PREVIEW_LIMIT_MAX)
+        );
     }
 
     private function disciplineNotFoundResponse(): JsonResponse
