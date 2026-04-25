@@ -6,6 +6,19 @@ use App\Models\CueScoreRanking;
 use App\Services\CueScoreClubRankingService;
 use Illuminate\Support\Collection;
 
+/**
+ * Service responsable de la construction du preview des classements CueScore.
+ *
+ * Ce service est utilisé par l'API publique pour produire une version
+ * légère et optimisée des classements par discipline.
+ *
+ * Responsabilités :
+ * - filtrer les classements actifs par discipline
+ * - récupérer les données via CueScoreClubRankingService
+ * - appliquer une limite sur les entrées individuelles
+ * - regrouper les résultats par scope
+ * - formater la réponse finale prête pour l'API
+ */
 class CueScoreRankingsPreviewBuilder
 {
     public function __construct(
@@ -13,6 +26,31 @@ class CueScoreRankingsPreviewBuilder
     ) {
     }
 
+    /**
+     * Construit le preview des classements pour une discipline donnée.
+     *
+     * Règles :
+     * - la discipline "carambole" ne supporte pas les classements → réponse spécifique
+     * - seuls les classements actifs sont pris en compte
+     * - les classements sont groupés par scope
+     * - les classements sans fetch actif ou sans données sont ignorés
+     * - la limite ne s'applique qu'aux classements individuels
+     *
+     * @param string $discipline Slug de la discipline
+     * @param int $limit Nombre maximum d'entrées pour les classements individuels
+     *
+     * @return array{
+     *     data: \Illuminate\Support\Collection|null,
+     *     meta: array{
+     *         discipline: string,
+     *         count: int,
+     *         limit: int,
+     *         rankings_supported: bool
+     *     },
+     *     links: array,
+     *     error: null
+     * }
+     */
     public function build(string $discipline, int $limit): array
     {
         if ($discipline === 'carambole') {
@@ -40,6 +78,7 @@ class CueScoreRankingsPreviewBuilder
             ->map(function (CueScoreRanking $ranking) use ($limit) {
                 $activeFetch = $this->clubRankingService->getActiveFetch($ranking);
 
+                // Ignorer les classements sans données exploitables
                 if ($activeFetch === null) {
                     return null;
                 }
@@ -52,6 +91,7 @@ class CueScoreRankingsPreviewBuilder
                         $limit
                     );
 
+                // Ignorer les classements vides
                 if ($rankingData['data']->isEmpty()) {
                     return null;
                 }
