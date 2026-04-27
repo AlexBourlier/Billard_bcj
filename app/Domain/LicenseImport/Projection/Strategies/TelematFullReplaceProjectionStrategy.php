@@ -39,32 +39,28 @@ final class TelematFullReplaceProjectionStrategy implements TelematProjectionStr
         }
 
         try {
-            return DB::transaction(function () use ($batch): ProjectionResult {
-                $rows = $this->buildProjectedRows($batch);
-                $deletedCount = (int) DB::table('licencies')->count();
+            $rows = $this->buildProjectedRows($batch);
+            $deletedCount = (int) DB::table('licencies')->count();
 
-                DB::table('licencies')->delete();
+            DB::table('licencies')->delete();
 
-                $driver = DB::getDriverName();
+            if (DB::getDriverName() === 'mysql') {
+                DB::statement('ALTER TABLE licencies AUTO_INCREMENT = 1');
+            }
 
-                if ($driver === 'mysql') {
-                    DB::statement('ALTER TABLE licencies AUTO_INCREMENT = 1');
-                }
+            if (DB::getDriverName() === 'sqlite') {
+                DB::statement("DELETE FROM sqlite_sequence WHERE name = 'licencies'");
+            }
 
-                if ($driver === 'sqlite') {
-                    DB::statement("DELETE FROM sqlite_sequence WHERE name = 'licencies'");
-                }
+            if ($rows !== []) {
+                DB::table('licencies')->insert($rows);
+            }
 
-                if ($rows !== []) {
-                    DB::table('licencies')->insert($rows);
-                }
-
-                return $this->buildProjectedResult(
-                    sourceSnapshotCount: count($rows),
-                    deletedCount: $deletedCount,
-                    insertedCount: count($rows),
-                );
-            });
+            return $this->buildProjectedResult(
+                sourceSnapshotCount: count($rows),
+                deletedCount: $deletedCount,
+                insertedCount: count($rows),
+            );
         } catch (TelematProjectionException $exception) {
             throw $exception;
         } catch (QueryException $exception) {
