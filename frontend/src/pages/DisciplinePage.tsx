@@ -1,12 +1,19 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { getDiscipline } from "../api/disciplinesApi";
+import { useParams, Link } from "react-router-dom";
+import { getDiscipline, getRankingsPreview } from "../api/disciplinesApi";
 import { DisciplineSubMenu } from "../components/DisciplineSubMenu";
-import type { DisciplineData, DisciplineMeta } from "../types/api";
+import type {
+    DisciplineData,
+    DisciplineMeta,
+    RankingsPreviewData,
+    RankingsPreviewMeta,
+} from "../types/api";
 
 type PageState = {
     data: DisciplineData | null;
     meta: DisciplineMeta | null;
+    rankingsPreview: RankingsPreviewData | null;
+    rankingsPreviewMeta: RankingsPreviewMeta | null;
     loading: boolean;
     error: string | null;
 };
@@ -17,24 +24,29 @@ export function DisciplinePage() {
     const [state, setState] = useState<PageState>({
         data: null,
         meta: null,
+        rankingsPreview: null,
+        rankingsPreviewMeta: null,
         loading: true,
         error: null,
     });
 
     useEffect(() => {
-        if (!discipline) {
-            return;
-        }
+        if (!discipline) return;
 
         let isMounted = true;
 
-        getDiscipline(discipline)
-            .then((response) => {
+        Promise.all([
+            getDiscipline(discipline),
+            getRankingsPreview(discipline, 5),
+        ])
+            .then(([disciplineResponse, rankingsResponse]) => {
                 if (!isMounted) return;
 
                 setState({
-                    data: response.data,
-                    meta: response.meta,
+                    data: disciplineResponse.data,
+                    meta: disciplineResponse.meta,
+                    rankingsPreview: rankingsResponse.data,
+                    rankingsPreviewMeta: rankingsResponse.meta,
                     loading: false,
                     error: null,
                 });
@@ -45,6 +57,8 @@ export function DisciplinePage() {
                 setState({
                     data: null,
                     meta: null,
+                    rankingsPreview: null,
+                    rankingsPreviewMeta: null,
                     loading: false,
                     error: "Impossible de charger la discipline.",
                 });
@@ -65,6 +79,27 @@ export function DisciplinePage() {
 
     const { data, meta } = state;
 
+    const normalizeScope = (value: string) =>
+        value
+            .normalize("NFD")
+            .replace(/\p{Diacritic}/gu, "")
+            .toLowerCase();
+
+    const scopeLabels: Record<string, string> = {
+        national: "National",
+        regional: "Régional",
+        departemental: "Départemental",
+    };
+
+    const orderedScopes = ["national", "regional", "departemental"];
+
+    const rankingsByNormalizedScope = Object.fromEntries(
+        Object.entries(state.rankingsPreview ?? {}).map(([scope, items]) => [
+            normalizeScope(scope),
+            items,
+        ])
+    );
+
     return (
         <main>
             <h1>Discipline : {meta.discipline}</h1>
@@ -77,7 +112,11 @@ export function DisciplinePage() {
                 {data.posts.length > 0 ? (
                     data.posts.map((post) => (
                         <article key={post.id}>
-                            <h3>{post.title ?? post.titre}</h3>
+                            <h3>
+                                <Link to={`/posts/${post.slug}`}>
+                                    {post.title ?? post.titre}
+                                </Link>
+                            </h3>
                             {post.excerpt && <p>{post.excerpt}</p>}
                         </article>
                     ))
@@ -132,16 +171,78 @@ export function DisciplinePage() {
             <section id="rankings">
                 <h2>Classements</h2>
 
-                {data.rankings && data.rankings.length > 0 ? (
-                    <ul>
-                        {data.rankings.map((ranking) => (
-                            <li key={ranking.id}>
-                                {ranking.name} — {ranking.scope} — {ranking.ranking_type}
-                            </li>
-                        ))}
-                    </ul>
+                {state.rankingsPreviewMeta?.rankings_supported === false && (
+                    <p>Les classements CueScore ne sont pas supportés pour cette discipline.</p>
+                )}
+
+                {state.rankingsPreview && Object.keys(state.rankingsPreview).length > 0 ? (
+                    orderedScopes.map((scopeKey) => {
+                        const items = rankingsByNormalizedScope[scopeKey];
+
+                        if (!items || items.length === 0) {
+                            return null;
+                        }
+
+                        const scopeLabel = scopeLabels[scopeKey];
+
+                        return (
+                            <div key={scopeKey}>
+                                <h3>{scopeLabel}</h3>
+
+                                {items.map((item) => (
+                                    <article key={item.ranking.id}>
+                                        <h4>{item.ranking.name}</h4>
+
+                                        {item.entries.length > 0 ? (
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th>Position</th>
+                                                        <th>Nom</th>
+                                                        <th>Points</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {item.entries.map((entry, index) => {
+                                                        const position = entry.rank_position ?? index + 1;
+
+                                                        return (
+                                                            <tr key={`${item.ranking.id}-${index}`}>
+                                                                <td>
+                                                                    <strong>
+                                                                        {position === 1
+                                                                            ? `${position} er`
+                                                                            : `${position} ème`}
+                                                                    </strong>
+                                                                </td>
+                                                                <td>
+                                                                    {entry.participant_name ??
+                                                                        entry.team_name ??
+                                                                        "Nom indisponible"}
+                                                                </td>
+                                                                <td>
+                                                                    {entry.points !== null &&
+                                                                        entry.points !== undefined
+                                                                        ? Math.round(Number(entry.points))
+                                                                        : "-"}
+                                                                </td>
+                                                            </tr>
+                                                        );
+                                                    })}
+                                                </tbody>
+                                            </table>
+                                        ) : (
+                                            <p>Aucune entrée disponible.</p>
+                                        )}
+                                    </article>
+                                ))}
+                            </div>
+                        );
+                    })
                 ) : (
-                    <p>Aucun classement disponible.</p>
+                    state.rankingsPreviewMeta?.rankings_supported !== false && (
+                        <p>Aucun classement disponible.</p>
+                    )
                 )}
             </section>
         </main>

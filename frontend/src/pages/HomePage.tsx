@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getHome } from "../api/publicApi";
+import { Link } from "react-router-dom";
 import type { HomeData } from "../types/api";
 
 export function HomePage() {
@@ -24,8 +25,9 @@ export function HomePage() {
             {home?.featured_post ? (
                 <article>
                     <h2>
-                        {home.featured_post.title ??
-                            home.featured_post.titre}
+                        <Link to={`/posts/${home.featured_post.slug}`}>
+                            {home.featured_post.title ?? home.featured_post.titre}
+                        </Link>
                     </h2>
                     <p>{home.featured_post.excerpt}</p>
                 </article>
@@ -44,6 +46,7 @@ export function HomePage() {
                                     <img
                                         src={partner.logo_url}
                                         alt={partner.name ?? partner.nom}
+                                        style={{ maxWidth: "100px" }}
                                     />
                                 )}
                             </li>

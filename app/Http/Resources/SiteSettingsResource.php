@@ -17,9 +17,9 @@ class SiteSettingsResource extends JsonResource
         return [
             'id' => $this->id,
             'logo' => $this->logo,
-            'logo_url' => $this->logo ? asset($this->logo) : null,
+            'logo_url' => $this->logo ? asset('storage/' . $this->logo) : null,
             'banniere' => $this->banniere,
-            'banniere_url' => $this->banniere ? asset($this->banniere) : null,
+            'banniere_url' => $this->banniere ? asset('storage/' . $this->banniere) : null,
             'adresse' => $this->adresse,
             'telephone' => $this->telephone,
             'email' => $this->email,

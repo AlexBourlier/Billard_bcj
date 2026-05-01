@@ -79,7 +79,7 @@ class PublicController extends Controller
 
         $menus = Menu::query()
             ->where('actif', true)
-            ->orderBy('nom')
+            ->orderBy('id')
             ->get();
 
         return response()->json([
