@@ -32,6 +32,27 @@ export function HomePage() {
             ) : (
                 <p>Aucun article mis en avant</p>
             )}
+
+            {home?.partners.length ? (
+                <section>
+                    <h2>Partenaires</h2>
+                    <ul>
+                        {home.partners.map((partner) => (
+                            <li key={partner.id}>
+                                {partner.name ?? partner.nom}
+                                {partner.logo_url && (
+                                    <img
+                                        src={partner.logo_url}
+                                        alt={partner.name ?? partner.nom}
+                                    />
+                                )}
+                            </li>
+                        ))}
+                    </ul>
+                </section>
+            ) : (
+                <p>Aucun partenaire</p>
+            )}
         </main>
     );
 }

@@ -10,9 +10,11 @@ export type ApiResponse<TData, TMeta = Record<string, unknown>> = {
 
 export type Menu = {
     id: number;
-    name?: string;
     nom?: string;
+    name?: string;
+    image?: string | null;
     image_url?: string | null;
+    actif?: boolean;
 };
 
 export type Partner = {
@@ -41,3 +43,51 @@ export type HomeData = {
     partners: Partner[];
     featured_post: Post | null;
 }
+
+export type Document = {
+    id: number;
+    title?: string;
+    file?: string;
+    file_url?: string;
+};
+
+export type CalendarEvent = {
+    id: number;
+    titre?: string;
+    lieu?: string;
+    club?: string | null;
+    date_debut?: string;
+    date_fin?: string;
+    url?: string | null;
+};
+
+export type CueScoreRanking = {
+    id: number;
+    name: string;
+    discipline: string;
+    scope: string;
+    ranking_type: string;
+    team_category?: string | null;
+    season?: string | null;
+    is_active: boolean;
+};
+
+export type DisciplineData = {
+    posts: Post[];
+    calendar: CalendarEvent[];
+    documents: Document[];
+    rankings: CueScoreRanking[] | null;
+};
+
+export type DisciplineMeta = {
+    discipline: string;
+    posts_count: number;
+    calendar_count: number;
+    documents_count: number;
+    rankings_count: number | null;
+};
+
+export type SiteData = {
+    site_settings: Record<string, unknown> | null;
+    menus: Menu[];
+};
