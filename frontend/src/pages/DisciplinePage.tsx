@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getDiscipline, getRankingsPreview } from "../api/disciplinesApi";
 import { DisciplineSubMenu } from "../components/DisciplineSubMenu";
+import { RankingsPreviewSection } from "../components/rankings/RankingsPreviewSection";
 import type {
     DisciplineData,
     DisciplineMeta,
@@ -79,27 +80,6 @@ export function DisciplinePage() {
 
     const { data, meta } = state;
 
-    const normalizeScope = (value: string) =>
-        value
-            .normalize("NFD")
-            .replace(/\p{Diacritic}/gu, "")
-            .toLowerCase();
-
-    const scopeLabels: Record<string, string> = {
-        national: "National",
-        regional: "Régional",
-        departemental: "Départemental",
-    };
-
-    const orderedScopes = ["national", "regional", "departemental"];
-
-    const rankingsByNormalizedScope = Object.fromEntries(
-        Object.entries(state.rankingsPreview ?? {}).map(([scope, items]) => [
-            normalizeScope(scope),
-            items,
-        ])
-    );
-
     return (
         <main>
             <h1>Discipline : {meta.discipline}</h1>
@@ -168,83 +148,10 @@ export function DisciplinePage() {
                 )}
             </section>
 
-            <section id="rankings">
-                <h2>Classements</h2>
-
-                {state.rankingsPreviewMeta?.rankings_supported === false && (
-                    <p>Les classements CueScore ne sont pas supportés pour cette discipline.</p>
-                )}
-
-                {state.rankingsPreview && Object.keys(state.rankingsPreview).length > 0 ? (
-                    orderedScopes.map((scopeKey) => {
-                        const items = rankingsByNormalizedScope[scopeKey];
-
-                        if (!items || items.length === 0) {
-                            return null;
-                        }
-
-                        const scopeLabel = scopeLabels[scopeKey];
-
-                        return (
-                            <div key={scopeKey}>
-                                <h3>{scopeLabel}</h3>
-
-                                {items.map((item) => (
-                                    <article key={item.ranking.id}>
-                                        <h4>{item.ranking.name}</h4>
-
-                                        {item.entries.length > 0 ? (
-                                            <table>
-                                                <thead>
-                                                    <tr>
-                                                        <th>Position</th>
-                                                        <th>Nom</th>
-                                                        <th>Points</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {item.entries.map((entry, index) => {
-                                                        const position = entry.rank_position ?? index + 1;
-
-                                                        return (
-                                                            <tr key={`${item.ranking.id}-${index}`}>
-                                                                <td>
-                                                                    <strong>
-                                                                        {position === 1
-                                                                            ? `${position} er`
-                                                                            : `${position} ème`}
-                                                                    </strong>
-                                                                </td>
-                                                                <td>
-                                                                    {entry.participant_name ??
-                                                                        entry.team_name ??
-                                                                        "Nom indisponible"}
-                                                                </td>
-                                                                <td>
-                                                                    {entry.points !== null &&
-                                                                        entry.points !== undefined
-                                                                        ? Math.round(Number(entry.points))
-                                                                        : "-"}
-                                                                </td>
-                                                            </tr>
-                                                        );
-                                                    })}
-                                                </tbody>
-                                            </table>
-                                        ) : (
-                                            <p>Aucune entrée disponible.</p>
-                                        )}
-                                    </article>
-                                ))}
-                            </div>
-                        );
-                    })
-                ) : (
-                    state.rankingsPreviewMeta?.rankings_supported !== false && (
-                        <p>Aucun classement disponible.</p>
-                    )
-                )}
-            </section>
+            <RankingsPreviewSection
+                rankingsPreview={state.rankingsPreview}
+                rankingsPreviewMeta={state.rankingsPreviewMeta}
+            />
         </main>
     );
 }
