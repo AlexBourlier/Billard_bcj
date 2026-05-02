@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { getDiscipline, getRankingsPreview } from "../api/disciplinesApi";
 import { DisciplineSubMenu } from "../components/DisciplineSubMenu";
 import { RankingsPreviewSection } from "../components/rankings/RankingsPreviewSection";
+import { PostsSection } from "../components/posts/PostsSection";
 import type {
     DisciplineData,
     DisciplineMeta,
@@ -86,24 +87,7 @@ export function DisciplinePage() {
 
             <DisciplineSubMenu rankingsEnabled={data.rankings !== null} />
 
-            <section id="articles">
-                <h2>Articles</h2>
-
-                {data.posts.length > 0 ? (
-                    data.posts.map((post) => (
-                        <article key={post.id}>
-                            <h3>
-                                <Link to={`/posts/${post.slug}`}>
-                                    {post.title ?? post.titre}
-                                </Link>
-                            </h3>
-                            {post.excerpt && <p>{post.excerpt}</p>}
-                        </article>
-                    ))
-                ) : (
-                    <p>Aucun article pour cette discipline.</p>
-                )}
-            </section>
+            <PostsSection posts={data.posts} />
 
             <section id="calendar">
                 <h2>Calendrier</h2>
