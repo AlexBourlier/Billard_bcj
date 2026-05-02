@@ -4,6 +4,7 @@ import { getDiscipline, getRankingsPreview } from "../api/disciplinesApi";
 import { DisciplineSubMenu } from "../components/DisciplineSubMenu";
 import { RankingsPreviewSection } from "../components/rankings/RankingsPreviewSection";
 import { PostsSection } from "../components/posts/PostsSection";
+import { CalendarSection } from "../components/calendar/CalendarSection";
 import type {
     DisciplineData,
     DisciplineMeta,
@@ -89,26 +90,7 @@ export function DisciplinePage() {
 
             <PostsSection posts={data.posts} />
 
-            <section id="calendar">
-                <h2>Calendrier</h2>
-
-                {data.calendar.length > 0 ? (
-                    data.calendar.map((event) => (
-                        <article key={event.id}>
-                            <h3>{event.titre}</h3>
-                            <p>{event.lieu}</p>
-                            {event.date_debut && (
-                                <p>
-                                    Date :{" "}
-                                    {new Date(event.date_debut).toLocaleDateString("fr-FR")}
-                                </p>
-                            )}
-                        </article>
-                    ))
-                ) : (
-                    <p>Aucun événement à afficher.</p>
-                )}
-            </section>
+            <CalendarSection events={data.calendar} />
 
             <section id="documents">
                 <h2>Documents</h2>
