@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { getPostBySlug } from "../api/postsApi";
 import type { Post } from "../types/api";
 
@@ -9,8 +9,17 @@ type PageState = {
     error: string | null;
 };
 
+type LocationState = {
+    from?: string;
+};
+
 export function PostPage() {
     const { slug } = useParams();
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const locationState = location.state as LocationState | null;
+    const backTarget = locationState?.from ?? "/";
 
     const [state, setState] = useState<PageState>({
         post: null,
@@ -56,11 +65,12 @@ export function PostPage() {
     if (!state.post) return <p>Aucun article disponible.</p>;
 
     const { post } = state;
-    console.log("POST", post);
 
     return (
         <article>
-            <Link to="/">← Retour à l’accueil</Link>
+            <button type="button" onClick={() => navigate(backTarget)}>
+                ← Retour
+            </button>
 
             <h1>{post.title ?? post.titre}</h1>
 

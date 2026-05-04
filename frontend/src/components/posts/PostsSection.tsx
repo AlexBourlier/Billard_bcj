@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import type { Post } from "../../types/api";
 
-type Props = {
+type PostsSectionProps = {
     posts: Post[];
+    discipline: string;
 };
 
 /**
@@ -12,8 +13,9 @@ type Props = {
  * - afficher les posts
  * - gérer le cas vide
  * - gérer le lien vers le détail
+ * - transmettre la page d'origine pour le retour depuis PostPage
  */
-export function PostsSection({ posts }: Props) {
+export function PostsSection({ posts, discipline }: PostsSectionProps) {
     return (
         <section id="articles">
             <h2>Articles</h2>
@@ -22,9 +24,16 @@ export function PostsSection({ posts }: Props) {
                 posts.map((post) => (
                     <article key={post.id}>
                         <h3>
-                            <Link to={`/posts/${post.slug}`}>
-                                {post.title ?? post.titre}
-                            </Link>
+                            {post.slug ? (
+                                <Link
+                                    to={`/posts/${post.slug}`}
+                                    state={{ from: `/disciplines/${discipline}` }}
+                                >
+                                    {post.title ?? post.titre}
+                                </Link>
+                            ) : (
+                                post.title ?? post.titre
+                            )}
                         </h3>
 
                         {post.excerpt && <p>{post.excerpt}</p>}

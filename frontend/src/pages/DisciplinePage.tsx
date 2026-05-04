@@ -5,6 +5,7 @@ import { DisciplineSubMenu } from "../components/DisciplineSubMenu";
 import { RankingsPreviewSection } from "../components/rankings/RankingsPreviewSection";
 import { PostsSection } from "../components/posts/PostsSection";
 import { CalendarSection } from "../components/calendar/CalendarSection";
+import { DocumentsSection } from "../components/documents/DocumentsSection";
 import type {
     DisciplineData,
     DisciplineMeta,
@@ -88,31 +89,11 @@ export function DisciplinePage() {
 
             <DisciplineSubMenu rankingsEnabled={data.rankings !== null} />
 
-            <PostsSection posts={data.posts} />
+            <PostsSection posts={data.posts} discipline={meta.discipline} />
 
             <CalendarSection events={data.calendar} />
 
-            <section id="documents">
-                <h2>Documents</h2>
-
-                {data.documents.length > 0 ? (
-                    <ul>
-                        {data.documents.map((document) => (
-                            <li key={document.id}>
-                                {document.file_url ? (
-                                    <a href={document.file_url} target="_blank" rel="noreferrer">
-                                        {document.title}
-                                    </a>
-                                ) : (
-                                    document.title
-                                )}
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <p>Aucun document disponible.</p>
-                )}
-            </section>
+            <DocumentsSection documents={data.documents} />
 
             <RankingsPreviewSection
                 rankingsPreview={state.rankingsPreview}
