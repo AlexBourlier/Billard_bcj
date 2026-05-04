@@ -32,8 +32,9 @@ export type Post = {
     slug?: string;
     excerpt?: string | null;
     content?: string | null;
-    contenu?: string | null;
+    image?: string | null;
     image_url?: string | null;
+    year?: number | null;
     created_at?: string | null;
 };
 
@@ -127,4 +128,30 @@ export type RankingsPreviewMeta = {
     count?: number;
     limit?: number;
     rankings_supported: boolean;
+};
+
+export type PaginationMeta = {
+    count: number;
+    current_page: number;
+    last_page: number;
+    per_page: number;
+    from: number | null;
+    to: number | null;
+    total: number;
+    [key: string]: unknown;
+};
+
+export type PaginatedResponse<TData> = {
+    data: TData[];
+    meta: PaginationMeta;
+    links: {
+        first: string | null;
+        last: string | null;
+        prev: string | null;
+        next: string | null;
+    };
+    error: null | {
+        code: string;
+        message: string;
+    };
 };

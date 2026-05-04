@@ -3,39 +3,66 @@ import { HomePage } from "../pages/HomePage";
 import { DisciplinePage } from "../pages/DisciplinePage";
 import { NotFoundPage } from "../pages/NotFoundPage";
 import { PostPage } from "../pages/PostPage";
-import {MainLayout} from "../layouts/MainLayout";
+import { ClubPostsPage } from "../pages/ClubPostsPage";
+import { MainLayout } from "../layouts/MainLayout";
 
 export function AppRouter() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route 
-                    path="/" 
+                <Route
+                    path="/"
                     element={
                         <MainLayout>
                             <HomePage />
-                        </MainLayout>} />
-                <Route 
-                    path="/disciplines/:discipline" 
+                        </MainLayout>
+                    }
+                />
+
+                <Route
+                    path="/disciplines/:discipline"
                     element={
                         <MainLayout>
                             <DisciplinePage />
                         </MainLayout>
-                    } />
-                <Route 
-                    path="*" 
-                    element={
-                        <MainLayout>
-                            <NotFoundPage />
-                        </MainLayout>
-                    } />
-                <Route 
-                    path="/posts/:slug" 
+                    }
+                />
+
+                <Route
+                    path="/posts/:slug"
                     element={
                         <MainLayout>
                             <PostPage />
                         </MainLayout>
-                    } />
+                    }
+                />
+
+                <Route
+                    path="/club"
+                    element={
+                        <MainLayout>
+                            <ClubPostsPage />
+                        </MainLayout>
+                    }
+                />
+
+                <Route
+                    path="/club/annee/:period"
+                    element={
+                        <MainLayout>
+                            <ClubPostsPage />
+                        </MainLayout>
+                    }
+                />
+
+                <Route
+                    path="*"
+                    element={
+                        <MainLayout>
+                            <NotFoundPage />
+                        </MainLayout>
+                    }
+                />
             </Routes>
         </BrowserRouter>
     );

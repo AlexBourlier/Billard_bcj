@@ -51,6 +51,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/discipline/{discipline}', [PostController::class, 'getPostsByDiscipline']);
         Route::get('/slug/{slug}', [PostController::class, 'getPostBySlug']);
         Route::get('/decade/{year}', [PostController::class, 'getPostByDecade']);
+        Route::get('/period/{period}', [PostController::class, 'getPostByPeriod']);
         Route::get('/year/{year}', [PostController::class, 'getPostByYear']);
         Route::get('/{id}', [PostController::class, 'show'])->whereNumber('id');
     });

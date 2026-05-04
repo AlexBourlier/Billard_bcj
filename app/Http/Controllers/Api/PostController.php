@@ -286,6 +286,84 @@ class PostController extends Controller
         ]);
     }
 
+    public function getPostByPeriod(string $period): JsonResponse
+    {
+        $currentDecade = (int) floor(now()->year / 10) * 10;
+
+        $previousDecadeStart = $currentDecade - 10;
+        $previousDecadeEnd = $currentDecade - 1;
+
+        $secondPreviousDecadeStart = $currentDecade - 20;
+        $secondPreviousDecadeEnd = $currentDecade - 11;
+
+        $beforeYear = $currentDecade - 20;
+
+        $periods = [
+            "depuis_{$currentDecade}" => [
+                'label' => "Depuis {$currentDecade}",
+                'start_year' => $currentDecade,
+                'end_year' => null,
+                'operator' => '>=',
+            ],
+            "{$previousDecadeStart}_{$previousDecadeEnd}" => [
+                'label' => "{$previousDecadeStart} - {$previousDecadeEnd}",
+                'start_year' => $previousDecadeStart,
+                'end_year' => $previousDecadeEnd,
+                'operator' => 'between',
+            ],
+            "{$secondPreviousDecadeStart}_{$secondPreviousDecadeEnd}" => [
+                'label' => "{$secondPreviousDecadeStart} - {$secondPreviousDecadeEnd}",
+                'start_year' => $secondPreviousDecadeStart,
+                'end_year' => $secondPreviousDecadeEnd,
+                'operator' => 'between',
+            ],
+            "avant_{$beforeYear}" => [
+                'label' => "Avant {$beforeYear}",
+                'start_year' => null,
+                'end_year' => $beforeYear,
+                'operator' => '<',
+            ],
+        ];
+
+        if (!array_key_exists($period, $periods)) {
+            return response()->json([
+                'data' => null,
+                'meta' => [],
+                'links' => [],
+                'error' => [
+                    'code' => 'invalid_period',
+                    'message' => 'Invalid period. Valid values: ' . implode(', ', array_keys($periods)),
+                ],
+            ], 400);
+        }
+
+        $selectedPeriod = $periods[$period];
+
+        $posts = Post::query()
+            ->when($selectedPeriod['operator'] === '>=', function ($query) use ($selectedPeriod) {
+                $query->where('year', '>=', $selectedPeriod['start_year']);
+            })
+            ->when($selectedPeriod['operator'] === '<', function ($query) use ($selectedPeriod) {
+                $query->where('year', '<', $selectedPeriod['end_year']);
+            })
+            ->when($selectedPeriod['operator'] === 'between', function ($query) use ($selectedPeriod) {
+                $query->whereBetween('year', [
+                    $selectedPeriod['start_year'],
+                    $selectedPeriod['end_year'],
+                ]);
+            })
+            ->orderByDesc('year')
+            ->orderByDesc('created_at')
+            ->paginate($this->getPerPage());
+
+        return $this->paginatedResponse($posts, [
+            'period' => $period,
+            'label' => $selectedPeriod['label'],
+            'start_year' => $selectedPeriod['start_year'],
+            'end_year' => $selectedPeriod['end_year'],
+        ]);
+    }
+
     /**
      * Articles par année
      *
