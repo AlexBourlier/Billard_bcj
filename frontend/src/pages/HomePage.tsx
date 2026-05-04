@@ -22,6 +22,13 @@ export function HomePage() {
         <main>
             {/* <h1>BCJ37</h1> */}
 
+            {home?.welcome_message?.content && (
+                <div
+                    dangerouslySetInnerHTML={{
+                        __html: home.welcome_message.content,
+                    }}
+                />
+            )}
             {home?.featured_post ? (
                 <article>
                     <h2>
@@ -29,7 +36,16 @@ export function HomePage() {
                             {home.featured_post.title ?? home.featured_post.titre}
                         </Link>
                     </h2>
-                    <p>{home.featured_post.excerpt}</p>
+                    {home.featured_post.image_url && (
+                        <img src={home.featured_post.image_url} alt={home.featured_post.title ?? home.featured_post.titre} style={{ maxWidth: "100%" }} />
+                    )}
+                    {home.featured_post.content && (
+                        <div
+                            dangerouslySetInnerHTML={{
+                                __html: home.featured_post.content,
+                            }}
+                        />
+                    )}
                 </article>
             ) : (
                 <p>Aucun article mis en avant</p>

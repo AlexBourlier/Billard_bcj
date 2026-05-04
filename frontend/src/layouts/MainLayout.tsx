@@ -20,11 +20,20 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                 </h1>
 
                 <nav>
-                    {menus.map((menu) => (
-                        <Link to={`/disciplines/${menu.name}`}>
-                            {menu.name}
-                        </Link>
-                    ))}
+                    {menus.map((menu) => {
+                        const slug = menu.name?.toLowerCase();
+
+                        const path =
+                            slug === "club"
+                                ? "/club"
+                                : `/disciplines/${slug}`;
+
+                        return (
+                            <Link key={menu.id} to={path}>
+                                {menu.name}
+                            </Link>
+                        );
+                    })}
                 </nav>
             </header>
 

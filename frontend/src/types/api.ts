@@ -25,6 +25,10 @@ export type Partner = {
     website_url?: string | null;
 };
 
+export type WelcomeMessage = {
+    content: string | null;
+};
+
 export type Post = {
     id: number;
     title?: string;
@@ -43,6 +47,7 @@ export type HomeData = {
     menus: Menu[];
     partners: Partner[];
     featured_post: Post | null;
+    welcome_message: WelcomeMessage | null;
 }
 
 export type Document = {

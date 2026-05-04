@@ -7,10 +7,12 @@ use App\Http\Resources\MenuResource;
 use App\Http\Resources\PartnerResource;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\SiteSettingsResource;
+use App\Http\Resources\IndexResource;
 use App\Models\Menu;
 use App\Models\Partenaire;
 use App\Models\Post;
 use App\Models\SiteSetting;
+use App\Models\Index;
 use App\Support\CacheKeys;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
@@ -194,6 +196,8 @@ class PublicController extends Controller
                     ->orderByDesc('created_at')
                     ->first();
 
+                $index = Index::query()->first();
+
                 if (!$featuredPost) {
                     $featuredPost = Post::query()
                         ->orderByDesc('created_at')
@@ -206,6 +210,7 @@ class PublicController extends Controller
                         'menus' => MenuResource::collection($menus),
                         'partners' => PartnerResource::collection($partners),
                         'featured_post' => $featuredPost ? new PostResource($featuredPost) : null,
+                        'welcome_message' => $index ? new IndexResource($index) : null,
                     ],
                     'meta' => [
                         'menus_count' => $menus->count(),

@@ -114,7 +114,7 @@ export function ClubPostsPage() {
 
     return (
         <main>
-            <h1>Club</h1>
+            {/* <h1>Club</h1> */}
 
             <nav aria-label="Archives du club">
                 {periods.map((item) => {
@@ -134,7 +134,7 @@ export function ClubPostsPage() {
             </nav>
 
             <section>
-                <h2>Articles</h2>
+                {/* <h2>Articles</h2> */}
 
                 {state.meta && (
                     <p>
