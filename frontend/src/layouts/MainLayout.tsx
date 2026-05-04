@@ -30,7 +30,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
 
                         return (
                             <Link key={menu.id} to={path}>
-                                {menu.name}
+                                {menu.name}{' '}
                             </Link>
                         );
                     })}

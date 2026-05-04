@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\LicenseImportBatchController;
 use App\Http\Controllers\Api\PartnerController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\PublicController;
+use App\Http\Controllers\Api\CaramboleRankingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use PharIo\Manifest\License;
@@ -103,5 +104,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/{discipline}', [DisciplineController::class, 'show']);
         Route::get('/{discipline}/rankings-preview', [DisciplineController::class, 'rankingsPreview']);
     });
+
+    Route::get('/disciplines/carambole/classement', [CaramboleRankingController::class, 'index']);
     
 });

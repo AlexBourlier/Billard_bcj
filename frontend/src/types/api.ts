@@ -78,11 +78,18 @@ export type CueScoreRanking = {
     is_active: boolean;
 };
 
+export type CaramboleRankingFile = {
+    name: string;
+    filename: string;
+    url: string;
+};
+
 export type DisciplineData = {
     posts: Post[];
     calendar: CalendarEvent[];
     documents: Document[];
     rankings: CueScoreRanking[] | null;
+    carambole_ranking_files: CaramboleRankingFile[];
 };
 
 export type DisciplineMeta = {
@@ -91,6 +98,7 @@ export type DisciplineMeta = {
     calendar_count: number;
     documents_count: number;
     rankings_count: number | null;
+    carambole_ranking_files_count: number;
 };
 
 export type SiteData = {

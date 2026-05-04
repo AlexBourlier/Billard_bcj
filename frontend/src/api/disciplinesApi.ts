@@ -5,11 +5,18 @@ import type {
     DisciplineMeta,
     RankingsPreviewData,
     RankingsPreviewMeta, 
+    CaramboleRankingFile
 } from "../types/api";
 
 export function getDiscipline(slug: string) {
     return apiGet<ApiResponse<DisciplineData, DisciplineMeta>>(
         `/disciplines/${slug}`
+    );
+}
+
+export function getRankingsCarambole() {
+    return apiGet<ApiResponse<{ files: CaramboleRankingFile[] }>>(
+        `/disciplines/carambole/classement`
     );
 }
 

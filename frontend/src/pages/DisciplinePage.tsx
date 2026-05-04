@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getDiscipline, getRankingsPreview } from "../api/disciplinesApi";
+import { getDiscipline, getRankingsPreview, getRankingsCarambole } from "../api/disciplinesApi";
 import { DisciplineSubMenu } from "../components/DisciplineSubMenu";
 import { RankingsPreviewSection } from "../components/rankings/RankingsPreviewSection";
+import { CaramboleRankingsSection } from "../components/rankings/CaramboleRankingsSection";
 import { PostsSection } from "../components/posts/PostsSection";
 import { CalendarSection } from "../components/calendar/CalendarSection";
 import { DocumentsSection } from "../components/documents/DocumentsSection";
@@ -11,6 +12,7 @@ import type {
     DisciplineMeta,
     RankingsPreviewData,
     RankingsPreviewMeta,
+    CaramboleRankingFile,
 } from "../types/api";
 
 type PageState = {
@@ -18,6 +20,7 @@ type PageState = {
     meta: DisciplineMeta | null;
     rankingsPreview: RankingsPreviewData | null;
     rankingsPreviewMeta: RankingsPreviewMeta | null;
+    caramboleRankingFiles: CaramboleRankingFile[];
     loading: boolean;
     error: string | null;
 };
@@ -30,6 +33,7 @@ export function DisciplinePage() {
         meta: null,
         rankingsPreview: null,
         rankingsPreviewMeta: null,
+        caramboleRankingFiles: [],
         loading: true,
         error: null,
     });
@@ -41,16 +45,24 @@ export function DisciplinePage() {
 
         Promise.all([
             getDiscipline(discipline),
-            getRankingsPreview(discipline, 5),
+
+            discipline === "carambole"
+                ? getRankingsCarambole().catch(() => null)
+                : Promise.resolve(null),
+
+            discipline === "carambole"
+                ? Promise.resolve(null)
+                : getRankingsPreview(discipline, 5).catch(() => null),
         ])
-            .then(([disciplineResponse, rankingsResponse]) => {
+            .then(([disciplineResponse, caramboleResponse, rankingsResponse]) => {
                 if (!isMounted) return;
 
                 setState({
                     data: disciplineResponse.data,
                     meta: disciplineResponse.meta,
-                    rankingsPreview: rankingsResponse.data,
-                    rankingsPreviewMeta: rankingsResponse.meta,
+                    rankingsPreview: rankingsResponse?.data ?? null,
+                    rankingsPreviewMeta: rankingsResponse?.meta ?? null,
+                    caramboleRankingFiles: caramboleResponse?.data ?? [],
                     loading: false,
                     error: null,
                 });
@@ -63,6 +75,7 @@ export function DisciplinePage() {
                     meta: null,
                     rankingsPreview: null,
                     rankingsPreviewMeta: null,
+                    caramboleRankingFiles: [],
                     loading: false,
                     error: "Impossible de charger la discipline.",
                 });
@@ -83,11 +96,15 @@ export function DisciplinePage() {
 
     const { data, meta } = state;
 
+    const hasCueScoreRankings = data.rankings !== null;
+    const hasCaramboleRankings = state.caramboleRankingFiles.length > 0;
+    const rankingsEnabled = hasCueScoreRankings || hasCaramboleRankings;
+
     return (
         <main>
             <h1>Discipline : {meta.discipline}</h1>
 
-            <DisciplineSubMenu rankingsEnabled={data.rankings !== null} />
+            <DisciplineSubMenu rankingsEnabled={rankingsEnabled} />
 
             <PostsSection posts={data.posts} discipline={meta.discipline} />
 
@@ -95,10 +112,20 @@ export function DisciplinePage() {
 
             <DocumentsSection documents={data.documents} />
 
-            <RankingsPreviewSection
-                rankingsPreview={state.rankingsPreview}
-                rankingsPreviewMeta={state.rankingsPreviewMeta}
-            />
+            <section id="rankings">
+                {state.rankingsPreview && (
+                    <RankingsPreviewSection
+                        rankingsPreview={state.rankingsPreview}
+                        rankingsPreviewMeta={state.rankingsPreviewMeta}
+                    />
+                )}
+
+                {state.caramboleRankingFiles.length > 0 && (
+                    <CaramboleRankingsSection
+                        files={state.caramboleRankingFiles}
+                    />
+                )}
+            </section>
         </main>
     );
 }
