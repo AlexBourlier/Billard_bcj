@@ -35,6 +35,13 @@ export function PostsSection({ posts, discipline }: PostsSectionProps) {
                                 post.title ?? post.titre
                             )}
                         </h3>
+                        {post.image_url && (
+                            <img
+                                src={post.image_url}
+                                alt={post.title ?? post.titre ?? "Image de l’article"}
+                                style={{ maxWidth: "200px" }}
+                            />
+                        )}
 
                         {post.excerpt && <p>{post.excerpt}</p>}
                     </article>

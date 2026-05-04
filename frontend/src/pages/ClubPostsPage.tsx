@@ -127,7 +127,7 @@ export function ClubPostsPage() {
                             aria-current={isActive ? "page" : undefined}
                         >
                             {isActive ? "• " : ""}
-                            {item.label}
+                            {item.label}{" "}
                         </Link>
                     );
                 })}
@@ -173,7 +173,13 @@ export function ClubPostsPage() {
 
                             {post.year && <p>Année : {post.year}</p>}
 
-                            {post.excerpt && <p>{post.excerpt}</p>}
+                            {post.excerpt && 
+                            <div
+                                dangerouslySetInnerHTML={{
+                                    __html: post.excerpt ?? "",
+                                }}
+                            />
+                            }
                         </article>
                     ))
                 ) : (
