@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getHome } from "../api/publicApi";
 import { Link } from "react-router-dom";
 import type { HomeData } from "../types/api";
+import { ClubMap } from "../components/map/ClubMap";
 
 export function HomePage() {
     const [home, setHome] = useState<HomeData | null>(null);
@@ -29,6 +30,9 @@ export function HomePage() {
                     }}
                 />
             )}
+
+            <ClubMap />
+
             {home?.featured_post ? (
                 <article>
                     <h2>
