@@ -18,7 +18,7 @@ class MenuResource extends JsonResource
             'id' => $this->id,
             'name' => $this->nom,
             'image' => $this->image,
-            'image_url' => $this->image ? asset($this->image) : null,
+            'image_url' => $this->image ? asset('storage/' . $this->image) : null,
             'actif' => (bool) $this->actif,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

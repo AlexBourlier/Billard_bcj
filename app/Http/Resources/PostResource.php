@@ -26,7 +26,7 @@ class PostResource extends JsonResource
             'year' => $this->year,
             'favoris' => (bool) $this->favoris,
             'image' => $this->thumbnail,
-            'image_url' => $this->thumbnail ? asset($this->thumbnail) : null,
+            'image_url' => $this->thumbnail ? asset('storage/' . $this->thumbnail) : null,
             'video' => $this->video,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

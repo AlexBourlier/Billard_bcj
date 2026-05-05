@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\LicenseImportBatchController;
 use App\Http\Controllers\Api\PartnerController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\PublicController;
+use App\Http\Controllers\Api\CaramboleRankingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use PharIo\Manifest\License;
@@ -51,6 +52,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/discipline/{discipline}', [PostController::class, 'getPostsByDiscipline']);
         Route::get('/slug/{slug}', [PostController::class, 'getPostBySlug']);
         Route::get('/decade/{year}', [PostController::class, 'getPostByDecade']);
+        Route::get('/period/{period}', [PostController::class, 'getPostByPeriod']);
         Route::get('/year/{year}', [PostController::class, 'getPostByYear']);
         Route::get('/{id}', [PostController::class, 'show'])->whereNumber('id');
     });
@@ -96,11 +98,14 @@ Route::prefix('v1')->group(function () {
     // Routes pour les contacts
     Route::prefix('/contact')->group(function () {
         Route::get('/', [ContactController::class, 'index']);
+        Route::post('/', [ContactController::class, 'send']);
     });
 
     Route::prefix('/disciplines')->group(function () {
         Route::get('/{discipline}', [DisciplineController::class, 'show']);
         Route::get('/{discipline}/rankings-preview', [DisciplineController::class, 'rankingsPreview']);
     });
+
+    Route::get('/disciplines/carambole/classement', [CaramboleRankingController::class, 'index']);
     
 });

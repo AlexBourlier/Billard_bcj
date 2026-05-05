@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ContactResource;
 use App\Models\Contact;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 /**
  * Contrôleur API pour la gestion des contacts.
@@ -52,5 +54,62 @@ class ContactController extends Controller
             'links' => [],
             'error' => null,
         ]);
+    }
+
+    /**
+     * Envoie un message de contact.
+     *
+     * @group Public
+     *
+     * @bodyParam name string required Le nom de l'expéditeur. Example: John Doe
+     * @bodyParam email string required L'email de l'expéditeur. Example: john.doe@example.com
+     * @bodyParam message string required Le message de l'expéditeur. Example: Bonjour, je souhaite...
+     *
+     * @response 200 {
+     *   "data": null,
+     *   "meta": null,
+     *   "links": [],
+     *   "error": null
+     * }
+     */
+    public function send(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email'],
+            'message' => ['required', 'string', 'min:10', 'max:5000'],
+        ]);
+
+        try {
+            Mail::raw(
+                "Nom : {$validated['name']}\n" .
+                "Email : {$validated['email']}\n\n" .
+                "Message :\n{$validated['message']}",
+                function ($message) use ($validated) {
+                    $message->from('no-reply@bcj37.fr', 'BCJ37 — Formulaire de contact');
+                    $message->to('contact@bcj37.fr');
+                    $message->replyTo($validated['email'], $validated['name']);
+                    $message->subject('Nouveau message depuis le formulaire de contact');
+                }
+            );
+
+            return response()->json([
+                'data' => [
+                    'message' => 'Votre message a bien été envoyé.',
+                ],
+                'meta' => [],
+                'links' => [],
+                'error' => null,
+            ]);
+        } catch (\Throwable $e) {
+            report($e);
+
+            return response()->json([
+                'data' => null,
+                'meta' => [],
+                'links' => [],
+                'error' => "Une erreur est survenue lors de l'envoi du message.",
+            ], 500);
+        }
     }
 }
