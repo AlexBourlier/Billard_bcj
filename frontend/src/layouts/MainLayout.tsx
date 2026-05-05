@@ -1,45 +1,23 @@
-import { useEffect, useState } from "react";
-import { getSite } from "../api/publicApi";
-import { Link } from "react-router-dom";
-import type { Menu } from "../types/api";
+import { Header } from "../components/layout/Header";
 
 export function MainLayout({ children }: { children: React.ReactNode }) {
-    const [menus, setMenus] = useState<Menu[]>([]);
-
-    useEffect(() => {
-        getSite().then((res) => {
-            setMenus(res.data.menus);
-        });
-    }, []);
-
     return (
-        <>
-            <header>
-                <h1>
-                    <Link to="/">BCJ37</Link>
-                </h1>
+        <div className="app-background">
+            <div className="app-overlay" aria-hidden="true" />
 
-                <nav>
-                    {menus.map((menu) => {
-                        const slug = menu.name?.toLowerCase();
+            <div className="app-shell">
+                <Header />
 
-                        const path =
-                            slug === "club"
-                                ? "/club"
-                                : `/disciplines/${slug}`;
+                <main className="main-content">
+                    <div className="container">
+                        {children}
+                    </div>
+                </main>
 
-                        return (
-                            <Link key={menu.id} to={path}>
-                                {menu.name}{' '}
-                            </Link>
-                        );
-                    })}
-                </nav>
-            </header>
-
-            <main>{children}</main>
-
-            <footer>© BCJ37</footer>
-        </>
+                <footer className="site-footer">
+                    <div className="container">© BCJ37</div>
+                </footer>
+            </div>
+        </div>
     );
 }

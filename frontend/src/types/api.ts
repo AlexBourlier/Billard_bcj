@@ -1,17 +1,47 @@
+export type ApiError = {
+    code: string;
+    message: string;
+};
+
 export type ApiResponse<TData, TMeta = Record<string, unknown>> = {
     data: TData;
     meta: TMeta;
     links: unknown[] | Record<string, unknown>;
-    error: null | {
-        code: string;
-        message: string;
+    error: ApiError | null;
+};
+
+export type PaginatedResponse<TData> = {
+    data: TData[];
+    meta: PaginationMeta;
+    links: {
+        first: string | null;
+        last: string | null;
+        prev: string | null;
+        next: string | null;
     };
+    error: ApiError | null;
+};
+
+export type SiteSettings = {
+    id: number;
+    logo?: string | null;
+    logo_url?: string | null;
+    banniere?: string | null;
+    banniere_url?: string | null;
+    adresse?: string | null;
+    telephone?: string | null;
+    email?: string | null;
+    youtube_page?: string | null;
+    facebook_page?: string | null;
+    facebook_page_id?: string | null;
+    created_at?: string | null;
+    updated_at?: string | null;
 };
 
 export type Menu = {
     id: number;
     nom?: string;
-    name?: string;
+    name: string;
     image?: string | null;
     image_url?: string | null;
     actif?: boolean;
@@ -43,12 +73,17 @@ export type Post = {
 };
 
 export type HomeData = {
-    site_settings: Record<string, unknown> | null;
+    site_settings: SiteSettings | null;
     menus: Menu[];
     partners: Partner[];
     featured_post: Post | null;
     welcome_message: WelcomeMessage | null;
-}
+};
+
+export type SiteData = {
+    site_settings: SiteSettings | null;
+    menus: Menu[];
+};
 
 export type Document = {
     id: number;
@@ -101,11 +136,6 @@ export type DisciplineMeta = {
     carambole_ranking_files_count: number;
 };
 
-export type SiteData = {
-    site_settings: Record<string, unknown> | null;
-    menus: Menu[];
-};
-
 export type RankingEntry = {
     rank_position?: number | null;
     participant_name?: string | null;
@@ -152,21 +182,6 @@ export type PaginationMeta = {
     to: number | null;
     total: number;
     [key: string]: unknown;
-};
-
-export type PaginatedResponse<TData> = {
-    data: TData[];
-    meta: PaginationMeta;
-    links: {
-        first: string | null;
-        last: string | null;
-        prev: string | null;
-        next: string | null;
-    };
-    error: null | {
-        code: string;
-        message: string;
-    };
 };
 
 export type Contact = {
