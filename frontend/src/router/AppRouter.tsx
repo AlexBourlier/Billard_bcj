@@ -5,6 +5,7 @@ import { NotFoundPage } from "../pages/NotFoundPage";
 import { PostPage } from "../pages/PostPage";
 import { ClubPostsPage } from "../pages/ClubPostsPage";
 import { CalendarPage } from "../pages/CalendarPage";
+import { ContactPage } from "../pages/ContactPage";
 import { MainLayout } from "../layouts/MainLayout";
 
 export function AppRouter() {
@@ -61,6 +62,15 @@ export function AppRouter() {
                     element={
                         <MainLayout>
                             <CalendarPage />
+                        </MainLayout>
+                    }
+                />
+
+                <Route
+                    path="/contact"
+                    element={
+                        <MainLayout>
+                            <ContactPage />
                         </MainLayout>
                     }
                 />

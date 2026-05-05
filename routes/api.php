@@ -98,6 +98,7 @@ Route::prefix('v1')->group(function () {
     // Routes pour les contacts
     Route::prefix('/contact')->group(function () {
         Route::get('/', [ContactController::class, 'index']);
+        Route::post('/', [ContactController::class, 'send']);
     });
 
     Route::prefix('/disciplines')->group(function () {

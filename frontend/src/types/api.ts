@@ -168,3 +168,17 @@ export type PaginatedResponse<TData> = {
         message: string;
     };
 };
+
+export type Contact = {
+    id: number;
+    nom: string;
+    email: string;
+    telephone: string | null;
+    message?: string | null;
+};
+
+export type ContactFormPayload = {
+    name: string;
+    email: string;
+    message: string;
+};
