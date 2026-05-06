@@ -202,6 +202,10 @@
         transition: filter 0.3s ease;
     }
 
+    .desktop-nav nav a.is-active img.menu-image {
+        filter: grayscale(0%) brightness(100%);
+    }
+
     .desktop-nav nav a:hover img.menu-image {
         filter: grayscale(0%) brightness(100%);
     }
@@ -302,14 +306,14 @@
         filter: grayscale(100%) brightness(80%);
         transition: filter 0.3s ease;
     }
+    .desktop-nav nav a.is-active img.menu-image {
+        filter: grayscale(0%) brightness(100%);
+    }
 
     .desktop-nav nav a:hover img.menu-image {
         filter: grayscale(0%) brightness(100%);
     }
 
-    .desktop-nav nav a.is-active img.menu-image {
-        filter: grayscale(0%) brightness(100%);
-    }
 
     .social-links {
         display: flex;
