@@ -24,7 +24,7 @@ export function HomePage() {
     return (
         <>
 
-        <section className="hero">
+        <div className="hero">
             {home?.site_settings?.banniere_url && (
                 <img
                     src={home.site_settings.banniere_url}
@@ -32,7 +32,7 @@ export function HomePage() {
                     className="hero-banner"
                 />
             )}
-        </section>
+        </div>
         <div className="home-layout">
             <section className="accueil" aria-labelledby="accueil-title">
                 <ArticleTitle>Accueil</ArticleTitle>

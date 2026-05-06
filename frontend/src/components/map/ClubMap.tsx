@@ -15,7 +15,7 @@ const markerIcon = new L.Icon({
 
 export function ClubMap() {
     return (
-        <section className="maps" aria-labelledby="maps-title">
+            <>
 
             <p className="sr-only" id="map-desc">
                 Carte indiquant l'emplacement du Billard Club de Joué-Lès-Tours.
@@ -67,6 +67,6 @@ export function ClubMap() {
                     Ouvrir dans Google Maps
                 </a>
             </p>
-        </section>
+        </>
     );
 }

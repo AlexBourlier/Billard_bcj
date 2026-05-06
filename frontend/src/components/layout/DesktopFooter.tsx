@@ -1,6 +1,6 @@
 import { Link, NavLink } from "react-router-dom";
 import type { Menu } from "../../types/api";
-import { getMenuPath } from "./navigationUtils";
+// import { getMenuPath } from "./navigationUtils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {
@@ -17,11 +17,11 @@ type Props = {
     logoUrl: string | null;
 };
 
-export function DesktopFooter({ menus, logoUrl }: Props) {
+export function DesktopFooter({ logoUrl }: Props) {
     return (
         <div className="desktop-footer-wrapper">
             <div className="container desktop-footer">
-                <h4 className="site-logo-desktop">
+                <h3 className="site-logo-desktop">
                     <NavLink end to="/">
                         {logoUrl ? (
                             <img
@@ -33,7 +33,7 @@ export function DesktopFooter({ menus, logoUrl }: Props) {
                             <span>BCJ37</span>
                         )}
                     </NavLink>
-                </h4>
+                </h3>
 
                 <div className="social-links-footer">
                     <p className="contact-info">Contact</p>
