@@ -1,46 +1,94 @@
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 type Props = {
     logoUrl: string | null;
 };
 
+const navLinks = [
+    { to: "/club", label: "Le club" },
+    { to: "/disciplines/blackball", label: "Blackball" },
+    { to: "/disciplines/carambole", label: "Carambole" },
+    { to: "/disciplines/snooker", label: "Snooker" },
+    { to: "/disciplines/americain", label: "Américain" },
+    { to: "/calendrier", label: "Calendrier" },
+    { to: "/contact", label: "Contact" },
+];
+
 export function MobileNavigation({ logoUrl }: Props) {
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement | null>(null);
+    const linksRef = useRef<(HTMLAnchorElement | null)[]>([]);
 
-    useEffect(() => {
-        function handleKeyDown(e: KeyboardEvent) {
-            if (e.key === "Escape") {
-                setIsOpen(false);
+    function closeMenu() {
+        setIsOpen(false);
+    }
+
+    function toggleMenu() {
+        setIsOpen((current) => {
+            const next = !current;
+
+            if (!current) {
+                window.setTimeout(() => {
+                    linksRef.current[0]?.focus();
+                }, 0);
             }
-        }
 
-        if (isOpen) {
-            document.addEventListener("keydown", handleKeyDown);
-        }
-
-        return () => {
-            document.removeEventListener("keydown", handleKeyDown);
-        };
-    }, [isOpen]);
+            return next;
+        });
+    }
 
     useEffect(() => {
+        if (!isOpen) return;
+
         function handleClickOutside(event: MouseEvent) {
             if (
                 menuRef.current &&
                 !menuRef.current.contains(event.target as Node)
             ) {
-                setIsOpen(false);
+                closeMenu();
             }
         }
 
-        if (isOpen) {
-            document.addEventListener("mousedown", handleClickOutside);
+        function handleKeyDown(event: KeyboardEvent) {
+            const links = linksRef.current.filter(Boolean);
+
+            if (event.key === "Escape") {
+                closeMenu();
+                return;
+            }
+
+            if (!links.length) return;
+
+            const currentIndex = links.findIndex(
+                (link) => link === document.activeElement
+            );
+
+            if (event.key === "ArrowDown") {
+                event.preventDefault();
+
+                const nextIndex =
+                    currentIndex < links.length - 1 ? currentIndex + 1 : 0;
+
+                links[nextIndex]?.focus();
+            }
+
+            if (event.key === "ArrowUp") {
+                event.preventDefault();
+
+                const previousIndex =
+                    currentIndex > 0 ? currentIndex - 1 : links.length - 1;
+
+                links[previousIndex]?.focus();
+            }
         }
+
+        document.addEventListener("mousedown", handleClickOutside);
+        document.addEventListener("keydown", handleKeyDown);
 
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("keydown", handleKeyDown);
         };
     }, [isOpen]);
 
@@ -48,7 +96,7 @@ export function MobileNavigation({ logoUrl }: Props) {
         <div className="mobile-nav-wrapper" ref={menuRef}>
             <div className="container mobile-nav-header">
                 <h1 className="site-logo">
-                    <Link to="/">
+                    <Link to="/" onClick={closeMenu}>
                         {logoUrl ? (
                             <img
                                 src={logoUrl}
@@ -67,12 +115,12 @@ export function MobileNavigation({ logoUrl }: Props) {
                     aria-expanded={isOpen}
                     aria-controls="mobile-navigation"
                     aria-label={isOpen ? "Fermer le menu" : "Ouvrir le menu"}
-                    onClick={() => setIsOpen((current) => !current)}
+                    onClick={toggleMenu}
                 >
                     <span className="burger" aria-hidden="true">
-                        <span></span>
-                        <span></span>
-                        <span></span>
+                        <span />
+                        <span />
+                        <span />
                     </span>
                 </button>
             </div>
@@ -82,33 +130,18 @@ export function MobileNavigation({ logoUrl }: Props) {
                 className={`mobile-nav ${isOpen ? "is-open" : ""}`}
                 aria-label="Navigation principale mobile"
             >
-                <Link to="/club" onClick={() => setIsOpen(false)}>
-                    Le club
-                </Link>
-
-                <Link to="/disciplines/blackball" onClick={() => setIsOpen(false)}>
-                    Blackball
-                </Link>
-
-                <Link to="/disciplines/carambole" onClick={() => setIsOpen(false)}>
-                    Carambole
-                </Link>
-
-                <Link to="/disciplines/snooker" onClick={() => setIsOpen(false)}>
-                    Snooker
-                </Link>
-
-                <Link to="/disciplines/americain" onClick={() => setIsOpen(false)}>
-                    Américain
-                </Link>
-
-                <Link to="/calendrier" onClick={() => setIsOpen(false)}>
-                    Calendrier
-                </Link>
-
-                <Link to="/contact" onClick={() => setIsOpen(false)}>
-                    Contact
-                </Link>
+                {navLinks.map((link, index) => (
+                    <Link
+                        key={link.to}
+                        to={link.to}
+                        onClick={closeMenu}
+                        ref={(element) => {
+                            linksRef.current[index] = element;
+                        }}
+                    >
+                        {link.label}
+                    </Link>
+                ))}
             </nav>
         </div>
     );

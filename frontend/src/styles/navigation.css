@@ -51,9 +51,11 @@
     padding: 1rem 1rem;
 }
 
-.mobile-nav-wrapper nav a:hover {
+.mobile-nav-wrapper nav a:hover,
+.mobile-nav-wrapper nav a:focus {
     background-color: #FFCDE1;
 }
+
 
 /* Bouton à droite */
 .mobile-nav-header button {
