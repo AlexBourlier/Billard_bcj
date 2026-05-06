@@ -1,6 +1,9 @@
 @import './layout.css';
 @import './navigation.css';
 @import './footer.css';
+@import './ui/cards.css';
+@import './ui/articleTitle.css';
+@import './homePage.css';
 /* @import './variables.css'; */
 /* @import './reset.css'; */
 /* @import './base.css'; */
@@ -11,6 +14,7 @@
   --text-h: #08060d;
   --bg: #ffffff;
   --border: #e5e4e7;
+  --bloc-title: #0e4daa;
 
   --app-gradient: linear-gradient(94deg, #ff65a3, #0e4daa);
 
