@@ -1,4 +1,5 @@
 import { Header } from "../components/layout/Header";
+import { Footer } from "../components/layout/Footer";
 
 export function MainLayout({ children }: { children: React.ReactNode }) {
     return (
@@ -15,7 +16,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                 </main>
 
                 <footer className="site-footer">
-                    <div className="container">© BCJ37</div>
+                    <Footer />
                 </footer>
             </div>
         </div>
