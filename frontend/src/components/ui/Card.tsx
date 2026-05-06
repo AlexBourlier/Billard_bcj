@@ -5,8 +5,8 @@ type Props = {
 
 export function ArticleCard({ children, className = "" }: Props) {
     return (
-        <article className={`article-card ${className}`}>
+        <div className={`article-card ${className}`}>
             {children}
-        </article>
+        </div>
     );
 }

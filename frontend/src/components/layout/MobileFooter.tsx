@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
-import type { Menu } from "../../types/api";
-import { getMenuPath } from "./navigationUtils";
+// import type { Menu } from "../../types/api";
+// import { getMenuPath } from "./navigationUtils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {
@@ -20,7 +20,7 @@ export function MobileFooter({ logoUrl }: Props) {
     return (
         <div className="mobile-footer-wrapper">
             <div className="container mobile-footer">
-                <h4 className="site-logo-mobile">
+                <h3 className="site-logo-mobile">
                     <NavLink end to="/">
                         {logoUrl ? (
                             <img
@@ -32,7 +32,7 @@ export function MobileFooter({ logoUrl }: Props) {
                             <span>BCJ37</span>
                         )}
                     </NavLink>
-                </h4>
+                </h3>
 
                 <div className="social-links-mobile">
                     <p className="contact-info">Contact</p>

@@ -22,20 +22,17 @@ export function DesktopNavigation({ menus, logoUrl }: Props) {
     return (
         <div className="desktop-nav-wrapper">
             <div className="container desktop-nav">
-                <h1 className="site-logo-desktop">
-                    <NavLink end to="/">
-                        {logoUrl ? (
-                            <img
-                                src={logoUrl}
-                                alt="BCJ37 - Billard Club de Joué-lès-Tours"
-                                className="site-logo__image"
-                            />
-                        ) : (
-                            <span>BCJ37</span>
-                        )}
-                    </NavLink>
-                </h1>
-
+                <NavLink end to="/">
+                    {logoUrl ? (
+                        <img
+                            src={logoUrl}
+                            alt="BCJ37 - Billard Club de Joué-lès-Tours"
+                            className="site-logo-desktop site-logo__image"
+                        />
+                    ) : (
+                        <span>BCJ37</span>
+                    )}
+                </NavLink>
                 <nav aria-label="navigation-principale-desktop">
                     {menus.map((menu) => (
                         <NavLink

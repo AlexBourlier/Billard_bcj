@@ -62,7 +62,7 @@ export function DisciplinePage() {
                     meta: disciplineResponse.meta,
                     rankingsPreview: rankingsResponse?.data ?? null,
                     rankingsPreviewMeta: rankingsResponse?.meta ?? null,
-                    caramboleRankingFiles: caramboleResponse?.data ?? [],
+                    caramboleRankingFiles: caramboleResponse?.data.files ?? [],
                     loading: false,
                     error: null,
                 });

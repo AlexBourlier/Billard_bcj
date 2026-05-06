@@ -24,7 +24,7 @@ export function Header() {
     return (
         <header className="site-header">
             <DesktopNavigation menus={menus} logoUrl={logoUrl} />
-            <MobileNavigation menus={menus} logoUrl={logoUrl} />
+            <MobileNavigation logoUrl={logoUrl} />
         </header>
         
         
