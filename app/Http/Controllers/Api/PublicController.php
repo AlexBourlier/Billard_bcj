@@ -211,6 +211,9 @@ class PublicController extends Controller
                         'partners' => PartnerResource::collection($partners),
                         'featured_post' => $featuredPost ? new PostResource($featuredPost) : null,
                         'welcome_message' => $index ? new IndexResource($index) : null,
+                        'site'=> [
+                            'logo_url' => asset('img/h2eb.png'),
+                        ],
                     ],
                     'meta' => [
                         'menus_count' => $menus->count(),

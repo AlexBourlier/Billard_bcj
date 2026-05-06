@@ -1,0 +1,43 @@
+.app-background {
+    position: relative;
+    min-height: 100svh;
+    background: var(--app-gradient);
+    overflow: hidden;
+}
+
+.app-overlay {
+    position: absolute;
+    inset-block: 0;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: min(100% - 10rem, 1200px);
+
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(12px);
+    border-radius: none;
+    pointer-events: none;
+    z-index: 0;
+}
+
+[data-theme='dark'] .app-overlay {
+    background: rgba(15, 23, 42, 0.2);
+}
+
+.app-shell {
+    position: relative;
+    z-index: 1;
+
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content {
+    flex: 1;
+}
+
+.container {
+    width: min(100% - 2rem, 1200px);
+    margin-inline: auto;
+}

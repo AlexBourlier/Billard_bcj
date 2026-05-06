@@ -20,48 +20,60 @@ export function HomePage() {
     if (error) return <p>{error}</p>;
 
     return (
-        <main>
-            {/* <h1>BCJ37</h1> */}
-
+        <>
             {home?.welcome_message?.content && (
-                <div
-                    dangerouslySetInnerHTML={{
-                        __html: home.welcome_message.content,
-                    }}
-                />
+                <section className="home-section home-welcome">
+                    <div
+                        dangerouslySetInnerHTML={{
+                            __html: home.welcome_message.content,
+                        }}
+                    />
+                </section>
             )}
 
-            <ClubMap />
+            <section className="home-section home-map">
+                <ClubMap />
+            </section>
 
-            {home?.featured_post ? (
-                <article>
-                    <h2>
-                        <Link to={`/posts/${home.featured_post.slug}`}>
-                            {home.featured_post.title ?? home.featured_post.titre}
-                        </Link>
-                    </h2>
-                    {home.featured_post.image_url && (
-                        <img src={home.featured_post.image_url} alt={home.featured_post.title ?? home.featured_post.titre} style={{ maxWidth: "100%" }} />
-                    )}
-                    {home.featured_post.content && (
-                        <div
-                            dangerouslySetInnerHTML={{
-                                __html: home.featured_post.content,
-                            }}
-                        />
-                    )}
-                </article>
-            ) : (
-                <p>Aucun article mis en avant</p>
-            )}
+            <section className="home-section home-featured-post">
+                {home?.featured_post ? (
+                    <article>
+                        <h2>
+                            <Link to={`/posts/${home.featured_post.slug}`}>
+                                {home.featured_post.title ?? home.featured_post.titre}
+                            </Link>
+                        </h2>
 
-            {home?.partners.length ? (
-                <section>
-                    <h2>Partenaires</h2>
+                        {home.featured_post.image_url && (
+                            <img
+                                src={home.featured_post.image_url}
+                                alt={home.featured_post.title ?? home.featured_post.titre}
+                                style={{ maxWidth: "100%" }}
+                            />
+                        )}
+
+                        {home.featured_post.content && (
+                            <div
+                                dangerouslySetInnerHTML={{
+                                    __html: home.featured_post.content,
+                                }}
+                            />
+                        )}
+                    </article>
+                ) : (
+                    <p>Aucun article mis en avant</p>
+                )}
+            </section>
+
+            <section className="home-section home-partners">
+                <h2>Partenaires</h2>
+
+                {home?.partners.length ? (
                     <ul>
                         {home.partners.map((partner) => (
                             <li key={partner.id}>
                                 {partner.name ?? partner.nom}
+
                                 {partner.logo_url && (
                                     <img
                                         src={partner.logo_url}
@@ -72,10 +84,10 @@ export function HomePage() {
                             </li>
                         ))}
                     </ul>
-                </section>
-            ) : (
-                <p>Aucun partenaire</p>
-            )}
-        </main>
+                ) : (
+                    <p>Aucun partenaire</p>
+                )}
+            </section>
+        </>
     );
 }
