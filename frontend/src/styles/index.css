@@ -4,6 +4,8 @@
 @import './ui/cards.css';
 @import './ui/articleTitle.css';
 @import './homePage.css';
+@import './contact.css';
+@import './googleCalendar.css';
 /* @import './variables.css'; */
 /* @import './reset.css'; */
 /* @import './base.css'; */
@@ -21,7 +23,17 @@
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
   --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
+  --error: #b42318;
+  --error-bg: #fef3f2;
+  --error-text: #7a271a;
 
+  --success: #067647;
+  --success-bg: #ecfdf3;
+  --success-text: #054f31;
+
+  --info: #175cd3;
+  --info-bg: #eff8ff;
+  --info-text: #1849a9;
   font: 18px/145% var(--sans);
   color: var(--text);
   background: var(--bg);

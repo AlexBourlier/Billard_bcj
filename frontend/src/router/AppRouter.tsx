@@ -8,6 +8,7 @@ import { CalendarPage } from "../pages/CalendarPage";
 import { ContactPage } from "../pages/ContactPage";
 import { MainLayout } from "../layouts/MainLayout";
 
+
 export function AppRouter() {
     return (
         <BrowserRouter>
