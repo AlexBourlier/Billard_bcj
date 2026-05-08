@@ -3,9 +3,12 @@
 @import './footer.css';
 @import './ui/cards.css';
 @import './ui/articleTitle.css';
+@import './ui/signets.css';
+@import './ui/seeMore.css';
 @import './homePage.css';
 @import './contact.css';
 @import './googleCalendar.css';
+@import './club.css';
 /* @import './variables.css'; */
 /* @import './reset.css'; */
 /* @import './base.css'; */

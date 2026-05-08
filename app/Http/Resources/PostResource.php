@@ -28,6 +28,7 @@ class PostResource extends JsonResource
             'image' => $this->thumbnail,
             'image_url' => $this->thumbnail ? asset('storage/' . $this->thumbnail) : null,
             'video' => $this->video,
+            'video_url'=> $this->video,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
