@@ -21,7 +21,7 @@
 
 .club-post-card__image,
 .club-post-card__video {
-    width: 50%;
+    width: 80%;
     height: auto;
     object-fit: cover;
     display: flex;
@@ -121,11 +121,18 @@
     display: grid;
     place-items: center;
 
-    width: 190px;
-    height: 190px;
+    width: 100px;
+    height: 100px;
 
     background: #222;
     color: #fff;
 
     font-weight: 700;
+}
+
+@media (min-width: 968px){
+    .club-post-card__image,
+    .club-post-card__video {
+        width: 50%;
+    }
 }

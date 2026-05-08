@@ -10,7 +10,6 @@ export default function Pagination({ meta }: PaginationProps) {
 
     function getPageUrl(page: number) {
         const params = new URLSearchParams(location.search);
-
         params.set("page", String(page));
 
         return `${location.pathname}?${params.toString()}`;
@@ -24,7 +23,7 @@ export default function Pagination({ meta }: PaginationProps) {
             {meta.current_page > 1 && (
                 <Link
                     to={getPageUrl(meta.current_page - 1)}
-                    className="pagination__link"
+                    className="pagination__link pagination__link--control"
                 >
                     Précédent
                 </Link>
@@ -55,7 +54,7 @@ export default function Pagination({ meta }: PaginationProps) {
             {meta.current_page < meta.last_page && (
                 <Link
                     to={getPageUrl(meta.current_page + 1)}
-                    className="pagination__link"
+                    className="pagination__link pagination__link--control"
                 >
                     Suivant
                 </Link>
