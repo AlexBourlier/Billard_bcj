@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import {
+    useParams,
+    useSearchParams,
+} from "react-router-dom";
 
 import { getAllPosts, getPostsByPeriod } from "../../api/postsApi";
 import type { PaginationMeta, Post } from "../../types/api";
 
 import ClubArchiveNav, { getClubPeriods } from "./ClubArchiveNav";
 import ClubPostList from "./ClubPostList";
+import Pagination from "../ui/Pagination";
 
 type PageState = {
     posts: Post[];
@@ -16,7 +20,9 @@ type PageState = {
 
 export default function ClubPosts() {
     const { period } = useParams();
+    const [searchParams] = useSearchParams();
 
+    const currentPage = Number(searchParams.get("page") ?? 1);
     const periods = getClubPeriods();
 
     const [state, setState] = useState<PageState>({
@@ -36,8 +42,8 @@ export default function ClubPosts() {
         }));
 
         const request = period
-            ? getPostsByPeriod(period)
-            : getAllPosts();
+            ? getPostsByPeriod(period, currentPage)
+            : getAllPosts(currentPage);
 
         request
             .then((response) => {
@@ -66,7 +72,7 @@ export default function ClubPosts() {
         return () => {
             isMounted = false;
         };
-    }, [period]);
+    }, [period, currentPage]);
 
     if (state.loading) {
         return <p>Chargement...</p>;
@@ -84,17 +90,14 @@ export default function ClubPosts() {
             />
 
             <section className="club-posts-section">
-                {/* {state.meta && (
-                    <p className="club-posts-count">
-                        {state.meta.total} article
-                        {state.meta.total > 1 ? "s" : ""}
-                    </p>
-                )} */}
-
                 <ClubPostList
                     posts={state.posts}
                     activePeriod={period ?? null}
                 />
+
+                {state.meta && state.meta.last_page > 1 && (
+                    <Pagination meta={state.meta} />
+                )}
             </section>
         </main>
     );
