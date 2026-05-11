@@ -1,0 +1,138 @@
+.club-posts-section {
+    margin: 0 2rem;
+    margin-bottom: 2rem;
+}
+
+.club-post-card {
+    display:flex;
+    flex-direction: row;
+    border-bottom: 2px solid var(--border);
+    padding: 1rem 0;
+}
+
+.club-post-card__media {
+    flex: 1;
+    width: 30%;
+    height: auto;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+}
+
+.club-post-card__image,
+.club-post-card__video {
+    width: 80%;
+    height: auto;
+    object-fit: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+}
+
+
+
+.club-post-card__content {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.club-post-card__video-button {
+    position: relative;
+    display: block;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+}
+
+.club-post-card__play {
+    position: absolute;
+    inset: 50% auto auto 50%;
+    transform: translate(-50%, -50%);
+
+    display: grid;
+    place-items: center;
+
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+
+    color: white;
+    background: rgba(0, 0, 0, 0.65);
+    font-size: 1.25rem;
+}
+
+.video-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+}
+
+.video-modal__overlay {
+    position: absolute;
+    inset: 0;
+    border: 0;
+    background: rgba(0, 0, 0, 0.75);
+}
+
+.video-modal__content {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 900px);
+    aspect-ratio: 16 / 9;
+    background: #000;
+    border-radius: 1rem;
+}
+
+.video-modal__video {
+    display: block;
+    width: 100%;
+    max-height: 80vh;
+    border-radius: 1rem;
+}
+
+.video-modal__close {
+    position: absolute;
+    top: -3rem;
+    right: 0;
+
+    color: white;
+    background: transparent;
+    border: 0;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.video-modal__iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: 1rem;
+}
+
+.club-post-card__video-placeholder {
+    display: grid;
+    place-items: center;
+
+    width: 100px;
+    height: 100px;
+
+    background: #222;
+    color: #fff;
+
+    font-weight: 700;
+}
+
+@media (min-width: 968px){
+    .club-post-card__image,
+    .club-post-card__video {
+        width: 50%;
+    }
+}

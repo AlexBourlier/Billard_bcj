@@ -68,6 +68,8 @@ export type Post = {
     content?: string | null;
     image?: string | null;
     image_url?: string | null;
+    video?:string | null;
+    video_url?: string | null;
     year?: number | null;
     created_at?: string | null;
 };

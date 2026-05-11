@@ -1,0 +1,10 @@
+.signets {
+    background-color: rgb(67 56 202);
+    color: #f3f4f6;
+    display: inline-block;
+    padding: 0.15rem 0.75rem;
+    width: fit-content;
+    border-radius: 1rem;
+    font-size: 0.835rem;
+    margin-bottom: 0.5rem;
+}
