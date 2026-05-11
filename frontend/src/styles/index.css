@@ -7,10 +7,12 @@
 @import './ui/seeMore.css';
 @import './ui/pagination.css';
 @import './ui/archiveNav.css';
+@import './ui/return.css';
 @import './homePage.css';
 @import './contact.css';
 @import './googleCalendar.css';
 @import './club.css';
+@import './post.css';
 /* @import './variables.css'; */
 /* @import './reset.css'; */
 /* @import './base.css'; */
@@ -39,6 +41,7 @@
   --info: #175cd3;
   --info-bg: #eff8ff;
   --info-text: #1849a9;
+  --date-text: #95979c;
   font: 18px/145% var(--sans);
   color: var(--text);
   background: var(--bg);
