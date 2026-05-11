@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { getPostBySlug } from "../api/postsApi";
 import type { Post } from "../types/api";
+import { ArticleCard } from "../components/ui/Card";
+import { Return } from "../components/ui/Return";
+import { ArticleTitle } from "../components/ui/Title";
+import { Signets } from "../components/ui/Signets";
 
 type PageState = {
     post: Post | null;
@@ -67,37 +71,62 @@ export function PostPage() {
     const { post } = state;
 
     return (
-        <article>
-            <button type="button" onClick={() => navigate(backTarget)}>
-                ← Retour
-            </button>
+        <section className="post-page">
+            <ArticleTitle>Le club</ArticleTitle>
+            <ArticleCard className="post-card">
+                <div className="post-image">
+                    {post.video_url ? (
+                        <iframe
+                            width="100%"
+                            height="600"
+                            src={post.video_url}
+                            title={post.title ?? post.titre ?? "Vidéo de l’article"}
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                        />
+                    ) : post.image_url ? (
+                        <img
+                            src={post.image_url}
+                            alt={post.title ?? post.titre ?? "Image de l’article"}
+                            style={{ maxWidth: "800px" }}
+                        />
+                    ) : (null)}
+                </div>
+                <div className="post-content">
+                    <h2>{post.title ?? post.titre}</h2>
 
-            <h1>{post.title ?? post.titre}</h1>
+                    {post.year && (
+                        <Signets id={`year-${post.year}-${post.id}`}>
+                            {post.year}
+                        </Signets>
+                    )}
 
-            {post.created_at && (
-                <p>
-                    Publié le{" "}
-                    {new Date(post.created_at).toLocaleDateString("fr-FR")}
-                </p>
-            )}
+                    {post.content && (
+                        <div
+                            dangerouslySetInnerHTML={{
+                                __html: post.content,
+                            }}
+                        />
+                    )}
 
-            {post.image_url && (
-                <img
-                    src={post.image_url}
-                    alt={post.title ?? post.titre ?? "Image de l’article"}
-                    style={{ maxWidth: "200px" }}
-                />
-            )}
-
-            {post.excerpt && <p>{post.excerpt}</p>}
-
-            {post.content && (
-                <div
-                    dangerouslySetInnerHTML={{
-                        __html: post.content,
-                    }}
-                />
-            )}
-        </article>
+                    {post.created_at && (
+                        <p className="post-date">
+                            Publié le{" "}
+                            {new Date(post.created_at).toLocaleDateString()}
+                        </p>
+                    )}
+                </div>
+            </ArticleCard>
+            <Return className="post-return">
+                <button
+                    type="button"
+                    onClick={() => navigate(backTarget)}
+                    className="returnButton"
+                >
+                    Retour
+                </button>
+            </Return>
+        </section>
     );
 }
