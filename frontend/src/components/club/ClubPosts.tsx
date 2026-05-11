@@ -83,7 +83,7 @@ export default function ClubPosts() {
     }
 
     return (
-        <main className="club-page">
+        <div className="club-page">
             <ClubArchiveNav
                 periods={periods}
                 activePeriod={period ?? null}
@@ -99,6 +99,6 @@ export default function ClubPosts() {
                     <Pagination meta={state.meta} />
                 )}
             </section>
-        </main>
+        </div>
     );
 }

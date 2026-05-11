@@ -184,7 +184,7 @@ export default function ClubPostCard({
                 </h2>
 
                 {post.year && (
-                    <Signets id={`year-${post.year}`}>
+                    <Signets id={`year-${post.year}-${post.id}`}>
                         {post.year}
                     </Signets>
                 )}

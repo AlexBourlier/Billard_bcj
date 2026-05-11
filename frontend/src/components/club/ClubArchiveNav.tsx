@@ -12,10 +12,6 @@ export function getClubPeriods(
 
     return [
         {
-            label: "Tous",
-            value: null,
-        },
-        {
             label: `Depuis ${currentDecade}`,
             value: `depuis_${currentDecade}`,
         },
@@ -48,28 +44,26 @@ export default function ClubArchiveNav({
             className="club-archive-nav"
             aria-label="Archives du club"
         >
-            {periods.map((item) => {
-                const isActive = item.value === activePeriod;
+            <div className="club-archive-nav__inner">
+                {periods.map((item) => {
+                    const isActive = item.value === activePeriod;
 
-                return (
-                    <Link
-                        key={item.value ?? "all"}
-                        to={
-                            item.value
-                                ? `/club/annee/${item.value}`
-                                : "/club"
-                        }
-                        className={
-                            isActive
-                                ? "club-archive-nav__link club-archive-nav__link--active"
-                                : "club-archive-nav__link"
-                        }
-                        aria-current={isActive ? "page" : undefined}
-                    >
-                        {item.label}
-                    </Link>
-                );
-            })}
+                    return (
+                        <Link
+                            key={item.value}
+                            to={`/club/annee/${item.value}`}
+                            className={
+                                isActive
+                                    ? "club-archive-nav__link club-archive-nav__link--active"
+                                    : "club-archive-nav__link"
+                            }
+                            aria-current={isActive ? "page" : undefined}
+                        >
+                            {item.label}
+                        </Link>
+                    );
+                })}
+            </div>
         </nav>
     );
 }
