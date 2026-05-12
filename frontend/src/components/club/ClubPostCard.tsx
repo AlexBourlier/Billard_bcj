@@ -8,6 +8,7 @@ import { SeeMore } from "../ui/SeeMore";
 type ClubPostCardProps = {
     post: Post;
     activePeriod: string | null;
+    priority?: boolean;
 };
 
 function isYouTubeUrl(url: string) {
@@ -37,14 +38,13 @@ function getYouTubeEmbedUrl(url: string) {
 export default function ClubPostCard({
     post,
     activePeriod,
+    priority = false,
 }: ClubPostCardProps) {
     const [isVideoOpen, setIsVideoOpen] = useState(false);
 
     const title = post.title ?? post.titre ?? "Article sans titre";
 
-    const from = activePeriod
-        ? `/club/annee/${activePeriod}`
-        : "/club";
+    const from = activePeriod ? `/club/annee/${activePeriod}` : "/club";
 
     const videoUrl = post.video ?? post.video_url ?? null;
 
@@ -53,6 +53,21 @@ export default function ClubPostCard({
 
     const youtubeEmbedUrl =
         videoUrl && isYoutube ? getYouTubeEmbedUrl(videoUrl) : null;
+
+    const imageSrc = post.image_thumb_url ?? post.image_url ?? null;
+
+    const imageElement = imageSrc ? (
+        <img
+            src={imageSrc}
+            alt={title}
+            width="279"
+            height="auto"
+            className="club-post-card__image"
+            loading={priority ? "eager" : "lazy"}
+            fetchPriority={priority ? "high" : "auto"}
+            decoding="async"
+        />
+    ) : null;
 
     return (
         <article className="club-post-card">
@@ -66,14 +81,7 @@ export default function ClubPostCard({
                             className="club-post-card__video-button"
                             aria-label={`Ouvrir la vidéo : ${title}`}
                         >
-                            {post.image_url ? (
-                                <img
-                                    src={post.image_url}
-                                    alt=""
-                                    className="club-post-card__image"
-                                    loading="lazy"
-                                />
-                            ) : (
+                            {imageElement ?? (
                                 <span className="club-post-card__video-placeholder">
                                     Vidéo
                                 </span>
@@ -93,14 +101,7 @@ export default function ClubPostCard({
                             onClick={() => setIsVideoOpen(true)}
                             aria-label={`Lire la vidéo : ${title}`}
                         >
-                            {post.image_url ? (
-                                <img
-                                    src={post.image_url}
-                                    alt=""
-                                    className="club-post-card__image"
-                                    loading="lazy"
-                                />
-                            ) : (
+                            {imageElement ?? (
                                 <span className="club-post-card__video-placeholder">
                                     Vidéo
                                 </span>
@@ -114,24 +115,10 @@ export default function ClubPostCard({
                             </span>
                         </button>
                     ) : (
-                        post.image_url && (
-                            <img
-                                src={post.image_url}
-                                alt={title}
-                                className="club-post-card__image"
-                                loading="lazy"
-                            />
-                        )
+                        imageElement
                     )
                 ) : (
-                    post.image_url && (
-                        <img
-                            src={post.image_url}
-                            alt={title}
-                            className="club-post-card__image"
-                            loading="lazy"
-                        />
-                    )
+                    imageElement
                 )}
 
                 {youtubeEmbedUrl && isVideoOpen && (
@@ -172,10 +159,7 @@ export default function ClubPostCard({
             <div className="club-post-card__content">
                 <h2 className="club-post-card__title">
                     {post.slug ? (
-                        <Link
-                            to={`/posts/${post.slug}`}
-                            state={{ from }}
-                        >
+                        <Link to={`/posts/${post.slug}`} state={{ from }}>
                             {title}
                         </Link>
                     ) : (
@@ -200,10 +184,7 @@ export default function ClubPostCard({
 
                 {post.slug && (
                     <SeeMore id={`see-more-${post.id}`}>
-                        <Link
-                            to={`/posts/${post.slug}`}
-                            state={{ from }}
-                        >
+                        <Link to={`/posts/${post.slug}`} state={{ from }}>
                             En voir plus
                         </Link>
                     </SeeMore>

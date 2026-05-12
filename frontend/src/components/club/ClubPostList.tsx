@@ -6,6 +6,7 @@ import ClubPostCard from "./ClubPostCard";
 type ClubPostListProps = {
     posts: Post[];
     activePeriod: string | null;
+    priority?: boolean;
 };
 
 export default function ClubPostList({
@@ -22,11 +23,12 @@ export default function ClubPostList({
         <ArticleTitle>Le club</ArticleTitle>
         <ArticleCard>
         
-            {posts.map((post) => (
+            {posts.map((post, index) => (
                 <ClubPostCard
                     key={post.id}
                     post={post}
                     activePeriod={activePeriod}
+                    priority={index === 0}
                 />
             ))}
 
