@@ -1,14 +1,20 @@
+import { NavLink } from "react-router-dom";
+
 type DisciplineSubMenuProps = {
     rankingsEnabled: boolean;
 };
 
 export function DisciplineSubMenu({ rankingsEnabled }: DisciplineSubMenuProps) {
     return (
-        <nav>
-            <a href="#articles">Articles</a>{" "}
-            {rankingsEnabled && <a href="#rankings">Classements</a>}{" "}
-            <a href="#calendar">Calendrier</a>{" "}
-            <a href="#documents">Documents</a>{" "}
+        <nav className="discipline-submenu" aria-label="Navigation discipline">
+            <NavLink to="articles">Articles</NavLink>
+            <NavLink to="calendrier">Calendrier</NavLink>
+
+            {rankingsEnabled && (
+                <NavLink to="classements">Classements</NavLink>
+            )}
+
+            <NavLink to="documents">Documents</NavLink>
         </nav>
     );
 }

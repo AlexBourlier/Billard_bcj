@@ -6,6 +6,10 @@ import { PostPage } from "../pages/PostPage";
 import { ClubPostsPage } from "../pages/ClubPostsPage";
 import { CalendarPage } from "../pages/CalendarPage";
 import { ContactPage } from "../pages/ContactPage";
+import { DisciplineDocumentsPage } from "../components/discipline/DisciplineDocumentsPage";
+import { DisciplineRankingsPage } from "../components/discipline/DisciplineRankingsPage";
+import { DisciplineCalendarPage } from "../components/discipline/DisciplineCalendarPage";
+import { DisciplinePostsPage } from "../components/discipline/DisciplinePostsPage";
 import { MainLayout } from "../layouts/MainLayout";
 
 
@@ -29,7 +33,13 @@ export function AppRouter() {
                             <DisciplinePage />
                         </MainLayout>
                     }
-                />
+                >
+                    <Route index element={<DisciplinePostsPage />} />
+                    <Route path="articles" element={<DisciplinePostsPage />} />
+                    <Route path="calendrier" element={<DisciplineCalendarPage />} />
+                    <Route path="classements" element={<DisciplineRankingsPage />} />
+                    <Route path="documents" element={<DisciplineDocumentsPage />} />
+                </Route>
 
                 <Route
                     path="/posts/:slug"
