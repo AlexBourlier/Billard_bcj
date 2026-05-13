@@ -16,6 +16,8 @@ export function CaramboleRankingsSection({ files }: Props) {
     }
 
     return (
+        <>
+
         <section className="ranking-carambole-section">
 
             <nav className="ranking-carambole-nav">
@@ -41,5 +43,6 @@ export function CaramboleRankingsSection({ files }: Props) {
                 </ArticleCard>
             )}
         </section>
+        </>
     );
 }

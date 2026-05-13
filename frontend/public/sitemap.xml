@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<urlset
+    xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+>
+    <url>
+        <loc>http://localhost:4173/</loc>
+    </url>
+
+    <url>
+        <loc>http://localhost:4173/club</loc>
+    </url>
+
+    <url>
+        <loc>http://localhost:4173/contact</loc>
+    </url>
+
+    <url>
+        <loc>http://localhost:4173/calendrier</loc>
+    </url>
+
+    <url>
+        <loc>
+            http://localhost:4173/disciplines/blackball/articles
+        </loc>
+    </url>
+
+    <url>
+        <loc>
+            http://localhost:4173/disciplines/blackball/documents
+        </loc>
+    </url>
+
+    <url>
+        <loc>
+            http://localhost:4173/disciplines/blackball/classements
+        </loc>
+    </url>
+
+    <url>
+        <loc>
+            http://localhost:4173/disciplines/blackball/calendrier
+        </loc>
+    </url>
+
+    <url>
+        <loc>
+            http://localhost:4173/disciplines/americain/articles
+        </loc>
+    </url>
+
+    <url>
+        <loc>
+            http://localhost:4173/disciplines/americain/documents
+        </loc>
+    </url>
+
+    <url>
+        <loc>
+            http://localhost:4173/disciplines/americain/classements
+        </loc>
+    </url>
+
+    <url>
+        <loc>
+            http://localhost:4173/disciplines/americain/calendrier
+        </loc>
+    </url>
+
+    <url>
+        <loc>
+            http://localhost:4173/disciplines/snooker/articles
+        </loc>
+    </url>
+
+    <url>
+        <loc>
+            http://localhost:4173/disciplines/snooker/documents
+        </loc>
+    </url>
+
+    <url>
+        <loc>
+            http://localhost:4173/disciplines/snooker/classements
+        </loc>
+    </url>
+
+    <url>
+        <loc>
+            http://localhost:4173/disciplines/snooker/calendrier
+        </loc>
+    </url>
+
+    <url>
+        <loc>
+            http://localhost:4173/disciplines/carambole/articles
+        </loc>
+    </url>
+
+    <url>
+        <loc>
+            http://localhost:4173/disciplines/carambole/documents
+        </loc>
+    </url>
+
+    <url>
+        <loc>
+            http://localhost:4173/disciplines/carambole/classements
+        </loc>
+    </url>
+
+    <url>
+        <loc>
+            http://localhost:4173/disciplines/carambole/calendrier
+        </loc>
+    </url>
+
+</urlset>

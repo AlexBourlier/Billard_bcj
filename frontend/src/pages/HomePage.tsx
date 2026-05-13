@@ -5,6 +5,7 @@ import type { HomeData } from "../types/api";
 import { ClubMap } from "../components/map/ClubMap";
 import { ArticleCard } from "../components/ui/Card";
 import { ArticleTitle } from "../components/ui/Title";
+import { Helmet } from "react-helmet-async";
 
 export function HomePage() {
     const [home, setHome] = useState<HomeData | null>(null);
@@ -23,6 +24,14 @@ export function HomePage() {
 
     return (
         <>
+            <Helmet>
+                <title>BCJ37 - Billard Club de Joué-lès-Tours</title>
+
+                <meta
+                    name="description"
+                    content="Club de billard à Joué-lès-Tours : blackball, carambole, snooker, compétitions et actualités."
+                />
+            </Helmet>
 
         <div className="hero">
             {home?.site_settings?.banniere_url && (

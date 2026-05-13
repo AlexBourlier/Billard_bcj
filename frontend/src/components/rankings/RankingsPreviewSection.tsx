@@ -48,23 +48,28 @@ export function RankingsPreviewSection({
 
     if (rankingsPreviewMeta?.rankings_supported === false) {
         return (
+            <>
             <section id="rankings" className="ranking-section">
                 <h2>Classements</h2>
                 <p>Les classements CueScore ne sont pas supportés pour cette discipline.</p>
             </section>
+            </>
         );
     }
 
     if (!rankingsPreview || Object.keys(rankingsPreview).length === 0) {
         return (
+            <>
             <section id="rankings" className="ranking-section">
                 <h2>Classements</h2>
                 <p>Aucun classement disponible.</p>
             </section>
+            </>
         );
     }
 
     return (
+        <>
         <section id="rankings" className="ranking-section">
             {/* <h2>Classements</h2> */}
 
@@ -128,5 +133,6 @@ export function RankingsPreviewSection({
                 );
             })}
         </section>
+        </>
     );
 }

@@ -21,6 +21,7 @@ type DocumentsSectionProps = {
  */
 export function DocumentsSection({ documents }: DocumentsSectionProps) {
     return (
+        <>
         <section id="documents" className="documents-section">
             <ArticleTitle>Documents</ArticleTitle>
             <ArticleCard>
@@ -51,5 +52,6 @@ export function DocumentsSection({ documents }: DocumentsSectionProps) {
             )}
         </ArticleCard>
         </section>
+        </>
     );
 }

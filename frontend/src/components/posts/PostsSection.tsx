@@ -20,6 +20,7 @@ type PostsSectionProps = {
  */
 export function PostsSection({ posts, discipline }: PostsSectionProps) {
     return (
+        <>
         <section id="articles" className="club-posts-section">
             <div className="club-post-list">
             <ArticleTitle>Actualités</ArticleTitle>
@@ -40,5 +41,6 @@ export function PostsSection({ posts, discipline }: PostsSectionProps) {
             </ArticleCard>
             </div>
         </section>
+        </>
     );
 }

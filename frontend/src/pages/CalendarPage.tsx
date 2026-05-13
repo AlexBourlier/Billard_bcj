@@ -1,8 +1,17 @@
+import { Helmet } from "react-helmet-async";
 import { ArticleCard } from "../components/ui/Card";
 import { ArticleTitle } from "../components/ui/Title";
 
 export function CalendarPage() {
     return (
+        <>
+        <Helmet>
+            <title>BCJ37 - Billard Club de Joué-lès-Tours - Calendrier</title>
+            <meta
+                name="description"
+                content="Découvrez le calendrier du BCJ37, club de billard à Joué-lès-Tours. Suivez les événements et compétitions à venir."
+            />
+        </Helmet>
         <section className="calendar-section">
             <ArticleTitle>Calendrier</ArticleTitle>
             <ArticleCard>
@@ -16,5 +25,6 @@ export function CalendarPage() {
                 />
             </ArticleCard>
         </section>
+        </>
     );
 }
