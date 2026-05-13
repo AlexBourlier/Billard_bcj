@@ -349,7 +349,7 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        color: #0e4daa;
+        /* color: #0e4daa; */
         font-size: 1.8rem;
         text-decoration: none;
     }

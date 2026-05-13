@@ -10,6 +10,7 @@ import type { PaginationMeta, Post } from "../../types/api";
 import ClubArchiveNav, { getClubPeriods } from "./ClubArchiveNav";
 import ClubPostList from "./ClubPostList";
 import Pagination from "../ui/Pagination";
+import { Helmet } from "react-helmet-async";
 
 type PageState = {
     posts: Post[];
@@ -83,6 +84,16 @@ export default function ClubPosts() {
     }
 
     return (
+        <>
+        <Helmet>
+            <title>BCJ37 - Billard Club de Joué-lès-Tours - Actualités</title>
+
+            <meta
+                name="description"
+                content="Club de billard à Joué-lès-Tours : Suivez les dernières actualités, résultats et événements du BCJ37. Restez informé sur les compétitions, les performances des joueurs et les activités du club."
+            />
+        </Helmet>
+
         <div className="club-page">
             <ClubArchiveNav
                 periods={periods}
@@ -100,5 +111,6 @@ export default function ClubPosts() {
                 )}
             </section>
         </div>
+        </>
     );
 }

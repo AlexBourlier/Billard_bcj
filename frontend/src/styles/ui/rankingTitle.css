@@ -1,0 +1,13 @@
+.ranking-article h3{
+    color: var(--bloc-title);
+    font-size: 1.05rem;
+    border-bottom: 2px solid var(--bloc-title);
+    border-radius: 1rem;
+    padding: 0 0.5rem;
+    text-align: center;
+}
+
+.ranking-article h3 a{
+    text-decoration: none;
+    color: inherit;
+}

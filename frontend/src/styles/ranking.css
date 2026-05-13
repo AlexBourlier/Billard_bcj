@@ -1,0 +1,42 @@
+.ranking-section {
+    margin: 0 2rem;
+}
+
+.ranking-section:last-child {
+    margin-bottom: 2rem;
+}
+
+.ranking-card {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: flex-start;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    gap:0.5rem;
+    border: 2px solid var(--border);
+}
+
+.ranking-article {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--bloc-bg);
+    margin-bottom: 1.5rem;
+}
+
+.ranking-article table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.ranking-article table tbody tr {
+    border-bottom: 1px solid var(--border);
+}
+
+.ranking-article table tbody tr td {
+    padding: 0 0.5rem;
+}

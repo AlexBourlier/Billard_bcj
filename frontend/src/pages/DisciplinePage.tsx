@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { getDiscipline, getRankingsPreview, getRankingsCarambole } from "../api/disciplinesApi";
+import { Outlet, useParams } from "react-router-dom";
+
+import {
+    getDiscipline,
+    getRankingsPreview,
+    getRankingsCarambole,
+} from "../api/disciplinesApi";
+
 import { DisciplineSubMenu } from "../components/DisciplineSubMenu";
-import { RankingsPreviewSection } from "../components/rankings/RankingsPreviewSection";
-import { CaramboleRankingsSection } from "../components/rankings/CaramboleRankingsSection";
-import { PostsSection } from "../components/posts/PostsSection";
-import { CalendarSection } from "../components/calendar/CalendarSection";
-import { DocumentsSection } from "../components/documents/DocumentsSection";
+
 import type {
     DisciplineData,
     DisciplineMeta,
@@ -14,6 +16,14 @@ import type {
     RankingsPreviewMeta,
     CaramboleRankingFile,
 } from "../types/api";
+
+export type DisciplinePageContext = {
+    data: DisciplineData;
+    meta: DisciplineMeta;
+    rankingsPreview: RankingsPreviewData | null;
+    rankingsPreviewMeta: RankingsPreviewMeta | null;
+    caramboleRankingFiles: CaramboleRankingFile[];
+};
 
 type PageState = {
     data: DisciplineData | null;
@@ -43,6 +53,12 @@ export function DisciplinePage() {
 
         let isMounted = true;
 
+        setState((previousState) => ({
+            ...previousState,
+            loading: true,
+            error: null,
+        }));
+
         Promise.all([
             getDiscipline(discipline),
 
@@ -57,12 +73,16 @@ export function DisciplinePage() {
             .then(([disciplineResponse, caramboleResponse, rankingsResponse]) => {
                 if (!isMounted) return;
 
+                const caramboleRankingFiles = Array.isArray(caramboleResponse?.data)
+                    ? caramboleResponse.data
+                    : disciplineResponse.data.carambole_ranking_files ?? [];
+
                 setState({
                     data: disciplineResponse.data,
                     meta: disciplineResponse.meta,
                     rankingsPreview: rankingsResponse?.data ?? null,
                     rankingsPreviewMeta: rankingsResponse?.meta ?? null,
-                    caramboleRankingFiles: caramboleResponse?.data.files ?? [],
+                    caramboleRankingFiles,
                     loading: false,
                     error: null,
                 });
@@ -94,38 +114,26 @@ export function DisciplinePage() {
         return <p>Aucune donnée disponible.</p>;
     }
 
-    const { data, meta } = state;
+    const hasCueScoreRankings =
+        Array.isArray(state.data.rankings) && state.data.rankings.length > 0;
 
-    const hasCueScoreRankings = data.rankings !== null;
     const hasCaramboleRankings = state.caramboleRankingFiles.length > 0;
+
     const rankingsEnabled = hasCueScoreRankings || hasCaramboleRankings;
 
     return (
-        <main>
-            <h1>Discipline : {meta.discipline}</h1>
-
+        <div>
             <DisciplineSubMenu rankingsEnabled={rankingsEnabled} />
 
-            <PostsSection posts={data.posts} discipline={meta.discipline} />
-
-            <CalendarSection events={data.calendar} />
-
-            <DocumentsSection documents={data.documents} />
-
-            <section id="rankings">
-                {state.rankingsPreview && (
-                    <RankingsPreviewSection
-                        rankingsPreview={state.rankingsPreview}
-                        rankingsPreviewMeta={state.rankingsPreviewMeta}
-                    />
-                )}
-
-                {state.caramboleRankingFiles.length > 0 && (
-                    <CaramboleRankingsSection
-                        files={state.caramboleRankingFiles}
-                    />
-                )}
-            </section>
-        </main>
+            <Outlet
+                context={{
+                    data: state.data,
+                    meta: state.meta,
+                    rankingsPreview: state.rankingsPreview,
+                    rankingsPreviewMeta: state.rankingsPreviewMeta,
+                    caramboleRankingFiles: state.caramboleRankingFiles,
+                }}
+            />
+        </div>
     );
 }

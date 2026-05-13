@@ -1,0 +1,32 @@
+.ranking-carambole-section {
+    margin: 0 2rem;
+    margin-bottom: 2rem;
+}
+
+.ranking-carambole-nav {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.ranking-carambole-nav button {
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--border);
+    background-color: var(--bloc-title);
+    color: var(--bg);
+    cursor: pointer;
+    border-radius: 0.5rem;
+}
+
+.ranking-carambole-nav button:hover {
+    background-color: var(--bloc-title);
+    transform: scale(1.05);
+    color: var(--bg);
+    transition: all 0.3s ease;
+}
+
+.carambole-ranking-card {
+    padding: 1rem;
+}

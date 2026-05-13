@@ -20,7 +20,7 @@ export default function ClubPostList({
     return (
         <>
         <section className="club-post-list">
-        <ArticleTitle>Le club</ArticleTitle>
+        <ArticleTitle>Actualités</ArticleTitle>
         <ArticleCard>
         
             {posts.map((post, index) => (

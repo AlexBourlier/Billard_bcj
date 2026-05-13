@@ -1,4 +1,7 @@
 import type { RankingsPreviewData, RankingsPreviewMeta } from "../../types/api";
+import { ArticleCard } from "../ui/Card";
+import { RankingTitle } from "../ui/RankingTitle";
+import { ArticleTitle } from "../ui/Title";
 
 type RankingsPreviewSectionProps = {
     rankingsPreview: RankingsPreviewData | null;
@@ -45,25 +48,30 @@ export function RankingsPreviewSection({
 
     if (rankingsPreviewMeta?.rankings_supported === false) {
         return (
-            <section id="rankings">
+            <>
+            <section id="rankings" className="ranking-section">
                 <h2>Classements</h2>
                 <p>Les classements CueScore ne sont pas supportés pour cette discipline.</p>
             </section>
+            </>
         );
     }
 
     if (!rankingsPreview || Object.keys(rankingsPreview).length === 0) {
         return (
-            <section id="rankings">
+            <>
+            <section id="rankings" className="ranking-section">
                 <h2>Classements</h2>
                 <p>Aucun classement disponible.</p>
             </section>
+            </>
         );
     }
 
     return (
-        <section id="rankings">
-            <h2>Classements</h2>
+        <>
+        <section id="rankings" className="ranking-section">
+            {/* <h2>Classements</h2> */}
 
             {orderedScopes.map((scopeKey) => {
                 const items = rankingsByNormalizedScope[scopeKey];
@@ -74,21 +82,14 @@ export function RankingsPreviewSection({
 
                 return (
                     <div key={scopeKey}>
-                        <h3>{scopeLabels[scopeKey]}</h3>
-
+                        <ArticleTitle>{scopeLabels[scopeKey]}</ArticleTitle>
+                        <ArticleCard className="ranking-card">
                         {items.map((item) => (
-                            <article key={item.ranking.id}>
-                                <h4>{item.ranking.name}</h4>
+                            <article key={item.ranking.id} className="ranking-article">
+                                <RankingTitle><a href={item.ranking.url} target="_blank">{item.ranking.name}</a></RankingTitle>
 
                                 {item.entries.length > 0 ? (
                                     <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Position</th>
-                                                <th>Nom</th>
-                                                <th>Points</th>
-                                            </tr>
-                                        </thead>
 
                                         <tbody>
                                             {item.entries.map((entry, index) => {
@@ -127,9 +128,11 @@ export function RankingsPreviewSection({
                                 )}
                             </article>
                         ))}
+                        </ArticleCard>
                     </div>
                 );
             })}
         </section>
+        </>
     );
 }

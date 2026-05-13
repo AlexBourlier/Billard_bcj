@@ -1,5 +1,8 @@
-import { Link } from "react-router-dom";
+
 import type { Post } from "../../types/api";
+import { ArticleTitle } from "../ui/Title";
+import { ArticleCard } from "../ui/Card";
+import ClubPostCard from "../club/ClubPostCard";
 
 type PostsSectionProps = {
     posts: Post[];
@@ -17,38 +20,27 @@ type PostsSectionProps = {
  */
 export function PostsSection({ posts, discipline }: PostsSectionProps) {
     return (
-        <section id="articles">
-            <h2>Articles</h2>
-
+        <>
+        <section id="articles" className="club-posts-section">
+            <div className="club-post-list">
+            <ArticleTitle>Actualités</ArticleTitle>
+            <ArticleCard>
             {posts.length > 0 ? (
                 posts.map((post) => (
-                    <article key={post.id}>
-                        <h3>
-                            {post.slug ? (
-                                <Link
-                                    to={`/posts/${post.slug}`}
-                                    state={{ from: `/disciplines/${discipline}` }}
-                                >
-                                    {post.title ?? post.titre}
-                                </Link>
-                            ) : (
-                                post.title ?? post.titre
-                            )}
-                        </h3>
-                        {post.image_url && (
-                            <img
-                                src={post.image_url}
-                                alt={post.title ?? post.titre ?? "Image de l’article"}
-                                style={{ maxWidth: "200px" }}
-                            />
-                        )}
+                    <ClubPostCard
+                        key={post.id}
+                        post={post}
+                        activePeriod={null}
+                        from={`/disciplines/${discipline}/articles`}
+                    />
 
-                        {post.excerpt && <p>{post.excerpt}</p>}
-                    </article>
                 ))
             ) : (
                 <p>Aucun article pour cette discipline.</p>
             )}
+            </ArticleCard>
+            </div>
         </section>
+        </>
     );
 }

@@ -1,8 +1,11 @@
+import { useOutletContext } from "react-router-dom";
+import { PostsSection } from "../posts/PostsSection";
+import type { DisciplinePageContext } from "../../pages/DisciplinePage";
 import { Helmet } from "react-helmet-async";
 
-import ClubPosts from "../components/club/ClubPosts";
+export function DisciplinePostsPage() {
+    const { data, meta } = useOutletContext<DisciplinePageContext>();
 
-export function ClubPostsPage() {
     return (
         <>
             <Helmet>
@@ -27,8 +30,7 @@ export function ClubPostsPage() {
 
                 <meta property="og:type" content="website" />
             </Helmet>
-
-            <ClubPosts />
+            <PostsSection posts={data.posts} discipline={meta.discipline} />
         </>
     );
 }

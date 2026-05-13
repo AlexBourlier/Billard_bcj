@@ -196,7 +196,7 @@ class CalendarController extends Controller
             ->active()
             ->byDiscipline($discipline)
             ->byScope($scope)
-            ->with(['events.links'])
+            ->with(['events.links', 'events.calendar'])
             ->firstOrFail();
 
         return response()->json([
