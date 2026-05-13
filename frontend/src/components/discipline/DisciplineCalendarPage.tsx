@@ -6,6 +6,7 @@ import { Helmet } from "react-helmet-async";
 export function DisciplineCalendarPage() {
     const { data } = useOutletContext<DisciplinePageContext>();
 
+    console.log("data.calendar :", data.calendar);
     return (
         <>
         <Helmet>

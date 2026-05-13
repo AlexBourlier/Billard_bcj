@@ -103,6 +103,7 @@ export type CalendarEvent = {
     date_debut?: string;
     date_fin?: string;
     url?: string | null;
+    scope?: string | null;
 };
 
 export type CueScoreRanking = {

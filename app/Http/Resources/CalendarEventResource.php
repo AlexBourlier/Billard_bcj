@@ -17,6 +17,8 @@ class CalendarEventResource extends JsonResource
         return [
             'id' => $this->id,
             'external_id' => $this->external_id,
+            'discipline' => $this->calendar?->discipline,
+            'scope' => $this->calendar?->scope,
             'date_debut' => $this->date_debut?->toISOString(),
             'date_fin' => $this->date_fin?->toISOString(),
             'date_limite' => $this->date_limite?->toISOString(),

@@ -15,7 +15,7 @@ export function getDiscipline(slug: string) {
 }
 
 export function getRankingsCarambole() {
-    return apiGet<ApiResponse<{ files: CaramboleRankingFile[] }>>(
+    return apiGet<ApiResponse<CaramboleRankingFile[]>>(
         `/disciplines/carambole/classement`
     );
 }
