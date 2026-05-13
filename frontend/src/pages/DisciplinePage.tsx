@@ -122,7 +122,7 @@ export function DisciplinePage() {
     const rankingsEnabled = hasCueScoreRankings || hasCaramboleRankings;
 
     return (
-        <main>
+        <div>
             <DisciplineSubMenu rankingsEnabled={rankingsEnabled} />
 
             <Outlet
@@ -134,6 +134,6 @@ export function DisciplinePage() {
                     caramboleRankingFiles: state.caramboleRankingFiles,
                 }}
             />
-        </main>
+        </div>
     );
 }

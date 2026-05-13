@@ -113,6 +113,7 @@ export type CueScoreRanking = {
     ranking_type: string;
     team_category?: string | null;
     season?: string | null;
+    url: string;
     is_active: boolean;
 };
 
