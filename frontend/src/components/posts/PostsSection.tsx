@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+
 import type { Post } from "../../types/api";
 import { ArticleTitle } from "../ui/Title";
 import { ArticleCard } from "../ui/Card";
@@ -26,34 +26,13 @@ export function PostsSection({ posts, discipline }: PostsSectionProps) {
             <ArticleCard>
             {posts.length > 0 ? (
                 posts.map((post) => (
-                    <ClubPostCard 
+                    <ClubPostCard
                         key={post.id}
                         post={post}
                         activePeriod={null}
                         from={`/disciplines/${discipline}/articles`}
-                    >
-                        <h3>
-                            {post.slug ? (
-                                <Link
-                                    to={`/posts/${post.slug}`}
-                                    state={{ from: `/disciplines/${discipline}` }}
-                                >
-                                    {post.title ?? post.titre}
-                                </Link>
-                            ) : (
-                                post.title ?? post.titre
-                            )}
-                        </h3>
-                        {post.image_url && (
-                            <img
-                                src={post.image_url}
-                                alt={post.title ?? post.titre ?? "Image de l’article"}
-                                style={{ maxWidth: "200px" }}
-                            />
-                        )}
+                    />
 
-                        {post.excerpt && <p>{post.excerpt}</p>}
-                    </ClubPostCard>
                 ))
             ) : (
                 <p>Aucun article pour cette discipline.</p>

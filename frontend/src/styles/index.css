@@ -8,11 +8,13 @@
 @import './ui/pagination.css';
 @import './ui/archiveNav.css';
 @import './ui/return.css';
+@import './ui/rankingTitle.css';
 @import './homePage.css';
 @import './contact.css';
 @import './googleCalendar.css';
 @import './club.css';
 @import './post.css';
+@import './ranking.css';
 @import './document.css';
 /* @import './variables.css'; */
 /* @import './reset.css'; */
