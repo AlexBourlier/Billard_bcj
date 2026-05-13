@@ -1,0 +1,43 @@
+.documents-section {
+    margin: 0 2rem;
+    margin-bottom: 2rem;
+}
+
+.documents-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.documents-section ul li{
+    margin: 0.5rem 0;
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--bloc-title);
+    border-radius: 0.2rem;
+    color: var(--bloc-title);
+}
+
+.documents-section ul li:hover{
+    background-color: var(--bloc-title);
+    transition: all 0.3s ease;
+    color: var(--bg);
+}
+
+.documents-section ul li:hover a{
+    color: var(--bg);
+}
+
+.documents-section ul li a{
+    text-decoration: none;
+    color: var(--bloc-title);
+    font-weight: 500;
+    margin-left: 0.5rem;
+}
+
+.documents-section ul li a:focus{
+    outline: 2px solid var(--bloc-title);
+    outline-offset: 2px;
+}
+
+.documents-section ul li a:hover{
+    color: var(--bg);
+}

@@ -1,4 +1,11 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { Document } from "../../types/api";
+import { ArticleCard } from "../ui/Card";
+import { ArticleTitle } from "../ui/Title";
+
+import {
+    faFilePdf, 
+} from "@awesome.me/kit-c0df283285/icons/classic/solid";
 
 type DocumentsSectionProps = {
     documents: Document[];
@@ -14,21 +21,25 @@ type DocumentsSectionProps = {
  */
 export function DocumentsSection({ documents }: DocumentsSectionProps) {
     return (
-        <section id="documents">
-            <h2>Documents</h2>
-
+        <section id="documents" className="documents-section">
+            <ArticleTitle>Documents</ArticleTitle>
+            <ArticleCard>
             {documents.length > 0 ? (
                 <ul>
                     {documents.map((document) => (
                         <li key={document.id}>
                             {document.file_url ? (
-                                <a
-                                    href={document.file_url}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                >
+                                <>
+                                    <FontAwesomeIcon icon={faFilePdf} aria-hidden="true" />
+                                    <span className="sr-only">Document PDF</span>
+                                    <a
+                                        href={document.file_url}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                    >
                                     {document.title}
                                 </a>
+                                </>
                             ) : (
                                 document.title
                             )}
@@ -38,6 +49,7 @@ export function DocumentsSection({ documents }: DocumentsSectionProps) {
             ) : (
                 <p>Aucun document disponible.</p>
             )}
+        </ArticleCard>
         </section>
     );
 }
