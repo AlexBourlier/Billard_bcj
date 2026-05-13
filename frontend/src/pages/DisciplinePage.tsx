@@ -73,12 +73,16 @@ export function DisciplinePage() {
             .then(([disciplineResponse, caramboleResponse, rankingsResponse]) => {
                 if (!isMounted) return;
 
+                const caramboleRankingFiles = Array.isArray(caramboleResponse?.data)
+                    ? caramboleResponse.data
+                    : disciplineResponse.data.carambole_ranking_files ?? [];
+
                 setState({
                     data: disciplineResponse.data,
                     meta: disciplineResponse.meta,
                     rankingsPreview: rankingsResponse?.data ?? null,
                     rankingsPreviewMeta: rankingsResponse?.meta ?? null,
-                    caramboleRankingFiles: caramboleResponse?.data.files ?? [],
+                    caramboleRankingFiles,
                     loading: false,
                     error: null,
                 });
@@ -110,14 +114,15 @@ export function DisciplinePage() {
         return <p>Aucune donnée disponible.</p>;
     }
 
-    const hasCueScoreRankings = state.data.rankings !== null;
+    const hasCueScoreRankings =
+        Array.isArray(state.data.rankings) && state.data.rankings.length > 0;
+
     const hasCaramboleRankings = state.caramboleRankingFiles.length > 0;
+
     const rankingsEnabled = hasCueScoreRankings || hasCaramboleRankings;
 
     return (
         <main>
-            {/* <h1>Discipline : {state.meta.discipline}</h1> */}
-
             <DisciplineSubMenu rankingsEnabled={rankingsEnabled} />
 
             <Outlet

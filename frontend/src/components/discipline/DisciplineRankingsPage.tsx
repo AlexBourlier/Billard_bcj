@@ -12,22 +12,23 @@ export function DisciplineRankingsPage() {
         caramboleRankingFiles,
     } = useOutletContext<DisciplinePageContext>();
 
-    const hasRankings = rankingsPreview || caramboleRankingFiles.length > 0;
+    const hasCueScoreRankings = rankingsPreview !== null;
+    const hasCaramboleRankings = caramboleRankingFiles.length > 0;
 
-    if (!hasRankings) {
+    if (!hasCueScoreRankings && !hasCaramboleRankings) {
         return <p>Aucun classement disponible pour cette discipline.</p>;
     }
 
     return (
         <>
-            {rankingsPreview && (
+            {hasCueScoreRankings && (
                 <RankingsPreviewSection
                     rankingsPreview={rankingsPreview}
                     rankingsPreviewMeta={rankingsPreviewMeta}
                 />
             )}
 
-            {caramboleRankingFiles.length > 0 && (
+            {hasCaramboleRankings && (
                 <CaramboleRankingsSection files={caramboleRankingFiles} />
             )}
         </>

@@ -16,7 +16,6 @@ export function CaramboleRankingsSection({ files }: Props) {
 
     return (
         <section>
-            <h2>Classements carambole</h2>
 
             <nav>
                 {files.map((file) => (

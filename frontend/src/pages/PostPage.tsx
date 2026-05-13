@@ -72,7 +72,7 @@ export function PostPage() {
 
     return (
         <section className="post-page">
-            <ArticleTitle>Le club</ArticleTitle>
+            <ArticleTitle>Actualité</ArticleTitle>
             <ArticleCard className="post-card">
                 <div className="post-image">
                     {post.video_url ? (

@@ -9,6 +9,7 @@ type ClubPostCardProps = {
     post: Post;
     activePeriod: string | null;
     priority?: boolean;
+    from?: string;
 };
 
 function isYouTubeUrl(url: string) {
@@ -39,12 +40,13 @@ export default function ClubPostCard({
     post,
     activePeriod,
     priority = false,
+    from,
 }: ClubPostCardProps) {
     const [isVideoOpen, setIsVideoOpen] = useState(false);
 
     const title = post.title ?? post.titre ?? "Article sans titre";
 
-    const from = activePeriod ? `/club/annee/${activePeriod}` : "/club";
+    const returnPath = from ?? (activePeriod ? `/club/annee/${activePeriod}` : "/club");
 
     const videoUrl = post.video ?? post.video_url ?? null;
 
@@ -159,7 +161,7 @@ export default function ClubPostCard({
             <div className="club-post-card__content">
                 <h2 className="club-post-card__title">
                     {post.slug ? (
-                        <Link to={`/posts/${post.slug}`} state={{ from }}>
+                        <Link to={`/posts/${post.slug}`} state={{ from: returnPath }}>
                             {title}
                         </Link>
                     ) : (
@@ -184,7 +186,7 @@ export default function ClubPostCard({
 
                 {post.slug && (
                     <SeeMore id={`see-more-${post.id}`}>
-                        <Link to={`/posts/${post.slug}`} state={{ from }}>
+                        <Link to={`/posts/${post.slug}`} state={{ from: returnPath }}>
                             En voir plus
                         </Link>
                     </SeeMore>
