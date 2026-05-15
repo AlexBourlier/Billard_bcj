@@ -55,28 +55,28 @@
 
 <div class="admin-grid">
     <div class="admin-card calendar-section">
-        <a href="{{ admin_url('carambole-calendrier-internationals') }}">
+        <a href="/admin/calendriers/carambole/international/events">
             <strong>Calendrier international</strong><br>
             <i class="fa-solid fa-globe"></i>
         </a>
     </div>
 
     <div class="admin-card calendar-section">
-        <a href="{{ admin_url('carambole-calendrier-nationals') }}">
+        <a href="/admin/calendriers/carambole/national/events">
             <strong>Calendrier national</strong><br>
             <i class="fa-solid fa-flag"></i>
         </a>
     </div>
 
     <div class="admin-card calendar-section">
-        <a href="{{ admin_url('carambole-calendrier-regionals') }}">
+        <a href="/admin/calendriers/carambole/regional/events">
             <strong>Calendrier régional</strong><br>
             <i class="fa-solid fa-map-location-dot"></i>
         </a>
     </div>
 
     <div class="admin-card calendar-section">
-        <a href="{{ admin_url('carambole-calendrier-departementals') }}">
+        <a href="/admin/calendriers/carambole/departemental/events">
             <strong>Calendrier départemental</strong><br>
             <i class="fa-solid fa-location-dot"></i>
         </a>
