@@ -35,7 +35,15 @@ class CalendarEventLink extends Model
     public const CATEGORY_U23 = 'u23';
     public const CATEGORY_HANDI_DEBOUT = 'handi_debout';
     public const CATEGORY_HANDI_FAUTEUIL = 'handi_fauteuil';
+    public const CATEGORY_HANDI = 'handi';
     public const CATEGORY_VETERAN = 'veteran';
+    public const CATEGORY_MIXTE_TABLEAU_A = 'mixte_tableau_a';
+    public const CATEGORY_MIXTE_TABLEAU_B = 'mixte_tableau_b';
+    public const CATEGORY_ESPOIR = 'espoir';
+    public const CATEGORY_JUNIOR = 'junior';
+    public const CATEGORY_INDIVIDUEL = 'individuel';
+    public const CATEGORY_EQUIPE = 'equipe';
+    public const CATEGORY_DOUBLETTE = 'doublette';
 
     public static function categories(): array
     {
@@ -43,10 +51,18 @@ class CalendarEventLink extends Model
             self::CATEGORY_TOP_LIGUE,
             self::CATEGORY_MASTER,
             self::CATEGORY_MIXTE,
+            self::CATEGORY_MIXTE_TABLEAU_A,
+            self::CATEGORY_MIXTE_TABLEAU_B,
             self::CATEGORY_FEMININ,
             self::CATEGORY_U15,
             self::CATEGORY_U18,
             self::CATEGORY_U23,
+            self::CATEGORY_ESPOIR,
+            self::CATEGORY_JUNIOR,
+            self::CATEGORY_INDIVIDUEL,
+            self::CATEGORY_EQUIPE,
+            self::CATEGORY_DOUBLETTE,
+            self::CATEGORY_HANDI,
             self::CATEGORY_HANDI_DEBOUT,
             self::CATEGORY_HANDI_FAUTEUIL,
             self::CATEGORY_VETERAN,
@@ -64,10 +80,18 @@ class CalendarEventLink extends Model
             self::CATEGORY_TOP_LIGUE => 'Top Ligue',
             self::CATEGORY_MASTER => 'Master',
             self::CATEGORY_MIXTE => 'Mixte',
+            self::CATEGORY_MIXTE_TABLEAU_A => 'Mixte Tableau A',
+            self::CATEGORY_MIXTE_TABLEAU_B => 'Mixte Tableau B',
             self::CATEGORY_FEMININ => 'Féminin',
             self::CATEGORY_U15 => 'U15',
             self::CATEGORY_U18 => 'U18',
             self::CATEGORY_U23 => 'U23',
+            self::CATEGORY_ESPOIR => 'Espoir',
+            self::CATEGORY_JUNIOR => 'Junior',
+            self::CATEGORY_INDIVIDUEL => 'Individuel',
+            self::CATEGORY_EQUIPE => 'Équipe',
+            self::CATEGORY_DOUBLETTE => 'Doublette',
+            self::CATEGORY_HANDI => 'Handi',
             self::CATEGORY_HANDI_DEBOUT => 'Handi Debout',
             self::CATEGORY_HANDI_FAUTEUIL => 'Handi Fauteuil',
             self::CATEGORY_VETERAN => 'Vétéran',

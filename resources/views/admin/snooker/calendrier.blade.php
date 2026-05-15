@@ -55,28 +55,28 @@
 
 <div class="admin-grid">
     <div class="admin-card calendar-section">
-        <a href="{{ admin_url('snooker-calendrier-internationals') }}">
+        <a href="/admin/calendriers/snooker/international/events">
             <strong>Calendrier international</strong><br>
             <i class="fa-solid fa-globe"></i>
         </a>
     </div>
 
     <div class="admin-card calendar-section">
-        <a href="{{ admin_url('snooker-calendrier-nationals') }}">
+        <a href="/admin/calendriers/snooker/national/events">
             <strong>Calendrier national</strong><br>
             <i class="fa-solid fa-flag"></i>
         </a>
     </div>
 
     <div class="admin-card calendar-section">
-        <a href="{{ admin_url('snooker-calendrier-regionals') }}">
+        <a href="/admin/calendriers/snooker/regional/events">
             <strong>Calendrier régional</strong><br>
             <i class="fa-solid fa-map-location-dot"></i>
         </a>
     </div>
 
     <div class="admin-card calendar-section">
-        <a href="{{ admin_url('snooker-calendrier-departementals') }}">
+        <a href="/admin/calendriers/snooker/departemental/events">
             <strong>Calendrier départemental</strong><br>
             <i class="fa-solid fa-location-dot"></i>
         </a>

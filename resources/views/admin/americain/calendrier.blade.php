@@ -55,28 +55,28 @@
 
 <div class="admin-grid">
     <div class="admin-card calendar-section">
-        <a href="{{ admin_url('americain-calendrier-internationals') }}">
+        <a href="/admin/calendriers/americain/international/events">
             <strong>Calendrier international</strong><br>
             <i class="fa-solid fa-globe"></i>
         </a>
     </div>
 
     <div class="admin-card calendar-section">
-        <a href="{{ admin_url('americain-calendrier-nationals') }}">
+        <a href="/admin/calendriers/americain/national/events">
             <strong>Calendrier national</strong><br>
             <i class="fa-solid fa-flag"></i>
         </a>
     </div>
 
     <div class="admin-card calendar-section">
-        <a href="{{ admin_url('americain-calendrier-regionals') }}">
+        <a href="/admin/calendriers/americain/regional/events">
             <strong>Calendrier régional</strong><br>
             <i class="fa-solid fa-map-location-dot"></i>
         </a>
     </div>
 
     <div class="admin-card calendar-section">
-        <a href="{{ admin_url('americain-calendrier-departementals') }}">
+        <a href="/admin/calendriers/americain/departemental/events">
             <strong>Calendrier départemental</strong><br>
             <i class="fa-solid fa-location-dot"></i>
         </a>

@@ -44,28 +44,28 @@
 
 <div class="admin-grid">
     <div class="admin-card calendar-section">
-        <a href="{{ admin_url('calendrier_internationals') }}">
+        <a href="/admin/calendriers/blackball/international/events">
             <strong>Calendrier international</strong><br>
             <i class="fa-solid fa-globe"></i>
         </a>
     </div>
 
     <div class="admin-card calendar-section">
-        <a href="{{ admin_url('calendrier_nationals') }}">
+        <a href="/admin/calendriers/blackball/national/events">
             <strong>Calendrier national</strong><br>
             <i class="fa-solid fa-flag"></i>
         </a>
     </div>
 
     <div class="admin-card calendar-section">
-        <a href="{{ admin_url('calendrier_regionals') }}">
+        <a href="/admin/calendriers/blackball/regional/events">
             <strong>Calendrier régional</strong><br>
             <i class="fa-solid fa-map-location-dot"></i>
         </a>
     </div>
 
     <div class="admin-card calendar-section">
-        <a href="{{ admin_url('calendrier_departementals') }}">
+        <a href="/admin/calendriers/blackball/departemental/events">
             <strong>Calendrier départemental</strong><br>
             <i class="fa-solid fa-location-dot"></i>
         </a>
