@@ -85,6 +85,7 @@ export default function ContactForm() {
                         name="name"
                         type="text"
                         placeholder="Jean Dupont"
+                        aria-label="Votre nom"
                         value={form.name}
                         onChange={(event) =>
                             updateField("name", event.target.value)
@@ -101,6 +102,7 @@ export default function ContactForm() {
                         name="email"
                         type="email"
                         placeholder="jean.dupont@example.com"
+                        aria-label="Votre email"
                         value={form.email}
                         onChange={(event) =>
                             updateField("email", event.target.value)
@@ -119,6 +121,7 @@ export default function ContactForm() {
                         name="message"
                         rows={5}
                         placeholder="Votre message ici..."
+                        aria-label="Votre message"
                         value={form.message}
                         onChange={(event) =>
                             updateField("message", event.target.value)
@@ -129,6 +132,7 @@ export default function ContactForm() {
 
                 <button
                     type="submit"
+                    aria-label="Envoyer le message"
                     disabled={sending}
                     className="contact-form-submit"
                 >

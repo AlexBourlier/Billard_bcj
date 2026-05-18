@@ -5,7 +5,7 @@
 
 .club-post-card {
     display:flex;
-    flex-direction: row;
+    flex-direction: column;
     border-bottom: 2px solid var(--border);
     padding: 1rem 0;
 }
@@ -136,6 +136,10 @@
 }
 
 @media (min-width: 968px){
+
+    .club-post-card {
+        flex-direction: row;
+    }
     .club-post-card__image,
     .club-post-card__video {
         width: 50%;
