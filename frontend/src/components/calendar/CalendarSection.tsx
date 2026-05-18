@@ -57,16 +57,17 @@ function formatDate(date: string | null | undefined): string {
 function getEventTitle(event: CalendarEvent): string {
     const startDate = formatDate(event.date_debut);
     const endDate = formatDate(event.date_fin);
+    const title = event.titre ?? "Événement sans titre";
 
     if (startDate && endDate && startDate !== endDate) {
-        return `${event.titre} du ${startDate} au ${endDate}`;
+        return `${title} du ${startDate} au ${endDate}`;
     }
 
     if (startDate) {
-        return `${event.titre} le ${startDate}`;
+        return `${title} le ${startDate}`;
     }
 
-    return event.titre;
+    return title;
 }
 
 function getEventGroupKey(event: CalendarEvent): string | null {
@@ -152,7 +153,7 @@ export function CalendarSection({ events }: CalendarSectionProps) {
                                                 <div className="calendar-event__content">
                                                     <p>
                                                         <strong>
-                                                            📍 {event.titre}
+                                                            📍 {event.titre ?? "Evénement sans titre"}
                                                         </strong>
                                                     </p>
 

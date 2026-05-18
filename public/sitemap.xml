@@ -2,181 +2,181 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>http://localhost:8000</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://localhost:8000/contact</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://localhost:8000/mentions-legales</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>http://localhost:8000/conditions-generales-utilisation</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>http://localhost:8000/politique-confidentialite</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>http://localhost:8000/cuescore</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
     <loc>http://localhost:8000/club</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost:8000/blackball</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost:8000/blackball/calendrier</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>http://localhost:8000/blackball/document</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>http://localhost:8000/blackball/classement</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>http://localhost:8000/carambole</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost:8000/carambole/calendrier</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>http://localhost:8000/carambole/document</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>http://localhost:8000/carambole/classement</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>http://localhost:8000/carambole/classement/pdf</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>http://localhost:8000/snooker</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost:8000/snooker/calendrier</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>http://localhost:8000/snooker/document</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>http://localhost:8000/snooker/classement</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>http://localhost:8000/americain</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost:8000/americain/calendrier</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>http://localhost:8000/americain/document</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>http://localhost:8000/americain/classement</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>http://localhost:8000/cuescore/67490224</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
     <loc>http://localhost:8000/cuescore/67490356</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
     <loc>http://localhost:8000/cuescore/67097593</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
     <loc>http://localhost:8000/cuescore/67097608</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
     <loc>http://localhost:8000/cuescore/67097614</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
     <loc>http://localhost:8000/cuescore/69856342</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
