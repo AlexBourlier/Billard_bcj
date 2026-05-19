@@ -6,21 +6,30 @@ import { ClubMap } from "../components/map/ClubMap";
 import { ArticleCard } from "../components/ui/Card";
 import { ArticleTitle } from "../components/ui/Title";
 import { Helmet } from "react-helmet-async";
+import { ErrorPage } from "./ErrorPage";
 
 export function HomePage() {
     const [home, setHome] = useState<HomeData | null>(null);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState(false);
 
     useEffect(() => {
         getHome()
             .then((response) => setHome(response.data))
-            .catch(() => setError("Erreur lors du chargement"))
+            .catch(() => setError(true))
             .finally(() => setLoading(false));
     }, []);
 
     if (loading) return <p>Chargement...</p>;
-    if (error) return <p>{error}</p>;
+    if (error) {
+        return (
+            <ErrorPage
+                code="500"
+                title="Erreur de chargement"
+                message="Impossible de récupérer les données de la page d’accueil."
+            />
+        );
+    }
 
     return (
         <>

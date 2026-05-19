@@ -7,6 +7,10 @@ import {
     getRankingsCarambole,
 } from "../api/disciplinesApi";
 
+import { ApiError } from "../api/client";
+import { ErrorPage } from "./ErrorPage";
+import { NotFoundPage } from "./NotFoundPage";
+
 import { DisciplineSubMenu } from "../components/DisciplineSubMenu";
 
 import type {
@@ -32,7 +36,8 @@ type PageState = {
     rankingsPreviewMeta: RankingsPreviewMeta | null;
     caramboleRankingFiles: CaramboleRankingFile[];
     loading: boolean;
-    error: string | null;
+    error: boolean;
+    notFound: boolean;
 };
 
 export function DisciplinePage() {
@@ -45,7 +50,8 @@ export function DisciplinePage() {
         rankingsPreviewMeta: null,
         caramboleRankingFiles: [],
         loading: true,
-        error: null,
+        error: false,
+        notFound: false,
     });
 
     useEffect(() => {
@@ -56,7 +62,8 @@ export function DisciplinePage() {
         setState((previousState) => ({
             ...previousState,
             loading: true,
-            error: null,
+            error: false,
+            notFound: false,
         }));
 
         Promise.all([
@@ -84,11 +91,27 @@ export function DisciplinePage() {
                     rankingsPreviewMeta: rankingsResponse?.meta ?? null,
                     caramboleRankingFiles,
                     loading: false,
-                    error: null,
+                    error: false,
+                    notFound: false,
                 });
             })
-            .catch(() => {
+            .catch((error) => {
                 if (!isMounted) return;
+
+                if (error instanceof ApiError && error.status === 404) {
+                    setState({
+                        data: null,
+                        meta: null,
+                        rankingsPreview: null,
+                        rankingsPreviewMeta: null,
+                        caramboleRankingFiles: [],
+                        loading: false,
+                        error: false,
+                        notFound: true,
+                    });
+
+                    return;
+                }
 
                 setState({
                     data: null,
@@ -97,7 +120,8 @@ export function DisciplinePage() {
                     rankingsPreviewMeta: null,
                     caramboleRankingFiles: [],
                     loading: false,
-                    error: "Impossible de charger la discipline.",
+                    error: true,
+                    notFound: false,
                 });
             });
 
@@ -106,13 +130,21 @@ export function DisciplinePage() {
         };
     }, [discipline]);
 
-    if (!discipline) return <p>Discipline introuvable.</p>;
+    if (!discipline) return <NotFoundPage />;
     if (state.loading) return <p>Chargement...</p>;
-    if (state.error) return <p>{state.error}</p>;
+    if (state.notFound) return <NotFoundPage />;
 
-    if (!state.data || !state.meta) {
-        return <p>Aucune donnée disponible.</p>;
+    if (state.error) {
+        return (
+            <ErrorPage
+                code="500"
+                title="Erreur serveur"
+                message="Impossible de charger la discipline demandée."
+            />
+        );
     }
+
+    if (!state.data || !state.meta) return <NotFoundPage />;
 
     const hasCueScoreRankings =
         Array.isArray(state.data.rankings) && state.data.rankings.length > 0;

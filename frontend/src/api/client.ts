@@ -1,5 +1,27 @@
 const API_URL = import.meta.env.VITE_API_URL;
 
+export class ApiError extends Error {
+    status: number;
+    body: unknown;
+
+    constructor(message: string, status: number, body: unknown = null) {
+        super(message);
+        this.name = "ApiError";
+        this.status = status;
+        this.body = body;
+    }
+}
+
+async function parseResponseBody(response: Response): Promise<unknown> {
+    const contentType = response.headers.get("content-type");
+
+    if (contentType?.includes("application/json")) {
+        return response.json();
+    }
+
+    return response.text();
+}
+
 export async function apiGet<T>(endpoint: string): Promise<T> {
     const url = `${API_URL}${endpoint}`;
 
@@ -9,23 +31,29 @@ export async function apiGet<T>(endpoint: string): Promise<T> {
         },
     });
 
-    if (!response.ok) {
-        const body = await response.text();
+    const body = await parseResponseBody(response);
 
+    if (!response.ok) {
         console.error("API ERROR", {
             url,
             status: response.status,
             body,
         });
 
-        throw new Error(`API error ${response.status}`);
+        throw new ApiError(
+            `API error ${response.status}`,
+            response.status,
+            body,
+        );
     }
 
-    return response.json() as Promise<T>;
+    return body as T;
 }
 
 export async function apiPost<T>(endpoint: string, body: unknown): Promise<T> {
-    const response = await fetch(`${API_URL}${endpoint}`, {
+    const url = `${API_URL}${endpoint}`;
+
+    const response = await fetch(url, {
         method: "POST",
         headers: {
             Accept: "application/json",
@@ -34,11 +62,15 @@ export async function apiPost<T>(endpoint: string, body: unknown): Promise<T> {
         body: JSON.stringify(body),
     });
 
-    const data = await response.json();
+    const responseBody = await parseResponseBody(response);
 
     if (!response.ok) {
-        throw data;
+        throw new ApiError(
+            `API error ${response.status}`,
+            response.status,
+            responseBody,
+        );
     }
 
-    return data;
+    return responseBody as T;
 }
