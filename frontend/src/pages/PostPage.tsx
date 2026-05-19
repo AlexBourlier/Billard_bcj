@@ -10,10 +10,15 @@ import { Return } from "../components/ui/Return";
 import { ArticleTitle } from "../components/ui/Title";
 import { Signets } from "../components/ui/Signets";
 
+import { ErrorPage } from "./ErrorPage";
+import { NotFoundPage } from "./NotFoundPage";
+import { ApiError } from "../api/client";
+
 type PageState = {
     post: Post | null;
     loading: boolean;
-    error: string | null;
+    error: boolean;
+    notFound: boolean;
 };
 
 type LocationState = {
@@ -35,7 +40,8 @@ export function PostPage() {
     const [state, setState] = useState<PageState>({
         post: null,
         loading: true,
-        error: null,
+        error: false,
+        notFound: false,
     });
 
     useEffect(() => {
@@ -52,16 +58,29 @@ export function PostPage() {
                 setState({
                     post: response.data,
                     loading: false,
-                    error: null,
+                    error: false,
+                    notFound: false,
                 });
             })
-            .catch(() => {
+            .catch((error) => {
                 if (!isMounted) return;
+
+                if (error instanceof ApiError && error.status === 404) {
+                    setState({
+                        post: null,
+                        loading: false,
+                        error: false,
+                        notFound: true,
+                    });
+
+                    return;
+                }
 
                 setState({
                     post: null,
                     loading: false,
-                    error: "Impossible de charger l’article.",
+                    error: true,
+                    notFound: false,
                 });
             });
 
@@ -70,17 +89,51 @@ export function PostPage() {
         };
     }, [slug]);
 
-    if (!slug) return <p>Article introuvable.</p>;
-    if (state.loading) return <p>Chargement...</p>;
-    if (state.error) return <p>{state.error}</p>;
-    if (!state.post) return <p>Aucun article disponible.</p>;
+    /*
+     * URL invalide
+     */
+    if (!slug) {
+        return <NotFoundPage />;
+    }
+
+    /*
+     * Loading
+     */
+    if (state.loading) {
+        return <p>Chargement...</p>;
+    }
+
+    /*
+     * Article inexistant
+     */
+    if (state.notFound) {
+        return <NotFoundPage />;
+    }
+
+    /*
+     * API ou serveur HS
+     */
+    if (state.error) {
+        return (
+            <ErrorPage
+                code="500"
+                title="Erreur serveur"
+                message="Impossible de charger l’article demandé."
+            />
+        );
+    }
+
+    /*
+     * Sécurité supplémentaire
+     */
+    if (!state.post) {
+        return <NotFoundPage />;
+    }
 
     const { post } = state;
 
-    console.log("Post chargé :", post);
-    console.log("Titre SEO :", post.title ?? post.titre);
-
     const postTitle = post.title ?? post.titre ?? "Article";
+
     const postDescription = post.excerpt
         ? stripHtml(post.excerpt).slice(0, 160)
         : `Actualité du BCJ37 : ${postTitle}.`;
@@ -88,7 +141,6 @@ export function PostPage() {
     return (
         <>
             <Helmet title={`${postTitle} - BCJ37`}>
-
                 <meta
                     name="description"
                     content={postDescription}
@@ -113,7 +165,9 @@ export function PostPage() {
             </Helmet>
 
             <section className="post-page">
-                <ArticleTitle>Actualité</ArticleTitle>
+                <ArticleTitle>
+                    Actualité
+                </ArticleTitle>
 
                 <ArticleCard className="post-card">
                     <div className="post-image">

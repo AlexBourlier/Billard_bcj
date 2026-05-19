@@ -2,13 +2,9 @@
     margin: 0 2rem;
 }
 
-.calendar-discipline-section:last-child {
-    margin-bottom: 2rem;
-}
-
 .calendar-section {
     position: relative;
-    padding: 3rem 2rem 2rem;
+    /* padding: 3rem 2rem 2rem; */
 }
 
 .calendar-events{
@@ -70,6 +66,19 @@
     text-decoration: none;
 }
 
+.calendar-wrapper {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 1rem;
+}
+
+.calendar-wrapper iframe {
+    display: block;
+    width: 100%;
+    min-height: 800px;
+    border: none;
+}
+
 @media (max-width: 768px) {
     .calendar-section {
         padding: 2.5rem 1rem 1.5rem;
@@ -83,5 +92,9 @@
 
     .calendar-event__header {
         font-size: 1rem;
+    }
+
+    .calendar-wrapper iframe {
+        min-height: 650px;
     }
 }

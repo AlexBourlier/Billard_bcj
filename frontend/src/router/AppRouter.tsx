@@ -6,6 +6,7 @@ import { PostPage } from "../pages/PostPage";
 import { ClubPostsPage } from "../pages/ClubPostsPage";
 import { CalendarPage } from "../pages/CalendarPage";
 import { ContactPage } from "../pages/ContactPage";
+import { ErrorPage } from "../pages/ErrorPage";
 import { DisciplineDocumentsPage } from "../components/discipline/DisciplineDocumentsPage";
 import { DisciplineRankingsPage } from "../components/discipline/DisciplineRankingsPage";
 import { DisciplineCalendarPage } from "../components/discipline/DisciplineCalendarPage";
@@ -82,6 +83,23 @@ export function AppRouter() {
                     element={
                         <MainLayout>
                             <ContactPage />
+                        </MainLayout>
+                    }
+                />
+
+                <Route 
+                    path="/erreur"
+                    element={
+                        <MainLayout>
+                            <ErrorPage />
+                        </MainLayout>
+                    }
+                />
+                <Route
+                    path="/404"
+                    element={
+                        <MainLayout>
+                            <NotFoundPage />
                         </MainLayout>
                     }
                 />

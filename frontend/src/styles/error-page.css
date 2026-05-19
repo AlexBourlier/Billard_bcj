@@ -1,0 +1,118 @@
+/* src/styles/error-page.css */
+
+.error-page-section {
+    margin: 2rem;
+    border-radius: 2rem;
+    min-height: calc(100vh - 160px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1.5rem;
+    background: linear-gradient(135deg, #f5f9ff 0%, #ffffff 50%, #fdf2f8 100%);
+}
+
+.error-page__content {
+    width: 100%;
+    max-width: 960px;
+    text-align: center;
+}
+
+.error-page__image {
+    width: 100%;
+    max-width: 720px;
+    height: auto;
+    margin: 0 auto 2rem;
+    display: block;
+    border-radius: 1.5rem;
+    box-shadow: 0 20px 45px rgba(0, 32, 96, 0.18);
+}
+
+.error-page__code {
+    margin: 0 0 0.5rem;
+    font-size: clamp(3rem, 10vw, 7rem);
+    font-weight: 800;
+    line-height: 1;
+    color: #005aa7;
+}
+
+.error-page__title {
+    margin: 0 0 1rem;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 800;
+    color: #102a43;
+}
+
+.error-page__text {
+    max-width: 620px;
+    margin: 0 auto 2rem;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #4a5568;
+}
+
+.error-page__actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.error-page__button,
+.error-page__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0.85rem 1.4rem;
+    border-radius: 999px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.error-page__button {
+    border: none;
+    background: linear-gradient(135deg, #e72f8a 0%, #005aa7 100%);
+    color: #ffffff;
+    cursor: pointer;
+    box-shadow: 0 10px 24px rgba(0, 90, 167, 0.25);
+}
+
+.error-page__link {
+    border: 2px solid #005aa7;
+    background: #ffffff;
+    color: #005aa7;
+}
+
+.error-page__button:hover,
+.error-page__link:hover {
+    transform: translateY(-2px);
+}
+
+.error-page__button:focus-visible,
+.error-page__link:focus-visible {
+    outline: 3px solid rgba(231, 47, 138, 0.45);
+    outline-offset: 4px;
+}
+
+@media (max-width: 768px) {
+    .error-page {
+        padding: 2rem 1rem;
+    }
+
+    .error-page__image {
+        border-radius: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .error-page__actions {
+        flex-direction: column;
+    }
+
+    .error-page__button,
+    .error-page__link {
+        width: 100%;
+        max-width: 320px;
+    }
+}

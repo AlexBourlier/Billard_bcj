@@ -94,7 +94,19 @@ class PostController extends Controller
      */
     public function show(int $id): JsonResponse
     {
-        $post = Post::query()->findOrFail($id);
+        $post = Post::query()->find($id);
+
+        if (!$post) {
+            return response()->json([
+                'data' => null,
+                'meta' => [],
+                'links' => [],
+                'error' => [
+                    'code' => 'post_not_found',
+                    'message' => 'Article not found',
+                ],
+            ], 404);
+        }
 
         return $this->singleResponse($post);
     }
@@ -196,7 +208,19 @@ class PostController extends Controller
     {
         $post = Post::query()
             ->where('slug', $slug)
-            ->firstOrFail();
+            ->first();
+
+        if (!$post) {
+            return response()->json([
+                'data' => null,
+                'meta' => [],
+                'links' => [],
+                'error' => [
+                    'code' => 'post_not_found',
+                    'message' => 'Article not found',
+                ],
+            ], 404);
+        }
 
         return $this->singleResponse($post);
     }
