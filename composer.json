@@ -15,7 +15,6 @@
         "maatwebsite/excel": "^3.1",
         "mbezhanov/faker-provider-collection": "^2.0",
         "mpdf/mpdf": "^8.2",
-        "open-admin-ext/ckeditor": "^1.0",
         "open-admin-ext/helpers": "^1.0",
         "open-admin-org/open-admin": "^1.0"
     },

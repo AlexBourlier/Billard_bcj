@@ -75,9 +75,23 @@ class ContactController extends Controller
     public function send(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email'],
-            'message' => ['required', 'string', 'min:10', 'max:5000'],
+            'name' => [
+                'required',
+                'string',
+                'max:100',
+                'not_regex:/<[^>]*>/',
+            ],
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+            ],
+            'message' => [
+                'required',
+                'string',
+                'max:3000',
+                'not_regex:/<[^>]*>/',
+            ],
         ]);
 
         try {
