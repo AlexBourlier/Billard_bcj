@@ -7,12 +7,15 @@ import { ClubPostsPage } from "../pages/ClubPostsPage";
 import { CalendarPage } from "../pages/CalendarPage";
 import { ContactPage } from "../pages/ContactPage";
 import { ErrorPage } from "../pages/ErrorPage";
+import { CGUPage } from "../pages/CGUPage";
 import { DisciplineDocumentsPage } from "../components/discipline/DisciplineDocumentsPage";
 import { DisciplineRankingsPage } from "../components/discipline/DisciplineRankingsPage";
 import { DisciplineCalendarPage } from "../components/discipline/DisciplineCalendarPage";
 import { DisciplinePostsPage } from "../components/discipline/DisciplinePostsPage";
 import { MainLayout } from "../layouts/MainLayout";
 import { useEffect } from "react";
+import { MentionsPage } from "../pages/MentionsLegales";
+import { PolitiqueConfidentialitePage } from "../pages/PolitiqueConfidentialite";
 
 export function AdminRedirect() {
     useEffect(() => {
@@ -117,6 +120,33 @@ export function AppRouter() {
                     element={
                         <MainLayout>
                             <NotFoundPage />
+                        </MainLayout>
+                    }
+                />
+
+                <Route
+                    path="/cgu"
+                    element={
+                        <MainLayout>
+                            <CGUPage />
+                        </MainLayout>
+                    }
+                />
+
+                <Route
+                    path="/mentions-legales"
+                    element={
+                        <MainLayout>
+                            <MentionsPage />
+                        </MainLayout>
+                    }
+                />
+
+                <Route
+                    path="/politique-confidentialite"
+                    element={
+                        <MainLayout>
+                            <PolitiqueConfidentialitePage />
                         </MainLayout>
                     }
                 />

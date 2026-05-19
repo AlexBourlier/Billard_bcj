@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 // import type { Menu } from "../../types/api";
 // import { getMenuPath } from "./navigationUtils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -70,7 +70,7 @@ export function MobileFooter({ logoUrl }: Props) {
 
             </div>
             <div className="footer-bottom">
-                <p>&copy; {new Date().getFullYear()} BCJ37 - Billard Club de Joué-lès-Tours. Tous droits réservés.</p>
+                <p>&copy; {new Date().getFullYear()} BCJ37 - Billard Club de Joué-lès-Tours. Tous droits réservés. - <Link to="/cgu" className="footer-link">CGU</Link> - <Link to="/mentions-legales" className="footer-link">Mentions légales</Link> - <Link to="/politique-confidentialite" className="footer-link">Politique de confidentialité</Link></p>
             </div>
         </div>
     );

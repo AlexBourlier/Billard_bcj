@@ -1,0 +1,10 @@
+.cgu-layout, .mentions-layout, .politique-layout{
+    margin: 0 2rem;
+    margin-bottom: 2rem;
+}
+
+.address {
+    text-align: center;
+    margin: 2rem 0;
+    font-style: normal;
+}
