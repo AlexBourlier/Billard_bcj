@@ -70,7 +70,9 @@ Route::get('/americain/{post}', [AmericainController::class, 'show'])->name('ame
 Route::get('/cuescore/{id}', [CuescoreController::class, 'show'])->name('cuescore.show');
 
 Route::get('contact', [ContactController::class, 'index'])->name('contact');
-Route::post('contact', [ContactController::class, 'send'])->name('contact.send');
+Route::post('contact', [ContactController::class, 'send'])
+    ->middleware('throttle:5,1')
+    ->name('contact.send');
 
 // Page CGU / Mentions légale / RGPD
 Route::get('mentions-legales', function () {

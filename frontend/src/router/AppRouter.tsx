@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { HomePage } from "../pages/HomePage";
 import { DisciplinePage } from "../pages/DisciplinePage";
 import { NotFoundPage } from "../pages/NotFoundPage";
@@ -12,8 +12,16 @@ import { DisciplineRankingsPage } from "../components/discipline/DisciplineRanki
 import { DisciplineCalendarPage } from "../components/discipline/DisciplineCalendarPage";
 import { DisciplinePostsPage } from "../components/discipline/DisciplinePostsPage";
 import { MainLayout } from "../layouts/MainLayout";
+import { useEffect } from "react";
 
+export function AdminRedirect() {
+    useEffect(() => {
+        window.location.replace("http://localhost:8000/admin");
+    }, []);
 
+    return null;
+}
+    
 export function AppRouter() {
     return (
         <BrowserRouter>
@@ -111,6 +119,15 @@ export function AppRouter() {
                             <NotFoundPage />
                         </MainLayout>
                     }
+                />
+
+                <Route 
+                    path="/admin"
+                    element={<AdminRedirect />}
+                />
+                <Route 
+                    path="/login"
+                    element={<AdminRedirect />}
                 />
             </Routes>
         </BrowserRouter>

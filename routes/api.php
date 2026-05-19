@@ -62,7 +62,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/licencies/search/{name}', [LicenciesController::class, 'searchByName']);
 
     // Routes batches
-    Route::middleware('auth:sanctum')->group(function () {
+    Route::middleware(['web', 'admin.api'])->group(function () {
         Route::get('/license-import/batches', [LicenseImportBatchController::class, 'index']);
         Route::get('/license-import/batches/{batch}', [LicenseImportBatchController::class, 'show']);
         Route::get('/license-import/batches/{batch}/report', [LicenseImportBatchController::class, 'report']);
@@ -98,7 +98,8 @@ Route::prefix('v1')->group(function () {
     // Routes pour les contacts
     Route::prefix('/contact')->group(function () {
         Route::get('/', [ContactController::class, 'index']);
-        Route::post('/', [ContactController::class, 'send']);
+        Route::post('/', [ContactController::class, 'send'])
+            ->middleware('throttle:5,1');
     });
 
     Route::prefix('/disciplines')->group(function () {
