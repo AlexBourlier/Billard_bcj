@@ -84,13 +84,23 @@ export function HomePage() {
                                 </Link>
                             </h3>
 
-                            {home.featured_post.image_url && (
-                                <img
-                                    src={home.featured_post.image_url}
-                                    alt={home.featured_post.title ?? home.featured_post.titre}
-                                    style={{ maxWidth: "100%" }}
-                                />
-                            )}
+                                {home.featured_post.video_url ? (
+                                    <iframe
+                                        width="100%"
+                                        height="600"
+                                        src={home.featured_post.video_url}
+                                        title={home.featured_post.title ?? home.featured_post.titre}
+                                        frameBorder="0"
+                                        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                    />
+                                ) : home.featured_post.image_url ? (
+                                    <img
+                                        src={home.featured_post.image_url}
+                                        alt={home.featured_post.title ?? home.featured_post.titre}
+                                        style={{ maxWidth: "100%" }}
+                                    />
+                                ) : null}
 
                             {home.featured_post.content && (
                                 <div

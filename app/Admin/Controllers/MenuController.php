@@ -8,6 +8,10 @@ use OpenAdmin\Admin\Grid;
 use OpenAdmin\Admin\Show;
 use Illuminate\Support\Facades\Cache;
 use OpenAdmin\Admin\Controllers\AdminController;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver as GdDriver;
 
 
 class MenuController extends AdminController
@@ -42,7 +46,7 @@ class MenuController extends AdminController
             }
 
             // Sinon, affiche l'image
-            return '<img src="' . asset('uploads/' . $thumbnail) . '" alt="Thumbnail" class="object-cover" style="width:48px; height:auto;">';
+            return '<img src="' . asset('storage/' . $thumbnail) . '" alt="Thumbnail" class="object-cover" style="width:48px; height:auto;">';
         });
         $grid->column('actif', __('Statut'))->display(function ($value) use ($colors) {
             $color = $colors[$value] ?? 'bg-secondary';
@@ -74,7 +78,7 @@ class MenuController extends AdminController
                 return ''; // Ne rien afficher si le thumbnail est vide
             }
         
-            return '<img src="' . asset('uploads/' . $thumbnail) . '" alt="Thumbnail" class="object-cover" style="width:192px; height:auto;">';
+            return '<img src="' . asset('storage/' . $thumbnail) . '" alt="Thumbnail" class="object-cover" style="width:192px; height:auto;">';
         });
         $show->field('actif', __('Actif'))->unescape()->as(function ($value) use ($colors) {
             $color = $colors[$value] ?? 'bg-secondary';
@@ -96,8 +100,46 @@ class MenuController extends AdminController
         $form = new Form(new Menu());
 
         $form->text('nom', __('Nom'));
-        $form->file('image', __('Image'))->move('menu')->uniqueName()->removable();
+
+        // Upload temporaire
+        $form->file('image_upload', __('Image'))->removable();
+
+        // Ignore le champ temporaire
+        $form->ignore(['image_upload']);
+
         $form->switch('actif', __('Actif'))->default(1);
+
+        $form->saving(function ($form) {
+
+            if (request()->hasFile('image_upload')) {
+
+                $file = request()->file('image_upload');
+
+                // Nom unique
+                $filename = Str::random(12) . '.webp';
+
+                $manager = new ImageManager(new GdDriver());
+
+                $image = $manager->read($file);
+
+                // Redimensionnement optionnel
+                if ($image->width() > 1200) {
+                    $image = $image->scale(width: 1200);
+                }
+
+                // Conversion WebP qualité 60
+                $webpData = $image->toWebp(quality: 60)->toString();
+
+                // Sauvegarde
+                Storage::disk('public')->put(
+                    'menu/' . $filename,
+                    $webpData
+                );
+
+                // Enregistrement BDD
+                $form->model()->image = 'menu/' . $filename;
+            }
+        });
 
         return $form;
     }
