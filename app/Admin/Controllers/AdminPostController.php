@@ -8,6 +8,7 @@ use OpenAdmin\Admin\Grid;
 use OpenAdmin\Admin\Show;
 use Intervention\Image\ImageManager;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Intervention\Image\Drivers\Gd\Driver as GdDriver;
 use OpenAdmin\Admin\Controllers\AdminController;
 
@@ -66,13 +67,14 @@ class AdminPostController extends AdminController
             return $titre;
         });
         $grid->column('thumbnail', __('Thumbnail'))->display(function ($thumbnail) {
-            // Vérifie si le thumbnail existe et est non vide
             if (empty($thumbnail)) {
-                return ''; // Si aucun thumbnail n'est présent, rien n'est affiché
+                return '';
             }
 
-            // Sinon, affiche l'image
-            return '<img src="' . asset('storage/' . $thumbnail) . '" alt="Thumbnail" class="object-cover" style="width:48px; height:auto;">';
+            $thumb = str_replace('files/', 'thumbs/', $thumbnail);
+            $thumb = preg_replace('/\.jpg$/', '.webp', $thumb);
+
+            return '<img src="' . asset('storage/' . $thumb) . '" alt="Thumbnail" style="width:48px; height:auto;">';
         });
         $grid->column('video', __('Video'));
         // Afficher les disciplines sous forme de tags
@@ -170,7 +172,8 @@ class AdminPostController extends AdminController
 
         $form->text('title', __('Titre'));
         $form->ck5('content', __('Contenu'))->rows(700);
-        $form->file('thumbnail', __('Image'))->disk('public')->move('files')->uniqueName()->removable();
+        $form->file('thumbnail_upload', __('Image'))->removable();
+        $form->ignore(['thumbnail_upload']);
         $form->url('video', __('Video'));
         $form->select('discipline', __('Discipline'))->options($disciplines);
         $form->select('year', __('Année'))->options($years)->default(function ($form) {
@@ -182,34 +185,39 @@ class AdminPostController extends AdminController
         // Traitement personnalisé avant sauvegarde
         $form->saving(function ($form) {
             $model = $form->model();
-        
-            $model->slug = \Str::slug($form->title);
-            $model->excerpt = \Str::limit(strip_tags($form->content), 150);
-        
+
+            $model->slug = Str::slug($form->title);
+            $model->excerpt = Str::limit(strip_tags($form->content), 150);
+
             if (!empty($form->video)) {
                 $model->thumbnail = null;
             }
-        
-            if (request()->hasFile('thumbnail')) {
-                $file = request()->file('thumbnail');
-                $filename = uniqid() . '.jpg'; // toujours jpg
+
+            if (request()->hasFile('thumbnail_upload')) {
+                $file = request()->file('thumbnail_upload');
+
+                $baseName = Str::random(12);
+
+                $jpgName = $baseName . '.jpg';
+                $webpName = $baseName . '.webp';
 
                 $manager = new ImageManager(new GdDriver());
+
                 $image = $manager->read($file);
 
                 if ($image->width() > 1280) {
                     $image = $image->scale(width: 1280);
                 }
 
-                // Générer le contenu JPEG compressé
-                $thumb = $manager->read($file)->scale(width:175);
-                $jpegData = $thumb->toJpeg(quality: 60)->toString();
+                $jpgData = $image->toJpeg(quality: 75)->toString();
 
-                // Sauvegarder via Storage
-                Storage::disk('public')->put('files/' . $filename, $jpegData);
+                $thumb = $manager->read($file)->scale(width: 175);
+                $webpData = $thumb->toWebp(quality: 60)->toString();
 
-                // Enregistrer le nom du fichier dans le modèle
-                $model->thumbnail = $filename;
+                Storage::disk('public')->put('files/' . $jpgName, $jpgData);
+                Storage::disk('public')->put('thumbs/' . $webpName, $webpData);
+
+                $model->thumbnail = 'files/' . $jpgName;
             }
         });
         return $form;
