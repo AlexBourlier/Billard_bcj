@@ -18,6 +18,18 @@
     align-items:center;
     justify-content: space-around;
     gap: 1.5rem;
+    padding: .9rem;
+}
+
+.site-logo-mobile img{
+    width: 120px;
+    height: auto;
+}
+
+.footer-bottom {
+    font-size: .9rem;
+    text-align: center;
+    padding: 0 0.9rem;
 }
 
 .social-links-mobile {
@@ -28,6 +40,7 @@
 
 .social-links-mobile a {
     text-decoration: none;
+    font-size:.9rem;
 }
 
 .social-links-mobile p {
@@ -41,6 +54,8 @@
     font-weight: normal;
     text-transform: none;
     font-style: normal;
+    font-size: 0.9rem;
+    text-align: center;
 }
 
 .social-links-mobile p.footer-note a {
@@ -49,6 +64,8 @@
 
 .social-links-mobile address {
     font-style: normal;
+    font-size: 0.9rem;
+    text-align: center;
 }
 
 @media (min-width: 968px){
@@ -94,6 +111,7 @@
         font-weight: normal;
         text-transform: none;
         font-style: normal;
+        font-size: 1rem;
     }
     .social-links-footer p.footer-note a {
         text-decoration: underline;
@@ -101,6 +119,7 @@
 
     .social-links-footer address {
         font-style: normal;
+        font-size: 1rem;
     }
 
     .desktop-footer nav{

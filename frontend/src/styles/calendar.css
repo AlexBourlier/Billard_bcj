@@ -7,6 +7,10 @@
     /* padding: 3rem 2rem 2rem; */
 }
 
+.calendar-discipline-section:last-child {
+    margin-bottom: 2rem;
+}
+
 .calendar-events{
     padding-top: 2rem;
 }
