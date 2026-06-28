@@ -38,6 +38,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('v1')->group(function () {
 
+    // Route d'accueil
+    Route::get('/', function () {
+        return response()->json([
+            'message' => 'Bienvenue sur l\'API du BCJ37',
+            'version' => '1.0'
+            // 'documentation' => url('/api/documentation')
+        ]);
+    });
+
     // Route pour les informations publiques du site
     Route::prefix('/public')->group(function () {
         Route::get('/site', [PublicController::class, 'site']);
