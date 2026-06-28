@@ -19,7 +19,7 @@ import { PolitiqueConfidentialitePage } from "../pages/PolitiqueConfidentialite"
 
 export function AdminRedirect() {
     useEffect(() => {
-        window.location.replace("http://localhost:8000/admin");
+        window.location.replace("https://api.test.alexandrebourlier.fr/admin");
     }, []);
 
     return null;

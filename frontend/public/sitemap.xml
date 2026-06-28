@@ -4,114 +4,114 @@
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
 >
     <url>
-        <loc>http://localhost:4173/</loc>
+        <loc>https://test.alexandrebourlier.fr/</loc>
     </url>
 
     <url>
-        <loc>http://localhost:4173/club</loc>
+        <loc>https://test.alexandrebourlier.fr/club</loc>
     </url>
 
     <url>
-        <loc>http://localhost:4173/contact</loc>
+        <loc>https://test.alexandrebourlier.fr/contact</loc>
     </url>
 
     <url>
-        <loc>http://localhost:4173/calendrier</loc>
+        <loc>https://test.alexandrebourlier.fr/calendrier</loc>
     </url>
 
     <url>
         <loc>
-            http://localhost:4173/disciplines/blackball/articles
+            https://test.alexandrebourlier.fr/disciplines/blackball/articles
         </loc>
     </url>
 
     <url>
         <loc>
-            http://localhost:4173/disciplines/blackball/documents
+            https://test.alexandrebourlier.fr/disciplines/blackball/documents
         </loc>
     </url>
 
     <url>
         <loc>
-            http://localhost:4173/disciplines/blackball/classements
+            https://test.alexandrebourlier.fr/disciplines/blackball/classements
         </loc>
     </url>
 
     <url>
         <loc>
-            http://localhost:4173/disciplines/blackball/calendrier
+            https://test.alexandrebourlier.fr/disciplines/blackball/calendrier
         </loc>
     </url>
 
     <url>
         <loc>
-            http://localhost:4173/disciplines/americain/articles
+            https://test.alexandrebourlier.fr/disciplines/americain/articles
         </loc>
     </url>
 
     <url>
         <loc>
-            http://localhost:4173/disciplines/americain/documents
+            https://test.alexandrebourlier.fr/disciplines/americain/documents
         </loc>
     </url>
 
     <url>
         <loc>
-            http://localhost:4173/disciplines/americain/classements
+            https://test.alexandrebourlier.fr/disciplines/americain/classements
         </loc>
     </url>
 
     <url>
         <loc>
-            http://localhost:4173/disciplines/americain/calendrier
+            https://test.alexandrebourlier.fr/disciplines/americain/calendrier
         </loc>
     </url>
 
     <url>
         <loc>
-            http://localhost:4173/disciplines/snooker/articles
+            https://test.alexandrebourlier.fr/disciplines/snooker/articles
         </loc>
     </url>
 
     <url>
         <loc>
-            http://localhost:4173/disciplines/snooker/documents
+            https://test.alexandrebourlier.fr/disciplines/snooker/documents
         </loc>
     </url>
 
     <url>
         <loc>
-            http://localhost:4173/disciplines/snooker/classements
+            https://test.alexandrebourlier.fr/disciplines/snooker/classements
         </loc>
     </url>
 
     <url>
         <loc>
-            http://localhost:4173/disciplines/snooker/calendrier
+            https://test.alexandrebourlier.fr/disciplines/snooker/calendrier
         </loc>
     </url>
 
     <url>
         <loc>
-            http://localhost:4173/disciplines/carambole/articles
+            https://test.alexandrebourlier.fr/disciplines/carambole/articles
         </loc>
     </url>
 
     <url>
         <loc>
-            http://localhost:4173/disciplines/carambole/documents
+            https://test.alexandrebourlier.fr/disciplines/carambole/documents
         </loc>
     </url>
 
     <url>
         <loc>
-            http://localhost:4173/disciplines/carambole/classements
+            https://test.alexandrebourlier.fr/disciplines/carambole/classements
         </loc>
     </url>
 
     <url>
         <loc>
-            http://localhost:4173/disciplines/carambole/calendrier
+            https://test.alexandrebourlier.fr/disciplines/carambole/calendrier
         </loc>
     </url>
 
