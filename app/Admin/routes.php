@@ -84,8 +84,6 @@ Route::group([
     $router->get('/blackball/calendrier', 'AdminBlackballController@calendrier')->name('blackball.calendrier');
     $router->get('/club/licencies', 'AdminLicenciesController@licencies')->name('club.licencies');
 
-    $router->get('/maj-licencies', [AdminLicenciesController::class, 'updateLicencies'])->name('maj-licencies');
-
 
     $router->resource('menus', MenuController::class);
     $router->resource('posts', AdminPostController::class);

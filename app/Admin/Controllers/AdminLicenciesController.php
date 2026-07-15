@@ -28,19 +28,6 @@ class AdminLicenciesController extends AdminController
             ->row(view('admin.club.licencies', compact('nbLicencies')));
     }
 
-    public function updateLicencies()
-    {
-        // Chemin absolu vers le script python
-        $scriptPath = base_path('public/script/licencies.py');
-
-        // Exécution du script Python
-        $output = shell_exec("python {$scriptPath} 2>&1");
-        // dd($output);
-
-        return response()->view('admin.club.redirect_licencies', [
-            'message' => "Liste des licenciés bien mise à jour"
-        ]);
-    }
     /**
      * Make a grid builder.
      *

@@ -71,13 +71,7 @@ class AdminAmericainRegionalLink extends AdminController
         </div>";
 });
 
-$chemin = public_path('script/licencies.txt');
-$licencies = [];
-
-if(file_exists($chemin)){
-    $contenu = file($chemin, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    $licencies = array_map('trim', $contenu);
-}
+$licencies = \App\Support\LicencieNames::fullNames();
 
 $licenciesJson = json_encode($licencies, JSON_UNESCAPED_UNICODE);
 

@@ -78,8 +78,8 @@
 
 <div class="admin-grid">
     <div class="admin-card admin-update">
-        <a href="{{ admin_url('maj-licencies') }}">
-            <strong>Mettre à jour<br>({{ $nbLicencies }} licenciés)</strong></br>
+        <a href="{{ admin_url('license-import/batches') }}">
+            <strong>Gérer les imports<br>({{ $nbLicencies }} licenciés)</strong></br>
             <i class="fa-solid fa-arrows-rotate"></i>
         </a>
     </div>
