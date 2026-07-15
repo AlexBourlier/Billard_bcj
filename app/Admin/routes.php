@@ -15,6 +15,7 @@ use App\Admin\Controllers\AdminPartenairesController;
 use App\Admin\Controllers\AdminPostController;
 use App\Admin\Controllers\AdminRegionalLink;
 use App\Admin\Controllers\LicenseImportBatchAdminController;
+use App\Admin\Controllers\CueScorePlayerMappingController;
 use App\Admin\Controllers\americain\AdminAmericainCalendrier;
 use App\Admin\Controllers\americain\AdminAmericainCalendrierDepartemental;
 use App\Admin\Controllers\americain\AdminAmericainCalendrierInternational;
@@ -127,6 +128,10 @@ Route::group([
     $router->get('license-import/run', [LicenseImportBatchAdminController::class, 'run'])->name('license-import.run');
     $router->get('license-import/batches', [LicenseImportBatchAdminController::class, 'index'])->name('license-import.batches.index');
     $router->get('license-import/batches/{id}', [LicenseImportBatchAdminController::class, 'show'])->name('license-import.batches.show');
+
+    // Correspondances CueScore (revue joueur -> licencie + declenchement import)
+    $router->get('cuescore-mappings/run', [CueScorePlayerMappingController::class, 'run'])->name('cuescore-mappings.run');
+    $router->resource('cuescore-mappings', CueScorePlayerMappingController::class)->only(['index', 'show', 'edit', 'update', 'destroy']);
     
     // Route pour le snooker admin calendrier
     $router->resource('documents-snooker', AdminDocumentSnooker::class);
