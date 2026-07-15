@@ -16,6 +16,7 @@ use App\Admin\Controllers\AdminPostController;
 use App\Admin\Controllers\AdminRegionalLink;
 use App\Admin\Controllers\LicenseImportBatchAdminController;
 use App\Admin\Controllers\CueScorePlayerMappingController;
+use App\Admin\Controllers\CueScoreRankingController;
 use App\Admin\Controllers\americain\AdminAmericainCalendrier;
 use App\Admin\Controllers\americain\AdminAmericainCalendrierDepartemental;
 use App\Admin\Controllers\americain\AdminAmericainCalendrierInternational;
@@ -130,6 +131,9 @@ Route::group([
     // Correspondances CueScore (revue joueur -> licencie + declenchement import)
     $router->get('cuescore-mappings/run', [CueScorePlayerMappingController::class, 'run'])->name('cuescore-mappings.run');
     $router->resource('cuescore-mappings', CueScorePlayerMappingController::class)->only(['index', 'show', 'edit', 'update', 'destroy']);
+
+    // CRUD des classements CueScore (param-driven par ?discipline=&scope=)
+    $router->resource('cuescore-classements', CueScoreRankingController::class);
     
     // Route pour le snooker admin calendrier
     $router->resource('documents-snooker', AdminDocumentSnooker::class);

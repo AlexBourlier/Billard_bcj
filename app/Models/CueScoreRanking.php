@@ -21,6 +21,7 @@ class CueScoreRanking extends Model
         'scope',
         'ranking_type',
         'team_category',
+        'category',
         'season',
         'is_active',
         'sort_order',
