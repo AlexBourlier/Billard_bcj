@@ -118,7 +118,7 @@
 
 <div class="admin-grid">
     <div class="admin-card externe">
-        <a href="/" target="_blank">
+        <a href="{{ config('app.frontend_url') }}" target="_blank">
             <strong>Voir le site</strong><br>
             <i class="fa-solid fa-globe"></i>
         </a>

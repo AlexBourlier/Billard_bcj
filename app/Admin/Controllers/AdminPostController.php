@@ -71,8 +71,9 @@ class AdminPostController extends AdminController
                 return '';
             }
 
-            $thumb = str_replace('files/', 'thumbs/', $thumbnail);
-            $thumb = preg_replace('/\.jpg$/', '.webp', $thumb);
+            // Les miniatures sont toujours generees en .webp dans thumbs/,
+            // quelle que soit l'extension d'origine du fichier source.
+            $thumb = 'thumbs/' . pathinfo($thumbnail, PATHINFO_FILENAME) . '.webp';
 
             return '<img src="' . asset('storage/' . $thumb) . '" alt="Thumbnail" style="width:48px; height:auto;">';
         });
@@ -86,7 +87,9 @@ class AdminPostController extends AdminController
         });
         $grid->column('year', __('Année'))->sortable();
         $grid->column('Partager')->display(function () {
-            $url = route("{$this->disciplineName()}.show", ['post' => $this]);
+            // Le site public est servi par le frontend React : on partage l'URL
+            // publique du post sur le front (/posts/{slug}), pas une route Laravel.
+            $url = rtrim(config('app.frontend_url'), '/') . '/posts/' . $this->slug;
             $facebookShareUrl = 'https://www.facebook.com/sharer/sharer.php?u=' . urlencode($url);
 
             return "<a href='{$facebookShareUrl}' target='_blank' class='btn btn-sm btn-primary'>

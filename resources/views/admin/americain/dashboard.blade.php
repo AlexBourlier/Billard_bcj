@@ -45,8 +45,8 @@
 <div class="admin-grid">
 
     <div class="admin-card americain-section">
-        <a href="{{ admin_url('americain-classements') }}">
-            <strong>Liens classements</strong><br>
+        <a href="{{ admin_url('americain/classement') }}">
+            <strong>Classement</strong><br>
             <i class="fa-solid fa-ranking-star"></i>
         </a>
     </div>

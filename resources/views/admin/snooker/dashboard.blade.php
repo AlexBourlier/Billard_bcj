@@ -46,8 +46,8 @@
 
 
     <div class="admin-card snooker-section">
-        <a href="{{ admin_url('snooker-classements') }}">
-            <strong>Liens classements</strong><br>
+        <a href="{{ admin_url('snooker/classement') }}">
+            <strong>Classement</strong><br>
             <i class="fa-solid fa-ranking-star"></i>
         </a>
     </div>

@@ -36,34 +36,27 @@
         margin-top: 10px;
     }
 
-    /* Style spécifique à CueScore */
     .cuescore-section {
         background: linear-gradient(135deg, #4a148c, #7b1fa2);
     }
 </style>
-<h4>Classements CueScore — Blackball</h4>
+
+<h4>Classements CueScore — Américain</h4>
 <p style="text-align:center; color:#555;">
-    Gère ici les classements CueScore du blackball. Chaque écran regroupe les
+    Gère ici les classements CueScore de l'américain. Chaque écran regroupe les
     classements individuels <strong>et</strong> par équipes (filtrables par type).
 </p>
 <div class="admin-grid">
     <div class="admin-card cuescore-section">
-        <a href="{{ admin_url('cuescore-classements') }}?discipline=blackball&scope=national">
+        <a href="{{ admin_url('cuescore-classements') }}?discipline=americain&scope=national">
             <strong>National</strong><br>
             <i class="fa-solid fa-trophy"></i>
         </a>
     </div>
 
     <div class="admin-card cuescore-section">
-        <a href="{{ admin_url('cuescore-classements') }}?discipline=blackball&scope=regional">
+        <a href="{{ admin_url('cuescore-classements') }}?discipline=americain&scope=regional">
             <strong>Régional</strong><br>
-            <i class="fa-solid fa-trophy"></i>
-        </a>
-    </div>
-
-    <div class="admin-card cuescore-section">
-        <a href="{{ admin_url('cuescore-classements') }}?discipline=blackball&scope=départemental">
-            <strong>Départemental</strong><br>
             <i class="fa-solid fa-trophy"></i>
         </a>
     </div>

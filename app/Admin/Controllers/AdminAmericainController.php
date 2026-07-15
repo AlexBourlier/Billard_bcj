@@ -27,4 +27,12 @@ class AdminAmericainController extends Controller
             ->row(view('admin.americain.calendrier'));
     }
 
+    public function classement(Content $content)
+    {
+        return $content
+            ->title('Tableau de bord')
+            ->description('Bienvenue dans l\'administration')
+            ->row(view('admin.americain.classement'));
+    }
+
 }
