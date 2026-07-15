@@ -14,6 +14,7 @@ use App\Admin\Controllers\AdminNationalLink;
 use App\Admin\Controllers\AdminPartenairesController;
 use App\Admin\Controllers\AdminPostController;
 use App\Admin\Controllers\AdminRegionalLink;
+use App\Admin\Controllers\LicenseImportBatchAdminController;
 use App\Admin\Controllers\americain\AdminAmericainCalendrier;
 use App\Admin\Controllers\americain\AdminAmericainCalendrierDepartemental;
 use App\Admin\Controllers\americain\AdminAmericainCalendrierInternational;
@@ -121,6 +122,11 @@ Route::group([
     $router->resource('site-settings', SiteSettingController::class);
     $router->resource('licencies', AdminLicenciesController::class);
     $router->resource('partenaires', AdminPartenairesController::class);
+
+    // Import de licences (pipeline Telemat / FFBI) - lecture seule + declenchement
+    $router->get('license-import/run', [LicenseImportBatchAdminController::class, 'run'])->name('license-import.run');
+    $router->get('license-import/batches', [LicenseImportBatchAdminController::class, 'index'])->name('license-import.batches.index');
+    $router->get('license-import/batches/{id}', [LicenseImportBatchAdminController::class, 'show'])->name('license-import.batches.show');
     
     // Route pour le snooker admin calendrier
     $router->resource('documents-snooker', AdminDocumentSnooker::class);
