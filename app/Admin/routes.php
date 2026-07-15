@@ -78,8 +78,10 @@ Route::group([
     $router->get('/carambole/calendrier', 'AdminCaramboleController@calendrier')->name('carambole.calendrier');
     $router->get('/snooker', 'AdminSnookerController@index')->name('snooker.menu');
     $router->get('/snooker/calendrier', 'AdminSnookerController@calendrier')->name('snooker.calendrier');
+    $router->get('/snooker/classement', 'AdminSnookerController@classement')->name('snooker.classement');
     $router->get('/americain', 'AdminAmericainController@index')->name('americain.menu');
     $router->get('/americain/calendrier', 'AdminAmericainController@calendrier')->name('americain.calendrier');
+    $router->get('/americain/classement', 'AdminAmericainController@classement')->name('americain.classement');
     $router->get('/systeme', 'SiteSettingDashboardController@index')->name('settings.menu');
     $router->get('/blackball/classement', 'AdminBlackballController@classement')->name('blackball.classement');
     $router->get('/blackball/calendrier', 'AdminBlackballController@calendrier')->name('blackball.calendrier');
