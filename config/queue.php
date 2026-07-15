@@ -17,6 +17,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Connexion des imports declenches depuis l'admin
+    |--------------------------------------------------------------------------
+    |
+    | Les boutons d'import (licences Telemat, CueScore) s'executent sur cette
+    | connexion. Par defaut "database" : traitement en arriere-plan, ce qui
+    | necessite un worker (php artisan queue:work). Mettre "sync" pour revenir a
+    | une execution inline (bloquante) sans worker.
+    |
+    */
+
+    'admin_import_connection' => env('ADMIN_IMPORT_QUEUE_CONNECTION', 'database'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Queue Connections
     |--------------------------------------------------------------------------
     |

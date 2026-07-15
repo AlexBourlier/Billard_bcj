@@ -18,9 +18,12 @@ return new class extends Migration
             $table->string('cuescore_name');
             $table->string('cuescore_url')->nullable();
             
+            // Nullable : un participant CueScore sans correspondance fiable reste
+            // stocke avec licencie_id = null (voir CueScorePlayerMatcher).
             $table->foreignId('licencie_id')
+                ->nullable()
                 ->constrained('licencies')
-                ->onDelete('cascade');
+                ->nullOnDelete();
 
             $table->string('matching_method', 30)->index();
             $table->unsignedTinyInteger('confidence_score')->nullable();

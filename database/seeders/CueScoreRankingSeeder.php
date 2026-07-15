@@ -565,18 +565,14 @@ class CueScoreRankingSeeder extends Seeder
 
         ];
 
-        DB::table('cuescore_rankings')->delete(); // Optionnel : vide la table avant d'insérer les nouvelles données
-        
-        $driver = DB::getDriverName();
-
-        if ($driver === 'mysql') {
-            DB::statement('ALTER TABLE cuescore_rankings AUTO_INCREMENT = 1');
+        // Upsert idempotent par cuescore_id : re-seeder ne vide plus la table.
+        // Les editions faites via le CRUD admin sont preservees, et la colonne
+        // `category` (absente ici) n'est jamais ecrasee.
+        foreach ($rankings as $ranking) {
+            DB::table('cuescore_rankings')->updateOrInsert(
+                ['cuescore_id' => $ranking['cuescore_id']],
+                $ranking + ['updated_at' => now()]
+            );
         }
-
-        if ($driver === 'sqlite') {
-            DB::statement("DELETE FROM sqlite_sequence WHERE name = 'cuescore_rankings'");
-        }
-
-        DB::table('cuescore_rankings')->insert($rankings);
     }
 }
