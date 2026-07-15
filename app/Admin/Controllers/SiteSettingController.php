@@ -69,11 +69,13 @@ class SiteSettingController extends AdminController
         $form = new Form(new SiteSetting());
 
         $form->image('logo', 'Logo du site')
+            ->disk('public')
             ->move('img')
             ->uniqueName()
             ->help('Ratio recommandé : 706x349 px');
 
         $form->image('banniere', 'Bannière du site')
+            ->disk('public')
             ->move('img')
             ->uniqueName()
             ->rules('image|max:8192')

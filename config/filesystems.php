@@ -36,13 +36,8 @@ return [
             'throw' => false,
         ],
 
-        'admin' => [
-            'driver' => 'local',
-            'root' => public_path('uploads'),
-            'url' => env('APP_URL') . '/uploads',
-            'visibility' => 'public',
-        ],
-
+        // Disque unique pour tous les fichiers publics (images, PDF, documents).
+        // Physiquement dans storage/app/public, servi via le lien /storage.
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
@@ -50,26 +45,6 @@ return [
             'visibility' => 'public',
             'throw' => false,
         ],
-
-
-        'admin' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
-            'visibility' => 'public',
-            'throw' => false,
-        ],
-
-        // (Optionnel) Disque direct pour public/partenaires si tu veux voir les fichiers physiquement là
-        // 'partners_public' => [
-        //     'driver' => 'local',
-        //     'root' => public_path('partenaires'),
-        //     'url'  => env('APP_URL').'/partenaires',
-        //     'visibility' => 'public',
-        //     'throw' => false,
-        // ],
-
-
 
         's3' => [
             'driver' => 's3',
