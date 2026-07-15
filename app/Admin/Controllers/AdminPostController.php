@@ -71,8 +71,9 @@ class AdminPostController extends AdminController
                 return '';
             }
 
-            $thumb = str_replace('files/', 'thumbs/', $thumbnail);
-            $thumb = preg_replace('/\.jpg$/', '.webp', $thumb);
+            // Les miniatures sont toujours generees en .webp dans thumbs/,
+            // quelle que soit l'extension d'origine du fichier source.
+            $thumb = 'thumbs/' . pathinfo($thumbnail, PATHINFO_FILENAME) . '.webp';
 
             return '<img src="' . asset('storage/' . $thumb) . '" alt="Thumbnail" style="width:48px; height:auto;">';
         });
