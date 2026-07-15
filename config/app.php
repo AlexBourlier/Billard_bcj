@@ -57,6 +57,10 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    // URL du frontend React (site public). Utilisee pour construire des liens
+    // vers le site public depuis le back-office (ex: partage d'un post).
+    'frontend_url' => env('FRONTEND_URL', 'http://localhost:5174'),
+
     'asset_url' => env('ASSET_URL'),
 
     /*

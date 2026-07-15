@@ -201,7 +201,7 @@
         <h3>Logo du site</h3>
         <div class="section-description">Ce logo apparaît dans l'en-tête du site et dans le footer du site, s'il doit être remplacé, respecté le ratio 706x349 px<br> Format PNG conseillé</Form></div>
         @if($settings && $settings->logo)
-            <img src="{{ asset('uploads/' . $settings->logo) }}" alt="Logo du site">
+            <img src="{{ asset('storage/' . $settings->logo) }}" alt="Logo du site">
         @else
             <p>Aucun logo enregistré.</p>
         @endif
@@ -212,7 +212,7 @@
         <h3>Bannière du site</h3>
         <div class="section-description">Image d'accueil affichée sur la page principale du site, si celle-ci doit être remplacée, respecté le ratio 3222x964 px <br> Format PNG conseillé</div>
         @if($settings && $settings->banniere)
-            <img src="{{ asset('uploads/' . $settings->banniere) }}" alt="Bannière du site">
+            <img src="{{ asset('storage/' . $settings->banniere) }}" alt="Bannière du site">
         @else
             <p>Aucune bannière enregistrée.</p>
         @endif
@@ -227,7 +227,7 @@
         <div class="menu-grid">
             @foreach(\App\Models\Menu::all() as $menu)
                 <div class="menu-card {{ $menu->actif ? 'actif' : '' }}" data-id="{{ $menu->id }}">
-                    <img src="{{ asset('uploads/' . $menu->image) }}" alt="{{ $menu->nom }}">
+                    <img src="{{ asset('storage/' . $menu->image) }}" alt="{{ $menu->nom }}">
                     <span>{{ ucfirst($menu->nom) }}</span>
                 </div>
             @endforeach
