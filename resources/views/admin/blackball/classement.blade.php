@@ -41,36 +41,30 @@
         background: linear-gradient(135deg, #4a148c, #7b1fa2);
     }
 </style>
-<h4>Pour mettre à jour les championnats individuels</h4>
+<h4>Classements CueScore — Blackball</h4>
+<p style="text-align:center; color:#555;">
+    Gère ici les classements CueScore du blackball. Chaque écran regroupe les
+    classements individuels <strong>et</strong> par équipes (filtrables par type).
+</p>
 <div class="admin-grid">
     <div class="admin-card cuescore-section">
-        <a href="{{ admin_url('cuescore-nationals/1/edit/') }}">
-            <strong>Liens Cuescore Nationaux</strong><br>
-            <i class="fa-solid fa-link"></i>
+        <a href="{{ admin_url('cuescore-classements') }}?discipline=blackball&scope=national">
+            <strong>National</strong><br>
+            <i class="fa-solid fa-trophy"></i>
         </a>
     </div>
 
     <div class="admin-card cuescore-section">
-        <a href="{{ admin_url('cuescore-regionals/1/edit/') }}">
-            <strong>Liens CueScore Régionaux</strong><br>
-            <i class="fa-solid fa-link"></i>
-        </a>
-    </div>
-</div>
-<hr>
-<h4>Pour mettre à jour les championnats par équipes</h4>
-<div class="admin-grid">
-    <div class="admin-card cuescore-section">
-        <a href="{{ admin_url('cuescore-equipes-nationales') }}">
-            <strong>Équipes Nationales</strong><br>
-            <i class="fa-solid fa-people-group"></i>
+        <a href="{{ admin_url('cuescore-classements') }}?discipline=blackball&scope=regional">
+            <strong>Régional</strong><br>
+            <i class="fa-solid fa-trophy"></i>
         </a>
     </div>
 
     <div class="admin-card cuescore-section">
-        <a href="{{ admin_url('cuescore-equipes-regionales') }}">
-            <strong>Équipes Régionales</strong><br>
-            <i class="fa-solid fa-people-group"></i>
+        <a href="{{ admin_url('cuescore-classements') }}?discipline=blackball&scope=départemental">
+            <strong>Départemental</strong><br>
+            <i class="fa-solid fa-trophy"></i>
         </a>
     </div>
 </div>
