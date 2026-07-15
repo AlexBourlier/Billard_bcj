@@ -116,9 +116,10 @@ class CueScoreRankingController extends AdminController
         $form = new Form(new CueScoreRanking());
 
         // Contexte discipline + portee : rempli depuis la query (creation) ou
-        // depuis le modele (edition, ou default() est ignore).
-        $form->hidden('discipline')->default(request('discipline'));
-        $form->hidden('scope')->default(request('scope'));
+        // depuis le modele (edition, ou default() est ignore). Requis pour eviter
+        // des classements "fantomes" (discipline/scope vides, invisibles partout).
+        $form->hidden('discipline')->default(request('discipline'))->rules('required');
+        $form->hidden('scope')->default(request('scope'))->rules('required');
 
         $form->text('name', 'Nom')->required();
         $form->text('cuescore_id', 'ID CueScore')

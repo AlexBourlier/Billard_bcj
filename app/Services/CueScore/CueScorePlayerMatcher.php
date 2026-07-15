@@ -5,6 +5,7 @@ namespace App\Services\CueScore;
 use App\Models\CueScorePlayerMapping;
 use App\Models\CueScoreRankingEntry;
 use App\Models\Licencies;
+use Illuminate\Support\Collection;
 
 class CueScorePlayerMatcher
 {
@@ -13,32 +14,32 @@ class CueScorePlayerMatcher
     ) {
     }
 
-    public function matchEntry(CueScoreRankingEntry $entry): ?CueScorePlayerMapping
+    /**
+     * Rapproche une entree CueScore d'un licencie.
+     *
+     * @param Collection<int, array{licencie: Licencies, fullName: string}>|null $candidates
+     *        Licencies pre-charges et normalises. Fournis par matchEntriesForFetch
+     *        pour eviter de recharger/renormaliser la table a chaque entree.
+     */
+    public function matchEntry(CueScoreRankingEntry $entry, ?Collection $candidates = null): ?CueScorePlayerMapping
     {
         if ($entry->entry_type !== 'player' || empty($entry->participant_name) || empty($entry->participant_external_id)) {
             return null;
         }
 
-        $normalizedCueScoreName = $this->normalizer->normalize($entry->participant_name);
+        $candidates ??= $this->buildLicencieCandidates();
 
-        $licencies = Licencies::query()->get();
+        $normalizedCueScoreName = $this->normalizer->normalize($entry->participant_name);
 
         $bestMatch = null;
         $bestScore = 0;
         $matchingMethod = null;
 
-        foreach ($licencies as $licencie) {
-            $fullName = $this->normalizer->normalizeFullName(
-                $licencie->prenom ?? null,
-                $licencie->nom ?? null
-            );
-
-            if ($fullName === '') {
-                continue;
-            }
+        foreach ($candidates as $candidate) {
+            $fullName = $candidate['fullName'];
 
             if ($normalizedCueScoreName === $fullName) {
-                $bestMatch = $licencie;
+                $bestMatch = $candidate['licencie'];
                 $bestScore = 100;
                 $matchingMethod = 'exact_normalized';
                 break;
@@ -47,7 +48,7 @@ class CueScorePlayerMatcher
             similar_text($normalizedCueScoreName, $fullName, $percent);
 
             if ($percent > $bestScore) {
-                $bestMatch = $licencie;
+                $bestMatch = $candidate['licencie'];
                 $bestScore = (int) round($percent);
                 $matchingMethod = 'similarity';
             }
@@ -95,10 +96,13 @@ class CueScorePlayerMatcher
             ->where('entry_type', 'player')
             ->get();
 
+        // Licencies charges et normalises une seule fois pour tout le fetch.
+        $candidates = $this->buildLicencieCandidates();
+
         $count = 0;
 
         foreach ($entries as $entry) {
-            $mapping = $this->matchEntry($entry);
+            $mapping = $this->matchEntry($entry, $candidates);
 
             if ($mapping !== null) {
                 $count++;
@@ -106,5 +110,24 @@ class CueScorePlayerMatcher
         }
 
         return $count;
+    }
+
+    /**
+     * Charge tous les licencies et pre-calcule leur nom complet normalise.
+     *
+     * @return Collection<int, array{licencie: Licencies, fullName: string}>
+     */
+    private function buildLicencieCandidates(): Collection
+    {
+        return Licencies::query()->get()
+            ->map(fn (Licencies $licencie) => [
+                'licencie' => $licencie,
+                'fullName' => $this->normalizer->normalizeFullName(
+                    $licencie->prenom ?? null,
+                    $licencie->nom ?? null
+                ),
+            ])
+            ->filter(fn (array $candidate) => $candidate['fullName'] !== '')
+            ->values();
     }
 }
