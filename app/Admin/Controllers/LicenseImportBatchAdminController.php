@@ -188,26 +188,38 @@ class LicenseImportBatchAdminController extends AdminController
             dryRun: $dryRun,
         );
 
+        $connection = config('queue.admin_import_connection', 'database');
+
         try {
             RunTelematLicenseImportJob::dispatch($context->toArray())
+                ->onConnection($connection)
                 ->onQueue(config('license_import.job.queue', 'default'));
 
-            $batch = LicenseImportBatch::latestFirst()->first();
-            $statusValue = $batch?->status instanceof BatchStatus
-                ? $batch->status->value
-                : (string) ($batch?->status ?? 'inconnu');
+            if ($connection === 'sync') {
+                // Execution inline : le batch est disponible immediatement.
+                $batch = LicenseImportBatch::latestFirst()->first();
+                $statusValue = $batch?->status instanceof BatchStatus
+                    ? $batch->status->value
+                    : (string) ($batch?->status ?? 'inconnu');
 
-            admin_success(
-                $dryRun ? 'Dry-run termine' : 'Import termine',
-                sprintf(
-                    'Batch #%s - statut : %s - %d ligne(s), %d valide(s), %d invalide(s).',
-                    $batch?->id ?? '?',
-                    $statusValue,
-                    $batch?->raw_rows_count ?? 0,
-                    $batch?->valid_rows_count ?? 0,
-                    $batch?->invalid_rows_count ?? 0,
-                )
-            );
+                admin_success(
+                    $dryRun ? 'Dry-run termine' : 'Import termine',
+                    sprintf(
+                        'Batch #%s - statut : %s - %d ligne(s), %d valide(s), %d invalide(s).',
+                        $batch?->id ?? '?',
+                        $statusValue,
+                        $batch?->raw_rows_count ?? 0,
+                        $batch?->valid_rows_count ?? 0,
+                        $batch?->invalid_rows_count ?? 0,
+                    )
+                );
+            } else {
+                admin_success(
+                    $dryRun ? 'Dry-run lance' : 'Import lance',
+                    'Traitement en arriere-plan. Rafraichissez la liste des batches dans quelques instants '
+                    . '(un worker « php artisan queue:work » doit tourner).'
+                );
+            }
         } catch (\Throwable $e) {
             admin_error(
                 'Echec de l\'import',

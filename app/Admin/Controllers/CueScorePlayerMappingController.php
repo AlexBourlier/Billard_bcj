@@ -2,10 +2,10 @@
 
 namespace App\Admin\Controllers;
 
+use App\Jobs\RunCueScoreImportJob;
 use App\Models\CueScorePlayerMapping;
 use App\Models\Licencies;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Artisan;
 use OpenAdmin\Admin\Controllers\AdminController;
 use OpenAdmin\Admin\Form;
 use OpenAdmin\Admin\Grid;
@@ -165,25 +165,22 @@ class CueScorePlayerMappingController extends AdminController
     public function run(Request $request)
     {
         $discipline = $request->query('discipline');
+        $discipline = ($discipline && in_array($discipline, self::DISCIPLINES, true)) ? $discipline : null;
 
-        $params = [
-            '--with-match'  => true,
-            '--active-only' => true,
-        ];
-
-        if ($discipline && in_array($discipline, self::DISCIPLINES, true)) {
-            $params['--discipline'] = $discipline;
-        }
+        $connection = config('queue.admin_import_connection', 'database');
+        $suffix = $discipline ? ' (' . $discipline . ')' : '';
 
         try {
-            Artisan::call('cuescore:import', $params);
-            $output = trim(Artisan::output());
-            $tail = collect(preg_split('/\r?\n/', $output))->filter()->take(-6)->implode(' | ');
+            RunCueScoreImportJob::dispatch($discipline)->onConnection($connection);
 
-            admin_success(
-                'Import CueScore termine' . ($discipline ? ' (' . $discipline . ')' : ''),
-                $tail !== '' ? $tail : 'Aucune sortie.'
-            );
+            if ($connection === 'sync') {
+                admin_success('Import CueScore termine' . $suffix, 'Import et matching executes.');
+            } else {
+                admin_success(
+                    'Import CueScore lance' . $suffix,
+                    'Traitement en arriere-plan (un worker « php artisan queue:work » doit tourner).'
+                );
+            }
         } catch (\Throwable $e) {
             admin_error('Echec de l\'import CueScore', $e->getMessage());
         }
