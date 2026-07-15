@@ -45,9 +45,16 @@
 <div class="admin-grid">
 
     <div class="admin-card americain-section">
-        <a href="{{ admin_url('americain-classements') }}">
-            <strong>Liens classements</strong><br>
-            <i class="fa-solid fa-ranking-star"></i>
+        <a href="{{ admin_url('cuescore-classements') }}?discipline=americain&scope=national">
+            <strong>Classements · National</strong><br>
+            <i class="fa-solid fa-trophy"></i>
+        </a>
+    </div>
+
+    <div class="admin-card americain-section">
+        <a href="{{ admin_url('cuescore-classements') }}?discipline=americain&scope=regional">
+            <strong>Classements · Régional</strong><br>
+            <i class="fa-solid fa-trophy"></i>
         </a>
     </div>
 
