@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Support\DisciplineMapper;
+use App\Support\HtmlSanitizer;
 
 class PostResource extends JsonResource
 {
@@ -19,8 +20,8 @@ class PostResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'slug' => $this->slug,
-            'excerpt' => $this->excerpt,
-            'content' => $this->content,
+            'excerpt' => HtmlSanitizer::post($this->excerpt),
+            'content' => HtmlSanitizer::post($this->content),
             'discipline' => DisciplineMapper::slugFromId($this->discipline),
             'discipline_id' => $this->discipline,
             'year' => $this->year,

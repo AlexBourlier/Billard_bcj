@@ -189,8 +189,12 @@ class AdminPostController extends AdminController
         $form->saving(function ($form) {
             $model = $form->model();
 
+            // Nettoyage serveur du HTML de l'article (liste blanche stricte)
+            // avant stockage : aucun script, style ou balise non autorisee.
+            $form->content = \App\Support\HtmlSanitizer::post($form->content);
+
             $model->slug = Str::slug($form->title);
-            $model->excerpt = Str::limit(strip_tags($form->content), 150);
+            $model->excerpt = Str::limit(strip_tags((string) $form->content), 150);
 
             if (!empty($form->video)) {
                 $model->thumbnail = null;
