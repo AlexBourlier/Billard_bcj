@@ -187,9 +187,7 @@ class PublicController extends Controller
                     ->orderBy('id')
                     ->get();
 
-                $partners = Partenaire::query()
-                    ->orderBy('id')
-                    ->get();
+                $partners = Partenaire::visible()->get();
 
                 $featuredPost = Post::query()
                     ->where('favoris', true)

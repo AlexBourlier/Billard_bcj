@@ -30,6 +30,9 @@ class AdminPartenairesController extends AdminController
     {
         $grid = new Grid(new Partenaire());
 
+        $grid->model()->orderBy('ordre')->orderBy('id');
+
+        $grid->column('ordre', __('Ordre'))->sortable();
         $grid->column('titre', __('Titre'));
         $grid->column('img', __('Image'))->display(function ($thumbnail) {
             // Vérifie si le thumbnail existe et est non vide
@@ -41,6 +44,12 @@ class AdminPartenairesController extends AdminController
             return '<img src="' . asset('storage/' . $thumbnail) . '" alt="Thumbnail" class="object-cover" style="width:48px; height:auto;">';
         });
         $grid->column('url', __('URL'));
+        $grid->column('actif', __('Actif'))->display(function ($v) {
+            return $v
+                ? '<span class="badge badge-success">actif</span>'
+                : '<span class="badge badge-default">inactif</span>';
+        });
+        $grid->column('date_fin', __('Fin'));
 
         return $grid;
     }
@@ -63,7 +72,12 @@ class AdminPartenairesController extends AdminController
         
             return '<img src="' . asset('storage/' . $thumbnail) . '" alt="Thumbnail" class="object-cover" style="width:192px; height:auto;">';
         });
+        $show->field('alt', __('Texte alternatif'));
         $show->field('url', __('URL'));
+        $show->field('ordre', __('Ordre d\'affichage'));
+        $show->field('actif', __('Actif'))->as(fn ($v) => $v ? 'Oui' : 'Non');
+        $show->field('date_debut', __('Debut du partenariat'));
+        $show->field('date_fin', __('Fin du partenariat'));
 
         return $show;
     }
@@ -78,9 +92,21 @@ class AdminPartenairesController extends AdminController
         $form = new Form(new Partenaire());
 
         $form->text('titre', __('Titre'))->required();
-        $form->file('img', __('Image'))->removable();
+        $form->file('img', __('Image'))->removable()
+            ->help('Logo du partenaire. Format conseille : PNG ou JPG, fond transparent ou blanc.');
         $form->ignore(['img']);
-        $form->url('url', __('URL'));
+        $form->text('alt', __('Texte alternatif'))
+            ->help('Decrit le logo pour l\'accessibilite et les lecteurs d\'ecran (ex : « Logo Intersport »). Si vide, le nom est utilise.');
+        $form->url('url', __('Site web (URL)'))
+            ->help('Facultatif. Si renseignee, le logo devient cliquable vers le site du partenaire.');
+        $form->number('ordre', __('Ordre d\'affichage'))->default(0)
+            ->help('Plus le nombre est petit, plus le partenaire apparait tot dans le carrousel.');
+        $form->switch('actif', __('Actif'))->default(true)
+            ->help('Desactiver masque le partenaire du site public, sans le supprimer.');
+        $form->date('date_debut', __('Debut du partenariat'))
+            ->help('Facultatif. Avant cette date, le partenaire n\'est pas affiche.');
+        $form->date('date_fin', __('Fin du partenariat'))
+            ->help('Facultatif. Apres cette date, le partenaire n\'est plus affiche (mais reste enregistre).');
 
         $form->saving(function ($form) {
             /** @var \Illuminate\Http\UploadedFile|null $file */

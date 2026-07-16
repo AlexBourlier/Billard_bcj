@@ -5,6 +5,7 @@ import type { HomeData } from "../types/api";
 import { ClubMap } from "../components/map/ClubMap";
 import { ArticleCard } from "../components/ui/Card";
 import { ArticleTitle } from "../components/ui/Title";
+import { PartnersCarousel } from "../components/partners/PartnersCarousel";
 import { Helmet } from "react-helmet-async";
 import { ErrorPage } from "./ErrorPage";
 
@@ -120,25 +121,7 @@ export function HomePage() {
                 <ArticleCard className="home-section home-partners">
 
                     {home?.partners.length ? (
-                            <div className="partners-grid">
-                                {home.partners.map((partner) => (
-                                    <a
-                                        key={partner.id}
-                                        href={partner.website_url ?? "#"}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="partner-card"
-                                    >
-                                        {partner.logo_url && (
-                                            <img
-                                                src={partner.logo_url}
-                                                alt={partner.name ?? partner.nom ?? "Partenaire"}
-                                                className="partner-logo"
-                                            />
-                                        )}
-                                    </a>
-                                ))}
-                            </div>
+                        <PartnersCarousel partners={home.partners} />
                     ) : (
                         <p>Aucun partenaire</p>
                     )}

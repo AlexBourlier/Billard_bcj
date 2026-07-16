@@ -37,7 +37,7 @@ class PartnerController extends Controller
      */
     public function index(): JsonResponse
     {
-        $partners = Partenaire::all();
+        $partners = Partenaire::visible()->get();
 
         return response()->json([
             'data' => PartnerResource::collection($partners),
