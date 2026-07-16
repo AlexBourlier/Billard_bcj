@@ -251,14 +251,18 @@ L’API expose toutes les données nécessaires au frontend React.
 
 ## Endpoints principaux
 
+L'API est versionnée sous le préfixe `/api/v1`.
+
 ```bash
-/api/posts
-/api/posts/{slug}
-/api/disciplines/{discipline}
-/api/calendars
-/api/calendars/{discipline}
-/api/rankings
-/api/documents
+/api/v1/public/home
+/api/v1/partenaires
+/api/v1/posts
+/api/v1/posts/slug/{slug}
+/api/v1/posts/discipline/{discipline}
+/api/v1/calendrier/{discipline}/{scope}
+/api/v1/cuescore/rankings
+/api/v1/documents/{discipline}
+/api/v1/contact
 ```
 ## Format standardisé
 
@@ -434,6 +438,18 @@ Le projet utilise Matomo auto-hébergé :
 * Event schema
 * Article schema
 * Documentation Swagger
+
+---
+
+# Documentation
+
+Documentation détaillée dans le dossier [`docs/`](docs/) :
+
+* [Guide de l'administration](docs/guide-admin.md) — pour les bénévoles non techniques (connexion, tableau de bord, articles, partenaires, documents).
+* [Documentation développeur](docs/developpeur.md) — installation, variables d'environnement, commandes, architecture, API, rôles, éditeur, tests, déploiement, retour arrière, points sensibles.
+* [Documentation de l'API](docs/api.md) — et spécification [OpenAPI](docs/openapi.yaml) (générée par Scribe, consultable sur `/docs`).
+* [Checklist de tests manuels](docs/tests-manuels.md).
+* [Étude du futur espace licencié](docs/etude-espace-licencie.md).
 
 ---
 
