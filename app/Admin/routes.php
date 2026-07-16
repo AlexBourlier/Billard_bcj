@@ -1,10 +1,7 @@
 <?php
 
 use App\Admin\Controllers\AdminCalendrierSnooker;
-use App\Admin\Controllers\AdminDocumentAmericain;
-use App\Admin\Controllers\AdminDocumentBlackball;
-use App\Admin\Controllers\AdminDocumentCarambole;
-use App\Admin\Controllers\AdminDocumentSnooker;
+use App\Admin\Controllers\AdminDocumentController;
 use App\Admin\Controllers\AdminIndex;
 use App\Admin\Controllers\AdminLicenciesController;
 use App\Admin\Controllers\AdminPartenairesController;
@@ -74,11 +71,10 @@ Route::group([
     $router->resource('calendrier_nationals', AdminCalendrierNational::class);
     $router->resource('calendrier_regionals', AdminCalendrierRegional::class);
     $router->resource('calendrier_internationals', AdminCalendrierInternational::class);
-    $router->resource('documents', AdminDocumentBlackball::class);
+    $router->resource('documents', AdminDocumentController::class);
 
     // Route pour le carambole admin
     $router->resource('classement-caramboles', AdminCaramboleClassement::class);
-    $router->resource('documents-carambole', AdminDocumentCarambole::class);
     $router->resource('carambole-calendriers', AdminCaramboleCalendrier::class);
     $router->resource('carambole-calendrier-internationals', AdminCaramboleCalendrierInternational::class)->parameters(['carambole-calendrier-internationals' => 'caramboleCalIntl']);
     $router->resource('carambole-calendrier-nationals', AdminCaramboleCalendrierNational::class)->parameters(['carambole-calendrier-nationals' => 'caramboleCalNat']);
@@ -105,7 +101,6 @@ Route::group([
     $router->resource('cuescore-classements', CueScoreRankingController::class);
 
     // Route pour le snooker admin calendrier
-    $router->resource('documents-snooker', AdminDocumentSnooker::class);
     $router->resource('snooker-calendriers', AdminSnookerCalendrier::class);
     $router->resource('snooker-calendrier-internationals', AdminSnookerCalendrierInternational::class)->parameters(['snooker-calendrier-internationals' => 'snookerCalIntl']);
     $router->resource('snooker-calendrier-nationals', AdminSnookerCalendrierNational::class)->parameters(['snooker-calendrier-nationals' => 'snookerCalNat']);
@@ -113,7 +108,6 @@ Route::group([
     $router->resource('snooker-calendrier-departementals', AdminSnookerCalendrierDepartemental::class)->parameters(['snooker-calendrier-departementals' => 'snookerCalDep']);
 
     // Route pour l'américain admin calendrier
-    $router->resource('documents-americain', AdminDocumentAmericain::class);
     $router->resource('americain-calendriers', AdminAmericainCalendrier::class);
     $router->resource('americain-calendrier-internationals', AdminAmericainCalendrierInternational::class)->parameters(['americain-calendrier-internationals' => 'americainCalIntl']);
     $router->resource('americain-calendrier-nationals', AdminAmericainCalendrierNational::class)->parameters(['americain-calendrier-nationals' => 'americainCalNat']);
@@ -154,9 +148,8 @@ Route::group([
     $router->get('calendrier_internationals', [AdminCalendrierInternational::class, 'index']);
     $router->get('calendrier_nationals', [AdminCalendrierNational::class, 'index']);
     $router->get('calendrier_regionals', [AdminCalendrierRegional::class, 'index']);
-    $router->get('documents', [AdminDocumentBlackball::class, 'index']);
+    $router->get('documents', [AdminDocumentController::class, 'index']);
     $router->get('carambole-calendriers', [AdminCaramboleCalendrier::class, 'index']);
-    $router->get('documents-carambole', [AdminDocumentCarambole::class, 'index']);
 
     $router->post('/menu/{id}/toggle', function ($id) {
         $menu = \App\Models\Menu::findOrFail($id);

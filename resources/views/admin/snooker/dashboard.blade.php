@@ -61,7 +61,7 @@
 
 
     <div class="admin-card snooker-section">
-        <a href="{{ admin_url('documents-snooker') }}">
+        <a href="{{ admin_url('documents') }}">
             <strong>Documents</strong><br>
             <i class="fa-solid fa-file-lines"></i>
         </a>

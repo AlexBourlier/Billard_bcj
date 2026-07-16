@@ -61,7 +61,7 @@
 
 
     <div class="admin-card americain-section">
-        <a href="{{ admin_url('documents-americain') }}">
+        <a href="{{ admin_url('documents') }}">
             <strong>Documents</strong><br>
             <i class="fa-solid fa-file-lines"></i>
         </a>
