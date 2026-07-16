@@ -13,7 +13,7 @@ return [
     | login page.
     |
     */
-    'name' => 'BCJ Admin',
+    'name' => 'BCJ37 · Administration',
 
     /*
     |--------------------------------------------------------------------------
@@ -24,7 +24,7 @@ return [
     | `img` tag, eg '<img src="http://logo-url" alt="Admin logo">'.
     |
     */
-    'logo' => '<b>BCJ</b> Admin',
+    'logo' => '<b>BCJ37</b> Administration',
 
     /*
     |--------------------------------------------------------------------------
@@ -87,7 +87,7 @@ return [
     | Html title for all pages.
     |
     */
-    'title' => 'Admin',
+    'title' => 'BCJ37 Admin',
 
     /*
     |--------------------------------------------------------------------------

@@ -1,0 +1,146 @@
+/*
+ * Charte graphique BCJ37 pour l'administration OpenAdmin.
+ *
+ * Approche volontairement basee sur la surcharge des variables Bootstrap 5
+ * exposees par OpenAdmin (--bs-primary, --primary-color, ...) plus quelques
+ * regles ciblees. Aucun fichier du package n'est modifie : une mise a jour
+ * d'OpenAdmin n'ecrasera pas ce theme.
+ *
+ * Palette reprise du site public (frontend React) :
+ *   bleu de marque #0e4daa, degrade signature rose -> bleu.
+ */
+
+:root {
+    --bcj-blue: #0e4daa;
+    --bcj-blue-dark: #0a2f68;
+    --bcj-blue-darker: #08234f;
+    --bcj-pink: #ff65a3;
+    --bcj-gradient: linear-gradient(94deg, #ff65a3, #0e4daa);
+
+    /* Surcharge de la couleur primaire Bootstrap : boutons, liens, etats actifs. */
+    --bs-primary: #0e4daa;
+    --bs-primary-rgb: 14, 77, 170;
+    --primary-color: #0e4daa;
+    --bs-link-color: #0e4daa;
+    --bs-link-color-rgb: 14, 77, 170;
+    --bs-link-hover-color: #0a2f68;
+}
+
+/* ------------------------------------------------------------------ */
+/* Barre laterale                                                     */
+/* ------------------------------------------------------------------ */
+
+.sidebar.bg-semi-dark {
+    background: var(--bcj-blue-darker) !important;
+}
+
+/* Zone marque (logo) : degrade signature du club. */
+.navbar-brand.bg-semi-dark {
+    background: var(--bcj-gradient) !important;
+    color: #fff !important;
+}
+
+.sidebar a {
+    color: #d3ddf0;
+}
+
+.sidebar a:hover,
+.sidebar a:focus {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* Etat actif : fond + barre rose (l'info n'est pas portee par la seule couleur). */
+.sidebar a.active,
+.sidebar li.active > a {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.12);
+    border-left: 3px solid var(--bcj-pink);
+}
+
+/* ------------------------------------------------------------------ */
+/* Barre superieure                                                   */
+/* ------------------------------------------------------------------ */
+
+.custom-navbar.bg-white {
+    border-bottom: 2px solid var(--bcj-blue);
+}
+
+/* ------------------------------------------------------------------ */
+/* Boutons                                                            */
+/* ------------------------------------------------------------------ */
+
+.btn-primary {
+    --bs-btn-bg: var(--bcj-blue);
+    --bs-btn-border-color: var(--bcj-blue);
+    --bs-btn-hover-bg: var(--bcj-blue-dark);
+    --bs-btn-hover-border-color: var(--bcj-blue-dark);
+    --bs-btn-active-bg: var(--bcj-blue-dark);
+    --bs-btn-active-border-color: var(--bcj-blue-dark);
+}
+
+/* ------------------------------------------------------------------ */
+/* Accessibilite : focus toujours visible                            */
+/* ------------------------------------------------------------------ */
+
+a:focus-visible,
+.btn:focus-visible,
+.page-link:focus,
+.form-control:focus,
+.form-select:focus,
+.custom-select:focus {
+    outline: 2px solid var(--bcj-blue);
+    outline-offset: 2px;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--bcj-blue);
+    box-shadow: 0 0 0 0.2rem rgba(14, 77, 170, 0.2);
+}
+
+/* ------------------------------------------------------------------ */
+/* Cartes, tableaux, pagination                                       */
+/* ------------------------------------------------------------------ */
+
+.card,
+.box {
+    border-top: 3px solid var(--bcj-blue);
+}
+
+.table thead th {
+    color: var(--bcj-blue-dark);
+    border-bottom: 2px solid var(--bcj-blue);
+}
+
+.page-item.active .page-link {
+    background-color: var(--bcj-blue);
+    border-color: var(--bcj-blue);
+}
+
+.page-link {
+    color: var(--bcj-blue);
+}
+
+/* Alertes : rappel de la nature par un liseret a gauche (pas que la couleur). */
+.alert {
+    border-left-width: 4px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Ecran de connexion                                                 */
+/* ------------------------------------------------------------------ */
+
+body.bg-light {
+    background: var(--bcj-gradient) !important;
+    min-height: 100vh;
+}
+
+body.bg-light h1 a {
+    color: #fff !important;
+    font-weight: 700;
+}
+
+body.bg-light .bg-body {
+    border-top: 4px solid var(--bcj-blue);
+}
