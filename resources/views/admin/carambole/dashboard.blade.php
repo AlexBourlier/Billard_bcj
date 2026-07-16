@@ -51,7 +51,7 @@
     </div>
 
     <div class="admin-card carambole-section">
-        <a href="{{ admin_url('documents-carambole') }}">
+        <a href="{{ admin_url('documents') }}">
             <strong>Documents</strong><br>
             <i class="fa-solid fa-file-lines"></i>
         </a>
