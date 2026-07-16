@@ -55,6 +55,37 @@ l'administration.
 - L'appariement compte ↔ licencié doit être **fiable** (n° de licence + vérification
   courriel) pour éviter qu'un membre accède aux données d'un autre.
 
+### 2.3 Comptes familiaux (gestion par foyer)
+
+Besoin fréquent en club : une même personne (souvent un parent) gère **plusieurs
+licenciés d'un même foyer** avec **une seule adresse courriel**, plutôt qu'un compte et
+une adresse par licencié.
+
+**Principe proposé** : un **foyer** regroupe plusieurs licenciés ; un **compte
+gestionnaire** (un courriel) est rattaché au foyer et gère l'ensemble de ses membres.
+
+| Élément | Proposition |
+|---------|-------------|
+| Modèle | Table `foyers` ; chaque `licencie` appartient à **au plus un** foyer ; un compte gestionnaire par foyer. |
+| Rattachement | Réalisé par un dirigeant (ou proposé lors de l'invitation), jamais deviné automatiquement. |
+| Vue gestionnaire | Le gestionnaire voit et gère, pour chaque membre du foyer : informations, statut de cotisation, documents réservés, convocations. |
+| Communications | Un seul courriel pour le foyer ; les relances de cotisation sont **regroupées** (un message listant les membres concernés). |
+| Bascule de compte individuel | Un membre **adulte** peut disposer de son **propre** compte au lieu d'être géré par le foyer. |
+| Cas à gérer | Membre changeant de foyer (déménagement), passage à la majorité, foyer comptant plusieurs adultes, membre sans foyer. |
+
+**Points de vigilance (RGPD)** :
+
+- Pour un **mineur**, la gestion par le représentant légal (autorité parentale) est
+  légitime.
+- Pour un **membre majeur** rattaché à un foyer, l'accès du gestionnaire à ses données
+  personnelles suppose son **consentement** ; à défaut, il doit pouvoir gérer son propre
+  compte. Ce point doit être **validé par une personne compétente en protection des
+  données** (cf. §8).
+
+Cette fonctionnalité peut être introduite **dès la version minimale** (rattachement +
+vue gestionnaire), la gestion fine du consentement des majeurs pouvant être précisée
+ensuite.
+
 ---
 
 ## 3. Données personnelles (minimisation)
@@ -167,7 +198,9 @@ d'**accès / rectification / export / suppression / anonymisation**, mise à jou
 > - bases légales et durées de conservation ;
 > - contenu de la politique de confidentialité et des mentions d'information ;
 > - contrat de sous‑traitance avec le prestataire d'envoi de courriels ;
-> - modalités d'exercice des droits (export, suppression, anonymisation).
+> - modalités d'exercice des droits (export, suppression, anonymisation) ;
+> - **consentement des membres majeurs** dont les données sont accessibles à un
+>   gestionnaire de foyer (cf. §2.3).
 
 ---
 
@@ -203,7 +236,7 @@ réservés (niveaux public / tous licenciés / discipline), statut de cotisation
 | Axe | Détail |
 |-----|--------|
 | Architecture | Garde `member` (Sanctum), espace React dédié, contrôleurs API protégés |
-| Tables envisagées | `members` (ou `users` + lien `licencie_id`), `member_discipline`, `cotisations`, champ `visibilite` sur `documents` |
+| Tables envisagées | `members` (ou `users` + lien `licencie_id`), `foyers` (comptes familiaux), `member_discipline`, `cotisations`, champ `visibilite` sur `documents` |
 | Endpoints | `POST /member/login`, `POST /member/logout`, `POST /member/activate`, `GET /member/me`, `GET /member/cotisation`, `GET /member/documents`, `GET /member/documents/{id}/download` |
 | Permissions | Rôle « membre » (accès à ses données) ; gestion côté admin via le RBAC existant |
 | Modifications React | Nouvelles pages : connexion, activation, tableau de bord membre, documents, cotisation |
