@@ -176,6 +176,10 @@ class PublicController extends Controller
      */
     public function home(): JsonResponse
     {
+        // La page d'accueil est la plus consultee : on met sa charge utile en
+        // cache court (10 min). Le cache est de toute facon invalide des qu'un
+        // contenu concerne change (ex : ecriture d'un partenaire), donc cette
+        // duree ne fait que borner la fraicheur en l'absence de modification.
         $response = Cache::remember(
             CacheKeys::publicHome(),
             now()->addMinutes(10),

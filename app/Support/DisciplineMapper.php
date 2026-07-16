@@ -2,6 +2,16 @@
 
 namespace App\Support;
 
+/**
+ * Correspondance entre le slug d'une discipline (utilise cote API/frontend) et
+ * son code entier stocke en base.
+ *
+ * Historiquement, les tables `posts` et `documents` stockent la discipline sous
+ * forme d'entier (1 a 4) et non de chaine. Cette classe centralise cette
+ * convention pour eviter que les codes soient recopies un peu partout.
+ * L'absence de correspondance (code 0/null) designe une actualite generale du
+ * club, sans discipline.
+ */
 class DisciplineMapper
 {
     public const DISCIPLINES = [

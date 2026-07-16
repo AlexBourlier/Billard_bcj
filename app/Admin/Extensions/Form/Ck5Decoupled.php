@@ -4,6 +4,17 @@ namespace App\Admin\Extensions\Form;
 
 use OpenAdmin\Admin\Form\Field\Textarea;
 
+/**
+ * Champ d'edition riche des articles pour OpenAdmin.
+ *
+ * Attention au nom : malgre « Ck5 » (herite d'une premiere version a base de
+ * CKEditor 5), l'implementation actuelle repose sur l'editeur Quill (charge via
+ * bootstrap.php). La barre d'outils est volontairement limitee aux formats surs.
+ *
+ * La securite ne repose pas sur cet editeur : le HTML produit est nettoye cote
+ * serveur par liste blanche (voir App\Support\HtmlSanitizer) avant stockage et
+ * avant d'etre renvoye par l'API, car le frontend React le rend en HTML brut.
+ */
 class Ck5Decoupled extends Textarea
 {
     protected $view = 'admin.form.ck5-decoupled';
