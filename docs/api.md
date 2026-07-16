@@ -1,5 +1,44 @@
 # Documentation API BCJ
 
+## Documentation interactive (auto-générée)
+
+La documentation de référence est **générée depuis le code** (annotations sur les
+contrôleurs `App\Http\Controllers\Api`) via Scribe — elle n'est donc jamais
+désynchronisée des routes réelles.
+
+| Ressource | URL | Contenu |
+|-----------|-----|---------|
+| Interface web | `/docs` | Documentation navigable (essayer les requêtes) |
+| Spécification | `/docs.openapi` | OpenAPI **3.0.3** (importable dans Swagger UI, Insomnia…) |
+| Collection | `/docs.postman` | Collection Postman |
+
+La spécification est aussi versionnée dans le dépôt : [`docs/openapi.yaml`](openapi.yaml).
+
+> Choix de version : Scribe 5 produit de l'OpenAPI **3.0.3**, universellement
+> supporté par l'outillage. La 3.1 n'apporte rien de nécessaire ici.
+
+## Génération et maintenance
+
+```bash
+php artisan scribe:generate
+```
+
+À exécuter **après toute création, modification ou suppression d'une route API**,
+et à jouer au déploiement. Documenter une route se fait par annotations dans le
+docblock du contrôleur : `@group`, `@authenticated`, `@queryParam`, `@urlParam`,
+`@bodyParam`, `@response`. Ajouter `@hideFromAPIDocumentation` pour un endpoint
+interne (ex. l'import de licences, réservé à l'admin).
+
+### Protection / activation
+
+La doc est publique par défaut (API majoritairement publique). Pour la restreindre
+ou la désactiver selon l'environnement, voir `config/scribe.php` :
+- `laravel.middleware` : ajouter un middleware (ex. `auth`) pour protéger `/docs` ;
+- `laravel.add_routes` : passer à `false` pour ne pas exposer la doc (ex. en
+  production).
+
+Aucun secret n'est present dans la documentation generee.
+
 ## Base URL
 
 ### Local
@@ -11,7 +50,7 @@ http://127.0.0.1:8000/api/v1
 ### Production
 
 ```txt
-À définir
+https://bcj37.fr/api/v1
 ```
 
 ---
