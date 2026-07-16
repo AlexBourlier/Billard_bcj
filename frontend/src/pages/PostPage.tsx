@@ -200,6 +200,10 @@ export function PostPage() {
                         )}
 
                         {post.content && (
+                            // Rendu HTML brut volontaire : le contenu est nettoye
+                            // cote serveur par liste blanche (HtmlSanitizer) avant
+                            // d'etre renvoye par l'API, il ne contient donc ni
+                            // script ni style dangereux.
                             <div
                                 dangerouslySetInnerHTML={{
                                     __html: post.content,
