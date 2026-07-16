@@ -173,16 +173,22 @@ class AdminPostController extends AdminController
         //     </div>
         // ');
 
-        $form->text('title', __('Titre'));
-        $form->ck5('content', __('Contenu'))->rows(700);
-        $form->file('thumbnail_upload', __('Image'))->removable();
+        $form->text('title', __('Titre de l\'article'))->required()
+            ->help('Titre affiche sur le site public.');
+        $form->ck5('content', __('Contenu'))->rows(700)
+            ->help('Redigez avec la barre d\'outils (titres, gras, listes, liens). Toute mise en forme non autorisee (couleurs, polices, scripts) est retiree automatiquement pour la securite du site.');
+        $form->file('thumbnail_upload', __('Image de l\'article'))->removable()
+            ->help('Image d\'illustration. Format conseille : JPG ou PNG, largeur environ 1200 px. Inutile si une video est renseignee.');
         $form->ignore(['thumbnail_upload']);
-        $form->url('video', __('Video'));
-        $form->select('discipline', __('Discipline'))->options($disciplines);
+        $form->url('video', __('Video (lien YouTube)'))
+            ->help('Facultatif. Collez le lien YouTube : la video remplacera l\'image.');
+        $form->select('discipline', __('Discipline'))->options($disciplines)
+            ->help('Discipline concernee. Laisser vide pour une actualite generale du club.');
         $form->select('year', __('Année'))->options($years)->default(function ($form) {
             return $form->model()->year ?? date('Y');
-        });
-        $form->switch('favoris',__('A la une'))->default(false);
+        })->help('Annee de reference de l\'article (utilisee pour le classement par decennie).');
+        $form->switch('favoris', __('Mettre a la une'))->default(false)
+            ->help('L\'article a la une est mis en avant sur la page d\'accueil (un seul a la fois).');
         $form->datetimeRange('created_at', 'updated_at');
 
         // Traitement personnalisé avant sauvegarde
