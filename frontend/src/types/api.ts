@@ -53,6 +53,8 @@ export type Partner = {
     nom?: string;
     logo_url?: string | null;
     website_url?: string | null;
+    alt?: string | null;
+    order?: number | null;
 };
 
 export type WelcomeMessage = {

@@ -20,6 +20,8 @@ class PartnerResource extends JsonResource
             'logo' => $this->img,
             'logo_url' => $this->img ? asset('storage/' . $this->img) : null,
             'website_url' => $this->url,
+            'alt' => $this->alt,
+            'order' => $this->ordre,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
