@@ -10,11 +10,17 @@ import "../../styles/partnersCarousel.css";
 const MIN_FOR_SCROLL = 4;
 
 function usePrefersReducedMotion(): boolean {
-    const [reduced, setReduced] = useState(false);
+    // Valeur initiale lue de facon paresseuse : l'effet ne fait que s'abonner
+    // aux changements, sans appeler setState de maniere synchrone a l'interieur
+    // (ce qui declencherait un rendu en cascade).
+    const [reduced, setReduced] = useState(
+        () =>
+            typeof window !== "undefined" &&
+            window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    );
 
     useEffect(() => {
         const query = window.matchMedia("(prefers-reduced-motion: reduce)");
-        setReduced(query.matches);
         const onChange = () => setReduced(query.matches);
         query.addEventListener("change", onChange);
         return () => query.removeEventListener("change", onChange);
