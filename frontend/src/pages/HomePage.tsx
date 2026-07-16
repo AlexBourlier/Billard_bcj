@@ -3,6 +3,7 @@ import { getHome } from "../api/publicApi";
 import { Link } from "react-router-dom";
 import type { HomeData } from "../types/api";
 import { ClubMap } from "../components/map/ClubMap";
+import { InfoBanner } from "../components/info/InfoBanner";
 import { ArticleCard } from "../components/ui/Card";
 import { ArticleTitle } from "../components/ui/Title";
 import { PartnersCarousel } from "../components/partners/PartnersCarousel";
@@ -52,6 +53,7 @@ export function HomePage() {
                 />
             )}
         </div>
+        <InfoBanner blocks={home?.info_blocks ?? []} />
         <div className="home-layout">
             <section className="accueil" aria-labelledby="accueil-title">
                 <ArticleTitle>Accueil</ArticleTitle>

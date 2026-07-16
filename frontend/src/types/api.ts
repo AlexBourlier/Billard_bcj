@@ -77,10 +77,21 @@ export type Post = {
     created_at?: string | null;
 };
 
+export type InfoBlock = {
+    id: number;
+    titre: string;
+    resume?: string | null;
+    niveau: "info" | "important" | "urgent" | string;
+    lien?: string | null;
+    date_debut?: string | null;
+    date_fin?: string | null;
+};
+
 export type HomeData = {
     site_settings: SiteSettings | null;
     menus: Menu[];
     partners: Partner[];
+    info_blocks: InfoBlock[];
     featured_post: Post | null;
     welcome_message: WelcomeMessage | null;
 };
