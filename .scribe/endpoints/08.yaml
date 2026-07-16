@@ -1,0 +1,52 @@
+name: Classements
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/disciplines/carambole/classement
+    metadata:
+      custom: []
+      groupName: Classements
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Classements carambole (PDF)'
+      description: 'Liste les fichiers PDF de classement carambole mis a disposition.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "data": [{"name": "3 bandes", "filename": "3 bandes.pdf", "url": "https://bcj37.fr/ftp/3 bandes.pdf"}],
+            "meta": {"count": 1},
+            "links": [],
+            "error": null
+          }
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 404
+        content: '{"data": [], "meta": [], "links": [], "error": "Dossier ftp introuvable"}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

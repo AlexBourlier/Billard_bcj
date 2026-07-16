@@ -1,19 +1,19 @@
-name: Documents
+name: Calendriers
 description: ''
 endpoints:
   -
     custom: []
     httpMethods:
       - GET
-    uri: api/v1/documents
+    uri: api/v1/calendrier
     metadata:
       custom: []
-      groupName: Documents
+      groupName: Calendriers
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Liste des documents'
-      description: 'Retourne la liste de tous les documents publics.'
+      title: 'Liste des calendriers'
+      description: 'Retourne la liste de tous les calendriers actifs.'
       authenticated: false
       deprecated: false
     headers:
@@ -35,10 +35,12 @@ endpoints:
             "data": [
               {
                 "id": 1,
-                "title": "Règlement intérieur",
-                "file": "documents/reglement.pdf",
-                "file_url": "https://example.com/documents/reglement.pdf",
                 "discipline": "blackball",
+                "scope": "national",
+                "name": "Calendrier national Blackball",
+                "slug": "blackball-national",
+                "source_type": "ffb",
+                "is_active": true,
                 "created_at": "2025-01-01T10:00:00.000000Z",
                 "updated_at": "2025-01-02T10:00:00.000000Z"
               }
@@ -60,15 +62,15 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: 'api/v1/documents/{discipline}'
+    uri: 'api/v1/calendrier/{discipline}'
     metadata:
       custom: []
-      groupName: Documents
+      groupName: Calendriers
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Documents par discipline'
-      description: 'Retourne les documents associés à une discipline donnée.'
+      title: 'Calendriers par discipline'
+      description: 'Retourne les calendriers actifs associés à une discipline donnée.'
       authenticated: false
       deprecated: false
     headers:
@@ -102,10 +104,13 @@ endpoints:
             "data": [
               {
                 "id": 1,
-                "title": "Règlement intérieur",
-                "file": "documents/reglement.pdf",
-                "file_url": "https://example.com/documents/reglement.pdf",
                 "discipline": "blackball",
+                "scope": "national",
+                "name": "Calendrier national Blackball",
+                "slug": "blackball-national",
+                "source_type": "ffb",
+                "is_active": true,
+                "events_count": 12,
                 "created_at": "2025-01-01T10:00:00.000000Z",
                 "updated_at": "2025-01-02T10:00:00.000000Z"
               }
@@ -124,13 +129,7 @@ endpoints:
         status: 404
         content: |-
           {
-            "data": null,
-            "meta": [],
-            "links": [],
-            "error": {
-              "code": "discipline_not_found",
-              "message": "Discipline not found"
-            }
+            "message": "Discipline invalide."
           }
         headers: []
         description: ''
@@ -143,15 +142,15 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: 'api/v1/documents/{discipline}/{id}'
+    uri: 'api/v1/calendrier/{discipline}/{scope}'
     metadata:
       custom: []
-      groupName: Documents
+      groupName: Calendriers
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Détail d’un document'
-      description: 'Retourne un document spécifique pour une discipline donnée.'
+      title: 'Calendrier par discipline et scope'
+      description: 'Retourne un calendrier spécifique avec la liste de ses événements et leurs liens.'
       authenticated: false
       deprecated: false
     headers:
@@ -169,20 +168,20 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         deprecated: false
-      id:
+      scope:
         custom: []
-        name: id
-        description: 'Identifiant du document. Exemple : 1'
+        name: scope
+        description: 'Scope du calendrier. Exemple : national'
         required: true
-        example: 16
-        type: integer
+        example: architecto
+        type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
       discipline: architecto
-      id: 16
+      scope: architecto
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -195,17 +194,46 @@ endpoints:
         content: |-
           {
             "data": {
-              "id": 1,
-              "title": "Règlement intérieur",
-              "file": "documents/reglement.pdf",
-              "file_url": "https://example.com/documents/reglement.pdf",
-              "discipline": "blackball",
-              "created_at": "2025-01-01T10:00:00.000000Z",
-              "updated_at": "2025-01-02T10:00:00.000000Z"
+              "calendar": {
+                "id": 1,
+                "discipline": "blackball",
+                "scope": "national",
+                "name": "Calendrier national Blackball",
+                "slug": "blackball-national",
+                "source_type": "ffb",
+                "is_active": true,
+                "created_at": "2025-01-01T10:00:00.000000Z",
+                "updated_at": "2025-01-02T10:00:00.000000Z"
+              },
+              "events": [
+                {
+                  "id": 1,
+                  "calendar_id": 1,
+                  "external_id": "event-123",
+                  "date_debut": "2026-01-10T09:00:00.000000Z",
+                  "date_fin": "2026-01-10T18:00:00.000000Z",
+                  "date_limite": "2026-01-05T23:59:00.000000Z",
+                  "titre": "Tournoi national",
+                  "lieu": "Joué-lès-Tours",
+                  "club": "BCJ37",
+                  "url": "https://example.com/event",
+                  "status": "published",
+                  "links": [
+                    {
+                      "id": 1,
+                      "category": "inscription",
+                      "label": "S'inscrire",
+                      "url": "https://example.com/register",
+                      "sort_order": 1
+                    }
+                  ]
+                }
+              ]
             },
             "meta": {
               "discipline": "blackball",
-              "document_id": 1
+              "scope": "national",
+              "count": 1
             },
             "links": [],
             "error": null
@@ -217,31 +245,7 @@ endpoints:
         status: 404
         content: |-
           {
-            "data": null,
-            "meta": {
-              "discipline": "blackball",
-              "document_id": 1
-            },
-            "links": [],
-            "error": {
-              "code": "document_not_found",
-              "message": "Document not found"
-            }
-          }
-        headers: []
-        description: ''
-      -
-        custom: []
-        status: 404
-        content: |-
-          {
-            "data": null,
-            "meta": [],
-            "links": [],
-            "error": {
-              "code": "discipline_not_found",
-              "message": "Discipline not found"
-            }
+            "message": "Discipline invalide."
           }
         headers: []
         description: ''
