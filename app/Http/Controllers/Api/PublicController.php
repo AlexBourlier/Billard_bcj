@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\MenuResource;
 use App\Http\Resources\PartnerResource;
+use App\Http\Resources\InfoBlockResource;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\SiteSettingsResource;
 use App\Http\Resources\IndexResource;
 use App\Models\Menu;
 use App\Models\Partenaire;
+use App\Models\InfoBlock;
 use App\Models\Post;
 use App\Models\SiteSetting;
 use App\Models\Index;
@@ -193,6 +195,8 @@ class PublicController extends Controller
 
                 $partners = Partenaire::visible()->get();
 
+                $infoBlocks = InfoBlock::visible()->get();
+
                 $featuredPost = Post::query()
                     ->where('favoris', true)
                     ->orderByDesc('created_at')
@@ -211,6 +215,7 @@ class PublicController extends Controller
                         'site_settings' => $siteSettings ? new SiteSettingsResource($siteSettings) : null,
                         'menus' => MenuResource::collection($menus),
                         'partners' => PartnerResource::collection($partners),
+                        'info_blocks' => InfoBlockResource::collection($infoBlocks),
                         'featured_post' => $featuredPost ? new PostResource($featuredPost) : null,
                         'welcome_message' => $index ? new IndexResource($index) : null,
                         'site'=> [

@@ -1,0 +1,62 @@
+.info-banners {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    /* Aligne les bannieres sur la largeur du contenu (cf. .home-layout). */
+    padding: 0 2rem;
+}
+
+.info-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding: 0.85rem 1.1rem;
+    border-radius: 10px;
+    border-left: 5px solid;
+}
+
+.info-banner__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.info-banner__title {
+    font-weight: 700;
+}
+
+.info-banner__link {
+    flex: 0 0 auto;
+    font-weight: 600;
+    text-decoration: underline;
+    white-space: nowrap;
+    color: inherit;
+}
+
+.info-banner__link:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+}
+
+/* Niveaux d'importance (contraste tenu, l'info n'est pas portee que par la couleur :
+   le titre reste explicite). */
+.info-banner--info {
+    background: #eff8ff;
+    border-color: #175cd3;
+    color: #1849a9;
+}
+
+.info-banner--important {
+    background: #fffaeb;
+    border-color: #f79009;
+    color: #b54708;
+}
+
+.info-banner--urgent {
+    background: #fef3f2;
+    border-color: #b42318;
+    color: #7a271a;
+}

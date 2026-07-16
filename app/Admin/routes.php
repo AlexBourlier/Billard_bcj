@@ -87,6 +87,7 @@ Route::group([
     $router->resource('site-settings', SiteSettingController::class);
     $router->resource('licencies', AdminLicenciesController::class);
     $router->resource('partenaires', AdminPartenairesController::class);
+    $router->resource('info-blocks', InfoBlockController::class);
 
     // Import de licences (pipeline Telemat / FFBI) - lecture seule + declenchement
     $router->get('license-import/run', [LicenseImportBatchAdminController::class, 'run'])->name('license-import.run');
