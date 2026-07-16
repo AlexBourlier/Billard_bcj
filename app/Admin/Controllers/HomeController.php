@@ -3,19 +3,18 @@
 namespace App\Admin\Controllers;
 
 use App\Http\Controllers\Controller;
-use OpenAdmin\Admin\Admin;
-use OpenAdmin\Admin\Controllers\Dashboard;
-use OpenAdmin\Admin\Layout\Column;
+use App\Services\ClubDashboardService;
 use OpenAdmin\Admin\Layout\Content;
-use OpenAdmin\Admin\Layout\Row;
 
 class HomeController extends Controller
 {
-    public function index(Content $content)
+    public function index(Content $content, ClubDashboardService $dashboard)
     {
         return $content
             ->title('Tableau de bord')
-            ->description('Bienvenue dans l\'administration')
-            ->row(view('admin.custom_dashboard'));
+            ->description('Vue d\'ensemble du club')
+            ->row(view('admin.dashboard.index', [
+                'metrics' => $dashboard->metrics(),
+            ]));
     }
 }
