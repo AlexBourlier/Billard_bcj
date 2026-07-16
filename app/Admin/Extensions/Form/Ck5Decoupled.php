@@ -42,19 +42,18 @@ class Ck5Decoupled extends Textarea
 
   // --- Toolbar HTML (style "décorrélé" comme CKEditor) ---
   // Tu peux ajuster les groupes/boutons en fonction de tes besoins.
+  // Barre d'outils volontairement limitee aux formats autorises et surs :
+  // pas de police, taille, couleur ni indentation arbitraires (le contenu est
+  // de toute facon nettoye cote serveur par liste blanche). Titres bornes a
+  // H2-H4 (le H1 est reserve au titre de l'article).
   toolbarDom.innerHTML = `
     <span class="ql-formats">
       <select class="ql-header">
         <option selected></option>
-        <option value="1"></option>
         <option value="2"></option>
         <option value="3"></option>
         <option value="4"></option>
-        <option value="5"></option>
-        <option value="6"></option>
       </select>
-      <select class="ql-font"></select>
-      <select class="ql-size"></select>
     </span>
     <span class="ql-formats">
       <button class="ql-bold"></button>
@@ -64,14 +63,10 @@ class Ck5Decoupled extends Textarea
     </span>
     <span class="ql-formats">
       <button class="ql-link"></button>
-      <select class="ql-color"></select>
-      <select class="ql-background"></select>
     </span>
     <span class="ql-formats">
       <button class="ql-list" value="ordered"></button>
       <button class="ql-list" value="bullet"></button>
-      <button class="ql-indent" value="-1"></button>
-      <button class="ql-indent" value="+1"></button>
     </span>
     <span class="ql-formats">
       <button class="ql-clean"></button>
