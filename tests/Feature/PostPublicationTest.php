@@ -18,9 +18,11 @@ class PostPublicationTest extends TestCase
 
     public function test_public_list_excludes_drafts_and_scheduled_posts(): void
     {
-        Post::factory()->create(['title' => 'Publie']);
-        Post::factory()->draft()->create(['title' => 'Brouillon']);
-        Post::factory()->scheduled()->create(['title' => 'Programme']);
+        // discipline null : ce sont des articles « club », donc listes par /posts
+        // (qui ne renvoie que les articles du club, cf. ClubPostsFilterTest).
+        Post::factory()->create(['title' => 'Publie', 'discipline' => null]);
+        Post::factory()->draft()->create(['title' => 'Brouillon', 'discipline' => null]);
+        Post::factory()->scheduled()->create(['title' => 'Programme', 'discipline' => null]);
 
         $titles = collect(
             $this->getJson('/api/v1/posts')->assertOk()->json('data')

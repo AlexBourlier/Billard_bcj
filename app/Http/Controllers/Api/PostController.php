@@ -24,9 +24,10 @@ use Illuminate\Pagination\LengthAwarePaginator;
 class PostController extends Controller
 {
     /**
-     * Liste des articles
+     * Articles du club
      *
-     * Retourne la liste paginée des articles, triés du plus récent au plus ancien.
+     * Retourne la liste paginée des articles du club (hors disciplines), triés du
+     * plus récent au plus ancien. Alimente la page « Vie du club ».
      *
      * @group Articles
      *
@@ -54,8 +55,10 @@ class PostController extends Controller
      */
     public function index(): JsonResponse
     {
+        // Page « Vie du club » : uniquement les articles du club (hors disciplines).
         $posts = Post::query()
             ->published()
+            ->club()
             ->orderByDesc('created_at')
             ->paginate($this->getPerPage());
 
@@ -369,8 +372,10 @@ class PostController extends Controller
 
         $selectedPeriod = $periods[$period];
 
+        // Archives de la page club : uniquement les articles du club (hors disciplines).
         $posts = Post::query()
             ->published()
+            ->club()
             ->when($selectedPeriod['operator'] === '>=', function ($query) use ($selectedPeriod) {
                 $query->where('year', '>=', $selectedPeriod['start_year']);
             })
