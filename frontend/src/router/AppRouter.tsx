@@ -16,6 +16,8 @@ import { MainLayout } from "../layouts/MainLayout";
 import { useEffect } from "react";
 import { MentionsPage } from "../pages/MentionsLegales";
 import { PolitiqueConfidentialitePage } from "../pages/PolitiqueConfidentialite";
+import { CookieBanner } from "../components/cookies/CookieBanner";
+import { MatomoTracker } from "../components/analytics/MatomoTracker";
 
 export function AdminRedirect() {
     useEffect(() => {
@@ -28,6 +30,7 @@ export function AdminRedirect() {
 export function AppRouter() {
     return (
         <BrowserRouter>
+            <MatomoTracker />
             <Routes>
                 <Route
                     path="/"
@@ -160,6 +163,7 @@ export function AppRouter() {
                     element={<AdminRedirect />}
                 />
             </Routes>
+            <CookieBanner />
         </BrowserRouter>
     );
 }
