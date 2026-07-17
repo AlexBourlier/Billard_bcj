@@ -30,12 +30,35 @@
 
 <div class="dashboard-bcj">
 
+    {{-- Liens externes (front public + statistiques Matomo). Bases sur la config
+         (app.frontend_url, matomo.url) : s'adaptent automatiquement selon
+         l'environnement (test / production). --}}
+    @php
+        $frontUrl = rtrim((string) config('app.frontend_url'), '/');
+        $matomoBase = rtrim((string) config('matomo.url'), '/');
+        $matomoUrl = $matomoBase
+            ? $matomoBase.'/index.php?module=CoreHome&action=index&idSite='.config('matomo.site_id').'&period=day&date=today'
+            : null;
+    @endphp
+
     {{-- Raccourcis vers les principales actions --}}
     <div class="d-flex flex-wrap gap-2 mb-4">
         <a class="btn btn-primary btn-sm" href="{{ admin_url('posts/create') }}"><i class="icon-plus"></i> Nouvel article</a>
         <a class="btn btn-outline-primary btn-sm" href="{{ admin_url('partenaires/create') }}"><i class="icon-plus"></i> Nouveau partenaire</a>
         <a class="btn btn-outline-primary btn-sm" href="{{ admin_url('documents/create') }}"><i class="icon-plus"></i> Nouveau document</a>
         <a class="btn btn-outline-secondary btn-sm" href="{{ admin_url('license-import/batches') }}">Imports des licenciés</a>
+
+        {{-- Acces externes (nouvel onglet) --}}
+        @if($frontUrl)
+            <a class="btn btn-outline-dark btn-sm" href="{{ $frontUrl }}" target="_blank" rel="noopener noreferrer">
+                <i class="icon-external-link"></i> Voir le site
+            </a>
+        @endif
+        @if($matomoUrl)
+            <a class="btn btn-outline-dark btn-sm" href="{{ $matomoUrl }}" target="_blank" rel="noopener noreferrer">
+                <i class="icon-external-link"></i> Statistiques (Matomo)
+            </a>
+        @endif
     </div>
 
     {{-- Cartes chiffres cles : chaque carte mene a sa section --}}
