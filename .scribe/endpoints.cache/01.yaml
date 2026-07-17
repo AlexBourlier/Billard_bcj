@@ -14,8 +14,10 @@ endpoints:
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Liste des articles'
-      description: 'Retourne la liste paginée des articles, triés du plus récent au plus ancien.'
+      title: 'Articles du club'
+      description: |-
+        Retourne la liste paginée des articles du club (hors disciplines), triés du
+        plus récent au plus ancien. Alimente la page « Vie du club ».
       authenticated: false
       deprecated: false
     headers:
