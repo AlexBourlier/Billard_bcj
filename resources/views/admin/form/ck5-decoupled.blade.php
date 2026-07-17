@@ -1,6 +1,14 @@
 @include('admin::form.error')
 
 <div class="oa-ck5-wrapper" id="{{ $id }}_wrap">
+  {{-- Bouton d'apercu : ouvre le rendu de l'article (titre + contenu) en modale.
+       La logique est dans public/js/admin-bcj.js (classe .bcj-preview-btn). --}}
+  <div class="oa-ck5-actions">
+    <button type="button" class="btn btn-sm btn-outline-primary bcj-preview-btn">
+      Aperçu de l'article
+    </button>
+  </div>
+
   <div class="editor-container editor-container_document-editor">
     {{-- Zone principale : toolbar + page --}}
     <div class="editor-container__main">
