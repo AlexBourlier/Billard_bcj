@@ -182,60 +182,55 @@ class AdminPostController extends AdminController
         $years = array_combine($years, $years);
 
         $form = new Form(new Post);
-        // $form->html('
-        //     <!-- Nouvelle notice pour la mise en forme -->
-        //     <div class="alert alert-warning mt-4" role="alert" style="font-size:15px; line-height:1.8; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-        //         <h4 style="font-weight:bold; margin-bottom:10px;">🛠️ Mise en forme du contenu</h4>
-        //         <p>Vous pouvez utiliser les balises HTML suivantes pour enrichir le texte :</p>
-        //         <ul style="padding-left:20px;">
-        //             <li><code>&lt;strong&gt;Texte important&lt;/strong&gt;</code> → <strong>Texte important</strong></li>
-        //             <li><code>&lt;em&gt;Texte en italique&lt;/em&gt;</code> → <em>Texte en italique</em></li>
-        //             <li><code>&lt;u&gt;Texte souligné&lt;/u&gt;</code> → <u>Texte souligné</u></li>
-        //             <li><code>&lt;br&gt;</code> → Retour à la ligne</li>
-        //             <li><code>&lt;a href="url"&gt;Lien&lt;/a&gt;</code> → <a href="#">Lien</a></li>
-        //         </ul>
-        //         <p style="margin-top:10px;">💡 Vous pouvez combiner ces balises pour structurer votre contenu.</p>
-        //     </div>
-        // ');
 
-        $form->text('title', __('Titre de l\'article'))->required()
-            ->help('Titre affiche sur le site public.');
-        $form->ck5('content', __('Contenu'))->rows(700)
-            ->help('Redigez avec la barre d\'outils (titres, gras, listes, liens). Toute mise en forme non autorisee (couleurs, polices, scripts) est retiree automatiquement pour la securite du site.');
-        $form->file('thumbnail_upload', __('Image de l\'article'))->removable()
-            ->help('Image d\'illustration. Format conseille : JPG ou PNG, largeur environ 1200 px. Inutile si une video est renseignee.');
-        $form->ignore(['thumbnail_upload', 'schedule_publication']);
-        $form->url('video', __('Video (lien YouTube)'))
-            ->help('Facultatif. Collez le lien YouTube : la video remplacera l\'image.');
-        $form->select('discipline', __('Discipline'))->options($disciplines)
-            ->help('Discipline concernee. Laisser vide pour une actualite generale du club.');
-        $form->select('year', __('Année'))->options($years)->default(function ($form) {
-            return $form->model()->year ?? date('Y');
-        })->help('Annee de reference de l\'article (utilisee pour le classement par decennie).');
-        $form->switch('favoris', __('Mettre a la une'))->default(false)
-            ->help('L\'article a la une est mis en avant sur la page d\'accueil (un seul a la fois).');
-        $form->radio('status', __('Statut'))
-            ->options([
-                Post::STATUS_DRAFT => 'Brouillon (non visible sur le site)',
-                Post::STATUS_PUBLISHED => 'Publie (visible sur le site)',
-            ])
-            ->default(Post::STATUS_PUBLISHED)
-            ->help('Un brouillon est enregistre mais n\'apparait pas sur le site public.');
-
-        // La programmation est explicite : par defaut, un article publie est
-        // visible immediatement. On ne s'appuie donc PAS sur la seule presence
-        // d'une date (le champ pouvant se pre-remplir), mais sur ce choix.
+        // Etat de programmation calcule avant la construction des champs : par
+        // defaut un article publie est visible immediatement, la programmation
+        // (date future) doit etre activee explicitement.
         $model = $form->model();
         $isScheduled = $model->published_at
             && $model->status === Post::STATUS_PUBLISHED
             && $model->published_at->isFuture();
 
-        $form->switch('schedule_publication', __('Programmer la publication'))
-            ->default((bool) $isScheduled)
-            ->help('Desactive : l\'article publie apparait immediatement. Active : il n\'apparait qu\'a la date choisie ci-dessous.');
-        $form->datetime('published_at', __('Date de publication programmee'))
-            ->help('Utilisee uniquement si la programmation est activee. Doit etre une date/heure future.');
-        $form->datetimeRange('created_at', 'updated_at');
+        // Champs auxiliaires non stockes directement sur le modele.
+        $form->ignore(['thumbnail_upload', 'schedule_publication']);
+
+        // Formulaire organise en onglets pour rester lisible par des benevoles
+        // non techniques : le contenu, puis le classement, puis la publication.
+        $form->tab(__('Contenu'), function ($form) {
+            $form->text('title', __('Titre de l\'article'))->required()
+                ->help('Titre affiche sur le site public.');
+            $form->ck5('content', __('Contenu'))->rows(700)
+                ->help('Redigez avec la barre d\'outils (titres, gras, listes, liens). Toute mise en forme non autorisee (couleurs, polices, scripts) est retiree automatiquement pour la securite du site.');
+            $form->file('thumbnail_upload', __('Image de l\'article'))->removable()
+                ->help('Image d\'illustration. Format conseille : JPG ou PNG, largeur environ 1200 px. Inutile si une video est renseignee.');
+            $form->url('video', __('Video (lien YouTube)'))
+                ->help('Facultatif. Collez le lien YouTube : la video remplacera l\'image.');
+        }, true);
+
+        $form->tab(__('Classement'), function ($form) use ($disciplines, $years) {
+            $form->select('discipline', __('Discipline'))->options($disciplines)
+                ->help('Discipline concernee. Laisser vide pour une actualite generale du club.');
+            $form->select('year', __('Année'))->options($years)->default(function ($form) {
+                return $form->model()->year ?? date('Y');
+            })->help('Annee de reference de l\'article (utilisee pour le classement par decennie).');
+        });
+
+        $form->tab(__('Publication'), function ($form) use ($isScheduled) {
+            $form->switch('favoris', __('Mettre a la une'))->default(false)
+                ->help('L\'article a la une est mis en avant sur la page d\'accueil (un seul a la fois).');
+            $form->radio('status', __('Statut'))
+                ->options([
+                    Post::STATUS_DRAFT => 'Brouillon (non visible sur le site)',
+                    Post::STATUS_PUBLISHED => 'Publie (visible sur le site)',
+                ])
+                ->default(Post::STATUS_PUBLISHED)
+                ->help('Un brouillon est enregistre mais n\'apparait pas sur le site public.');
+            $form->switch('schedule_publication', __('Programmer la publication'))
+                ->default((bool) $isScheduled)
+                ->help('Desactive : l\'article publie apparait immediatement. Active : il n\'apparait qu\'a la date choisie ci-dessous.');
+            $form->datetime('published_at', __('Date de publication programmee'))
+                ->help('Utilisee uniquement si la programmation est activee. Doit etre une date/heure future.');
+        });
 
         // Traitement personnalisé avant sauvegarde
         $form->saving(function ($form) {
