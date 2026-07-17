@@ -72,6 +72,19 @@ class Post extends Model
             });
     }
 
+    /**
+     * Articles « du club » : ceux qui ne sont rattaches a aucune discipline
+     * (blackball=1, carambole=2, snooker=3, americain=4). Le club correspond a
+     * une discipline nulle/0 ou hors de cette liste (cf. DisciplineMapper).
+     */
+    public function scopeClub($query)
+    {
+        return $query->where(function ($q) {
+            $q->whereNull('discipline')
+                ->orWhereNotIn('discipline', [1, 2, 3, 4]);
+        });
+    }
+
     public function getRouteKeyName(): string
     {
         return 'slug';
