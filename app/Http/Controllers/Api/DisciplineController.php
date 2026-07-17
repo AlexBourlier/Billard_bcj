@@ -31,13 +31,14 @@ use Illuminate\Support\Facades\Cache;
 class DisciplineController extends Controller
 {
     private const PREVIEW_LIMIT_MIN = 1;
+
     private const PREVIEW_LIMIT_MAX = 10;
+
     private const PREVIEW_LIMIT_DEFAULT = 5;
 
     public function __construct(
         private CueScoreRankingsPreviewBuilder $rankingsPreviewBuilder,
-    ) {
-    }
+    ) {}
 
     /**
      * Détail d'une discipline
@@ -68,7 +69,6 @@ class DisciplineController extends Controller
      *   "links": [],
      *   "error": null
      * }
-     *
      * @response 404 {
      *   "data": null,
      *   "meta": [],
@@ -81,7 +81,7 @@ class DisciplineController extends Controller
      */
     public function show(string $discipline): JsonResponse
     {
-        if (!DisciplineMapper::isValidSlug($discipline)) {
+        if (! DisciplineMapper::isValidSlug($discipline)) {
             return $this->disciplineNotFoundResponse();
         }
 
@@ -92,6 +92,7 @@ class DisciplineController extends Controller
                 $disciplineId = DisciplineMapper::idFromSlug($discipline);
 
                 $posts = Post::query()
+                    ->published()
                     ->where('discipline', $disciplineId)
                     ->orderByDesc('created_at')
                     ->get();
@@ -215,7 +216,6 @@ class DisciplineController extends Controller
      *   "links": [],
      *   "error": null
      * }
-     *
      * @response 404 {
      *   "data": null,
      *   "meta": [],
@@ -228,7 +228,7 @@ class DisciplineController extends Controller
      */
     public function rankingsPreview(string $discipline): JsonResponse
     {
-        if (!DisciplineMapper::isValidSlug($discipline)) {
+        if (! DisciplineMapper::isValidSlug($discipline)) {
             return $this->disciplineNotFoundResponse();
         }
 
@@ -250,8 +250,6 @@ class DisciplineController extends Controller
      * - valeur par défaut : 5
      * - minimum : 1
      * - maximum : 10
-     *
-     * @return int
      */
     private function getPreviewLimit(): int
     {
@@ -263,8 +261,6 @@ class DisciplineController extends Controller
 
     /**
      * Retourne une réponse JSON standardisée lorsqu’une discipline est invalide.
-     *
-     * @return JsonResponse
      */
     private function disciplineNotFoundResponse(): JsonResponse
     {

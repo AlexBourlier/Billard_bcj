@@ -29,8 +29,25 @@ class PostFactory extends Factory
             'thumbnail' => fake()->imageUrl,
             'discipline' => fake()->numberBetween(1, 4),
             'year' => fake()->numberBetween(1970, now()->year),
+            'status' => \App\Models\Post::STATUS_PUBLISHED,
+            'published_at' => $created_at,
             'created_at' => $created_at,
             'updated_at' => $created_at,
         ];
+    }
+
+    /** Article en brouillon (non visible publiquement). */
+    public function draft(): static
+    {
+        return $this->state(fn () => ['status' => \App\Models\Post::STATUS_DRAFT]);
+    }
+
+    /** Article publie mais programme dans le futur (encore masque). */
+    public function scheduled(): static
+    {
+        return $this->state(fn () => [
+            'status' => \App\Models\Post::STATUS_PUBLISHED,
+            'published_at' => now()->addWeek(),
+        ]);
     }
 }

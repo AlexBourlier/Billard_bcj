@@ -59,6 +59,11 @@ export function DisciplinePage() {
 
         let isMounted = true;
 
+        // Reset volontaire vers l'etat « chargement » a chaque changement de
+        // discipline, avant le refetch : l'utilisateur voit un indicateur de
+        // chargement plutot que le contenu de la discipline precedente. Ce
+        // setState synchrone dans l'effet est donc intentionnel.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setState((previousState) => ({
             ...previousState,
             loading: true,

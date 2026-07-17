@@ -45,6 +45,16 @@
                 <div class="card-body">
                     <div class="text-muted small text-uppercase">Articles</div>
                     <div class="stat-value">{{ $articles['total'] }}</div>
+                    @php
+                        $articleParts = [$articles['published'] . ' publie(s)'];
+                        if ($articles['drafts'] > 0) {
+                            $articleParts[] = $articles['drafts'] . ' brouillon(s)';
+                        }
+                        if ($articles['scheduled'] > 0) {
+                            $articleParts[] = $articles['scheduled'] . ' programme(s)';
+                        }
+                    @endphp
+                    <div class="muted-note">{{ implode(', ', $articleParts) }}</div>
                     @if($articles['latest'])
                         <div class="muted-note">Dernier : {{ Str::limit($articles['latest']->title, 34) }}</div>
                     @endif
@@ -209,8 +219,7 @@
 
     {{-- Indicateurs non encore suivis (honnete : pas de chiffre invente) --}}
     <p class="muted-note mt-3">
-        Non encore suivis (a activer plus tard) : brouillons et publications programmees des articles,
-        cotisations, repartition detaillee des licencies.
+        Non encore suivis (a activer plus tard) : cotisations, repartition detaillee des licencies.
     </p>
 
 </div>

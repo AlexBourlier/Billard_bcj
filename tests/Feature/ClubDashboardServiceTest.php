@@ -3,9 +3,9 @@
 namespace Tests\Feature;
 
 use App\Models\Partenaire;
+use App\Models\Post;
 use App\Services\ClubDashboardService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 /**
@@ -27,12 +27,8 @@ class ClubDashboardServiceTest extends TestCase
 
     public function test_it_counts_articles_and_groups_them_by_discipline(): void
     {
-        // Insertion directe (query builder) volontaire : elle n'ecrit que sur des
-        // colonnes reellement presentes en base, sans dependre de la fabrique Post
-        // ni d'eventuels attributs par defaut du modele.
-        $this->makePost('Blackball 1', 1);
-        $this->makePost('Blackball 2', 1);
-        $this->makePost('Carambole 1', 2);
+        Post::factory()->count(2)->create(['discipline' => 1]); // Blackball
+        Post::factory()->create(['discipline' => 2]);           // Carambole
 
         $articles = app(ClubDashboardService::class)->metrics()['articles'];
 
@@ -55,20 +51,5 @@ class ClubDashboardServiceTest extends TestCase
 
         $this->assertSame(2, $partenaires['active']);
         $this->assertCount(1, $partenaires['expiringSoon']);
-    }
-
-    private function makePost(string $title, int $discipline): void
-    {
-        DB::table('posts')->insert([
-            'title' => $title,
-            'slug' => str($title)->slug()->value(),
-            'excerpt' => 'Extrait de test',
-            'content' => 'Contenu de test',
-            'thumbnail' => 'test.webp',
-            'discipline' => $discipline,
-            'year' => 2026,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
     }
 }
