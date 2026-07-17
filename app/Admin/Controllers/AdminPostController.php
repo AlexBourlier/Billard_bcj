@@ -191,12 +191,16 @@ class AdminPostController extends AdminController
             && $model->status === Post::STATUS_PUBLISHED
             && $model->published_at->isFuture();
 
+        // Image deja enregistree, exposee pour l'apercu (cas de l'edition sans
+        // re-televersement). Le JS d'apercu la lit via .bcj-current-thumb.
+        $currentThumbUrl = $model->thumbnail ? asset('storage/'.$model->thumbnail) : '';
+
         // Champs auxiliaires non stockes directement sur le modele.
         $form->ignore(['thumbnail_upload', 'schedule_publication']);
 
         // Formulaire organise en onglets pour rester lisible par des benevoles
         // non techniques : le contenu, puis le classement, puis la publication.
-        $form->tab(__('Contenu'), function ($form) {
+        $form->tab(__('Contenu'), function ($form) use ($currentThumbUrl) {
             $form->text('title', __('Titre de l\'article'))->required()
                 ->help('Titre affiche sur le site public.');
             $form->ck5('content', __('Contenu'))->rows(700)
@@ -205,6 +209,7 @@ class AdminPostController extends AdminController
                 ->help('Image d\'illustration. Format conseille : JPG ou PNG, largeur environ 1200 px. Inutile si une video est renseignee.');
             $form->url('video', __('Video (lien YouTube)'))
                 ->help('Facultatif. Collez le lien YouTube : la video remplacera l\'image.');
+            $form->html('<input type="hidden" class="bcj-current-thumb" value="'.e($currentThumbUrl).'">');
         }, true);
 
         $form->tab(__('Classement'), function ($form) use ($disciplines, $years) {

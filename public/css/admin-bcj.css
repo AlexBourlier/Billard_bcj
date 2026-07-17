@@ -316,6 +316,87 @@ a:focus-visible,
     text-decoration: underline;
 }
 
+/* Champ technique masque : l'URL de l'image existante n'est la que pour
+   l'apercu (lue par le JS), pas pour l'utilisateur. On masque sa ligne. */
+.form-group:has(.bcj-current-thumb) {
+    display: none;
+}
+
+/* Media (image / video) de l'apercu. */
+.bcj-preview__media {
+    margin: 0 0 1.2rem;
+}
+
+.bcj-preview__image {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+}
+
+/* Video en ratio 16:9 responsive. */
+.bcj-preview__video {
+    position: relative;
+    padding-top: 56.25%;
+}
+
+.bcj-preview__video iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: 6px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Modale de confirmation (charte du club, centree)                   */
+/* ------------------------------------------------------------------ */
+
+.bcj-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: rgba(8, 35, 79, 0.55);
+}
+
+.bcj-modal-overlay[hidden] {
+    display: none;
+}
+
+.bcj-modal {
+    width: 100%;
+    max-width: 460px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+}
+
+.bcj-modal__bar {
+    padding: 0.8rem 1.1rem;
+    background: var(--bcj-gradient);
+    color: #fff;
+    font-weight: 700;
+}
+
+.bcj-modal__body {
+    padding: 1.2rem 1.1rem;
+    color: #1f2937;
+    line-height: 1.5;
+}
+
+.bcj-modal__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.6rem;
+    padding: 0 1.1rem 1.1rem;
+}
+
 /* ------------------------------------------------------------------ */
 /* Ecran de connexion                                                 */
 /* ------------------------------------------------------------------ */
