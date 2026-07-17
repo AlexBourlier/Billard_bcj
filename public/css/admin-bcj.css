@@ -128,34 +128,79 @@ a:focus-visible,
 }
 
 /* ------------------------------------------------------------------ */
-/* Aides des champs de formulaire                                     */
+/* Aides des champs de formulaire (bulle flottante)                   */
 /* ------------------------------------------------------------------ */
 
 /*
- * Par defaut, les aides (->help()) s'affichent en petit texte gris tres
- * compact, peu lisible pour des benevoles. On les presente comme une note
- * d'aide : bloc distinct, texte plus grand et mieux contraste, liseret de
- * marque et icone coloree.
+ * Le conseil n'apparait qu'en cas de besoin : une icone info discrete est
+ * affichee sous le champ ; le texte d'aide s'affiche en bulle flottante au
+ * survol de la souris ou au focus clavier. Ainsi le formulaire reste epure.
+ * (La vue admin::form.help-block est surchargee pour produire ce markup.)
  */
-.help-block {
-    display: block;
-    margin-top: 0.4rem;
-    padding: 0.5rem 0.75rem;
-    background: rgba(14, 77, 170, 0.05);
-    border-left: 3px solid var(--bcj-blue);
-    border-radius: 4px;
-    color: #3b4a63;
-    font-size: 0.875rem;
-    line-height: 1.5;
+.help-block.bcj-help {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    margin-top: 0.3rem;
+    color: var(--bcj-blue);
+    cursor: help;
+    line-height: 1;
 }
 
-.help-block i {
+.help-block.bcj-help > i {
+    font-size: 1.05rem;
     color: var(--bcj-blue);
 }
 
-/* Les liens eventuels dans une aide restent identifiables. */
-.help-block a {
-    color: var(--bcj-blue);
+.help-block.bcj-help:focus {
+    outline: 2px solid var(--bcj-blue);
+    outline-offset: 2px;
+    border-radius: 3px;
+}
+
+/* La bulle : masquee par defaut, revelee au survol / focus. */
+.bcj-help__bubble {
+    position: absolute;
+    left: 0;
+    top: calc(100% + 7px);
+    z-index: 1080;
+    width: max-content;
+    max-width: 320px;
+    padding: 0.6rem 0.8rem;
+    background: var(--bcj-blue-dark);
+    color: #fff;
+    font-size: 0.85rem;
+    line-height: 1.45;
+    border-radius: 6px;
+    box-shadow: 0 6px 20px rgba(8, 35, 79, 0.28);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-3px);
+    transition: opacity 0.12s ease, transform 0.12s ease, visibility 0.12s;
+    pointer-events: none;
+    white-space: normal;
+}
+
+/* Petite fleche pointant vers l'icone. */
+.bcj-help__bubble::before {
+    content: "";
+    position: absolute;
+    left: 11px;
+    bottom: 100%;
+    border: 6px solid transparent;
+    border-bottom-color: var(--bcj-blue-dark);
+}
+
+.help-block.bcj-help:hover .bcj-help__bubble,
+.help-block.bcj-help:focus .bcj-help__bubble,
+.help-block.bcj-help:focus-within .bcj-help__bubble {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.bcj-help__bubble a {
+    color: #cfe0ff;
     text-decoration: underline;
 }
 
