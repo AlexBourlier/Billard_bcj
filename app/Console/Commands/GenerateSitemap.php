@@ -65,7 +65,9 @@ class GenerateSitemap extends Command
 
             // on parcourt par discipline pour fabriquer /{discipline}/{slug}
             foreach ($pathsByDiscipline as $discipline => $basePath) {
-                $q = \App\Models\Post::query()->select(['slug']);
+                // Seuls les articles publies figurent au sitemap (les brouillons
+                // et publications programmees ne sont pas accessibles publiquement).
+                $q = \App\Models\Post::query()->published()->select(['slug']);
                 if ($hasUpdated) $q->addSelect('updated_at');
                 if ($hasDiscipline) $q->where('discipline', $discipline);
 
@@ -81,6 +83,7 @@ class GenerateSitemap extends Command
             /* 4) Pages club par décennie : /club/annee/{decade} (si colonne year) */
             if ($hasYear) {
                 $decades = \App\Models\Post::query()
+                    ->published()
                     ->when($hasDiscipline, fn($q) => $q->where('discipline','club'))
                     ->whereNotNull('year')
                     ->pluck('year')

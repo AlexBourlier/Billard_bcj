@@ -3,18 +3,18 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\IndexResource;
+use App\Http\Resources\InfoBlockResource;
 use App\Http\Resources\MenuResource;
 use App\Http\Resources\PartnerResource;
-use App\Http\Resources\InfoBlockResource;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\SiteSettingsResource;
-use App\Http\Resources\IndexResource;
+use App\Models\Index;
+use App\Models\InfoBlock;
 use App\Models\Menu;
 use App\Models\Partenaire;
-use App\Models\InfoBlock;
 use App\Models\Post;
 use App\Models\SiteSetting;
-use App\Models\Index;
 use App\Support\CacheKeys;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
@@ -198,14 +198,16 @@ class PublicController extends Controller
                 $infoBlocks = InfoBlock::visible()->get();
 
                 $featuredPost = Post::query()
+                    ->published()
                     ->where('favoris', true)
                     ->orderByDesc('created_at')
                     ->first();
 
                 $index = Index::query()->first();
 
-                if (!$featuredPost) {
+                if (! $featuredPost) {
                     $featuredPost = Post::query()
+                        ->published()
                         ->orderByDesc('created_at')
                         ->first();
                 }
@@ -218,7 +220,7 @@ class PublicController extends Controller
                         'info_blocks' => InfoBlockResource::collection($infoBlocks),
                         'featured_post' => $featuredPost ? new PostResource($featuredPost) : null,
                         'welcome_message' => $index ? new IndexResource($index) : null,
-                        'site'=> [
+                        'site' => [
                             'logo_url' => asset('img/h2eb.png'),
                         ],
                     ],

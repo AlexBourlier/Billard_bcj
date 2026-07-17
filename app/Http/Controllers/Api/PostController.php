@@ -55,6 +55,7 @@ class PostController extends Controller
     public function index(): JsonResponse
     {
         $posts = Post::query()
+            ->published()
             ->orderByDesc('created_at')
             ->paginate($this->getPerPage());
 
@@ -94,9 +95,9 @@ class PostController extends Controller
      */
     public function show(int $id): JsonResponse
     {
-        $post = Post::query()->find($id);
+        $post = Post::query()->published()->find($id);
 
-        if (!$post) {
+        if (! $post) {
             return response()->json([
                 'data' => null,
                 'meta' => [],
@@ -119,6 +120,7 @@ class PostController extends Controller
      * @group Articles
      *
      * @urlParam discipline string required Slug de la discipline. Exemple : blackball
+     *
      * @queryParam per_page integer Nombre d’articles par page. Min: 1. Max: 100. Default: 10. Exemple : 10
      *
      * @response 200 {
@@ -136,7 +138,6 @@ class PostController extends Controller
      *   "links": [],
      *   "error": null
      * }
-     *
      * @response 404 {
      *   "data": null,
      *   "meta": [],
@@ -164,6 +165,7 @@ class PostController extends Controller
         }
 
         $posts = Post::query()
+            ->published()
             ->where('discipline', $disciplineId)
             ->orderByDesc('created_at')
             ->paginate($this->getPerPage());
@@ -207,10 +209,11 @@ class PostController extends Controller
     public function getPostBySlug(string $slug): JsonResponse
     {
         $post = Post::query()
+            ->published()
             ->where('slug', $slug)
             ->first();
 
-        if (!$post) {
+        if (! $post) {
             return response()->json([
                 'data' => null,
                 'meta' => [],
@@ -253,6 +256,7 @@ class PostController extends Controller
     public function getPostIsFavoris(): JsonResponse
     {
         $posts = Post::query()
+            ->published()
             ->where('favoris', true)
             ->orderByDesc('created_at')
             ->paginate($this->getPerPage());
@@ -272,6 +276,7 @@ class PostController extends Controller
      * @group Articles
      *
      * @urlParam year integer required Année utilisée pour calculer la décennie. Exemple : 2023
+     *
      * @queryParam per_page integer Nombre d’articles par page. Min: 1. Max: 100. Default: 10. Exemple : 10
      *
      * @response 200 {
@@ -298,6 +303,7 @@ class PostController extends Controller
         $endDecade = $startDecade + 9;
 
         $posts = Post::query()
+            ->published()
             ->whereBetween('year', [$startDecade, $endDecade])
             ->orderBy('year')
             ->orderByDesc('created_at')
@@ -349,14 +355,14 @@ class PostController extends Controller
             ],
         ];
 
-        if (!array_key_exists($period, $periods)) {
+        if (! array_key_exists($period, $periods)) {
             return response()->json([
                 'data' => null,
                 'meta' => [],
                 'links' => [],
                 'error' => [
                     'code' => 'invalid_period',
-                    'message' => 'Invalid period. Valid values: ' . implode(', ', array_keys($periods)),
+                    'message' => 'Invalid period. Valid values: '.implode(', ', array_keys($periods)),
                 ],
             ], 400);
         }
@@ -364,6 +370,7 @@ class PostController extends Controller
         $selectedPeriod = $periods[$period];
 
         $posts = Post::query()
+            ->published()
             ->when($selectedPeriod['operator'] === '>=', function ($query) use ($selectedPeriod) {
                 $query->where('year', '>=', $selectedPeriod['start_year']);
             })
@@ -396,6 +403,7 @@ class PostController extends Controller
      * @group Articles
      *
      * @urlParam year integer required Année des articles. Exemple : 2026
+     *
      * @queryParam per_page integer Nombre d’articles par page. Min: 1. Max: 100. Default: 10. Exemple : 10
      *
      * @response 200 {
@@ -417,6 +425,7 @@ class PostController extends Controller
     public function getPostByYear(int $year): JsonResponse
     {
         $posts = Post::query()
+            ->published()
             ->where('year', $year)
             ->orderBy('year')
             ->orderByDesc('created_at')
@@ -434,8 +443,6 @@ class PostController extends Controller
      * - défaut : 10
      * - minimum : 1
      * - maximum : 100
-     *
-     * @return int
      */
     private function getPerPage(): int
     {
@@ -450,10 +457,6 @@ class PostController extends Controller
 
     /**
      * Retourne une réponse JSON pour un article unique.
-     *
-     * @param Post $post
-     * @param array $meta
-     * @return JsonResponse
      */
     private function singleResponse(Post $post, array $meta = []): JsonResponse
     {
@@ -471,10 +474,6 @@ class PostController extends Controller
      * Inclut :
      * - données transformées via PostResource
      * - pagination complète
-     *
-     * @param LengthAwarePaginator $posts
-     * @param array $meta
-     * @return JsonResponse
      */
     private function paginatedResponse(LengthAwarePaginator $posts, array $meta = []): JsonResponse
     {

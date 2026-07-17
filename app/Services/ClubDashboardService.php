@@ -64,6 +64,13 @@ class ClubDashboardService
 
         return [
             'total' => Post::count(),
+            'published' => Post::query()->published()->count(),
+            'drafts' => Post::query()->where('status', Post::STATUS_DRAFT)->count(),
+            // Programmes : publies mais dont la date de publication est future.
+            'scheduled' => Post::query()
+                ->where('status', Post::STATUS_PUBLISHED)
+                ->where('published_at', '>', now())
+                ->count(),
             'latest' => Post::query()->orderByDesc('created_at')->first(['id', 'title', 'created_at']),
             'recentlyUpdated' => Post::query()
                 ->orderByDesc('updated_at')
