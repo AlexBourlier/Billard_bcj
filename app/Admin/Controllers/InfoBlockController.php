@@ -17,28 +17,34 @@ class InfoBlockController extends AdminController
     protected $title = 'Informations page d\'accueil';
 
     private const NIVEAUX = [
-        'info'      => 'Information',
+        'info' => 'Information',
         'important' => 'Important',
-        'urgent'    => 'Urgent',
+        'urgent' => 'Urgent',
     ];
 
     private const NIVEAU_COLORS = [
-        'info'      => 'bg-info',
+        'info' => 'bg-info',
         'important' => 'bg-warning',
-        'urgent'    => 'bg-danger',
+        'urgent' => 'bg-danger',
     ];
 
     protected function grid()
     {
-        $grid = new Grid(new InfoBlock());
+        $grid = new Grid(new InfoBlock);
 
         $grid->model()->orderBy('ordre')->orderByDesc('id');
 
         $grid->column('ordre', __('Ordre'))->sortable();
         $grid->column('titre', __('Titre'));
-        $grid->column('niveau', __('Niveau'))->display(function ($niveau) {
-            $color = self::NIVEAU_COLORS[$niveau] ?? 'bg-secondary';
-            $label = self::NIVEAUX[$niveau] ?? $niveau;
+        // OpenAdmin rebinde le scope des closures d'affichage sur le modele :
+        // `self::` y pointerait vers InfoBlock. On capture donc les constantes
+        // dans des variables locales passees via `use`.
+        $niveaux = self::NIVEAUX;
+        $colors = self::NIVEAU_COLORS;
+        $grid->column('niveau', __('Niveau'))->display(function ($niveau) use ($niveaux, $colors) {
+            $color = $colors[$niveau] ?? 'bg-secondary';
+            $label = $niveaux[$niveau] ?? $niveau;
+
             return "<span class='badge {$color}'>{$label}</span>";
         });
         $grid->column('actif', __('Actif'))->display(function ($v) {
@@ -62,9 +68,14 @@ class InfoBlockController extends AdminController
     {
         $show = new Show(InfoBlock::findOrFail($id));
 
+        // Idem detail : le scope de la closure est rebinde sur le modele, on
+        // capture donc la table des libelles via `use`.
+        $niveaux = self::NIVEAUX;
         $show->field('titre', __('Titre'));
         $show->field('resume', __('Message'));
-        $show->field('niveau', __('Niveau'))->as(fn ($n) => self::NIVEAUX[$n] ?? $n);
+        $show->field('niveau', __('Niveau'))->as(function ($n) use ($niveaux) {
+            return $niveaux[$n] ?? $n;
+        });
         $show->field('lien', __('Lien'));
         $show->field('date_debut', __('Debut'));
         $show->field('date_fin', __('Fin'));
@@ -76,7 +87,7 @@ class InfoBlockController extends AdminController
 
     protected function form()
     {
-        $form = new Form(new InfoBlock());
+        $form = new Form(new InfoBlock);
 
         $form->text('titre', __('Titre'))->required()
             ->help('Titre court affiche en tete du bloc (ex : « Fermeture exceptionnelle »).');
