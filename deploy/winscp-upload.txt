@@ -1,0 +1,61 @@
+# Script de televersement WinSCP — separation back (API) / front.
+#
+# Utilisation (Windows) :
+#   "C:\Program Files (x86)\WinSCP\WinSCP.com" /script="deploy\winscp-upload.txt"
+#   (ne PAS ajouter /ini=nul : WinSCP demarrerait sans tes sessions enregistrees)
+#
+# PREREQUIS - creer une session SFTP dans WinSCP (une seule fois) :
+#   1. WinSCP (interface) > Nouveau site :
+#        Protocole : SFTP   |  Hote : melon.o2switch.net   |  Port : 22
+#        Utilisateur : boal2619  |  mot de passe (ou cle SSH)
+#   2. Enregistre-la sous le nom EXACT : "o2switch-sftp".
+#   3. Connecte-toi UNE fois via l'interface pour accepter/memoriser la cle
+#      d'hote du serveur (sinon le script echoue sur la verification de cle).
+#
+# Pourquoi SFTP et pas FTP : le SFTP passe par SSH et voit donc le vrai
+# filesystem (le dossier de l'API existe), et le transfert est chiffre.
+
+option batch on
+option confirm off
+option transfer binary
+
+lcd "C:\laragon\www\BCJ"
+
+# Session SFTP enregistree (voir prerequis). Aucun secret ici.
+open "o2switch-sftp"
+
+# --------------------------------------------------------------------------
+# 1) Backend Laravel  ->  api.test.alexandrebourlier.fr
+#    (le sous-domaine doit pointer vers le sous-dossier /public de ce dossier)
+#
+#    Deploiement DETERMINISTE : on envoie une archive du code (deploy\app.tar.gz)
+#    generee par `git archive` (voir deploy.ps1). Elle contient exactement les
+#    fichiers versionnes (y compris resources/views/vendor/), et JAMAIS vendor/,
+#    node_modules, .env ni les images uploadees. remote.sh la decompresse cote
+#    serveur. Fini les fichiers oublies par la synchronisation.
+# --------------------------------------------------------------------------
+cd "/home/boal2619/api.test.alexandrebourlier.fr"
+
+# Archive du code (decompressee ensuite par remote.sh).
+put -nopreservetime "C:\laragon\www\BCJ\deploy\app.tar.gz" "/home/boal2619/api.test.alexandrebourlier.fr/app.tar.gz"
+
+# Fichier d'environnement de production, renomme en .env (transfert chiffre SFTP ;
+# jamais versionne dans git).
+put -nopreservetime "C:\laragon\www\BCJ\.env.production" "/home/boal2619/api.test.alexandrebourlier.fr/.env"
+
+# Script des commandes serveur (extraction + composer + migrations + caches).
+put -nopreservetime "C:\laragon\www\BCJ\deploy\remote.sh" "/home/boal2619/api.test.alexandrebourlier.fr/remote.sh"
+
+# --------------------------------------------------------------------------
+# 2) Frontend React (build)  ->  test.alexandrebourlier.fr
+#    On envoie le contenu de frontend/dist (genere par `npm run build`).
+# --------------------------------------------------------------------------
+lcd "C:\laragon\www\BCJ\frontend\dist"
+cd "/home/boal2619/test.alexandrebourlier.fr"
+synchronize remote -criteria=time -resumesupport=off . .
+
+# .htaccess du SPA (routage cote client + HTTPS + cache assets).
+put -nopreservetime "C:\laragon\www\BCJ\deploy\front.htaccess" "/home/boal2619/test.alexandrebourlier.fr/.htaccess"
+
+close
+exit
