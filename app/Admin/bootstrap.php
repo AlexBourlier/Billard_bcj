@@ -10,6 +10,10 @@ Form::extend('ck5', Ck5Decoupled::class);
 // les variables Bootstrap). Voir public/css/admin-bcj.css.
 Admin::css('/css/admin-bcj.css');
 
+// Ameliorations UX admin : avertissement "modifications non enregistrees" et
+// apercu d'article. Voir public/js/admin-bcj.js.
+Admin::js('/js/admin-bcj.js');
+
 // Quill (CSS + JS)
 Admin::css('https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css');
 Admin::js('https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js');
