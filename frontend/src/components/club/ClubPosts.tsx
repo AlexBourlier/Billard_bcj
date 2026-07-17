@@ -10,7 +10,8 @@ import { ApiError } from "../../api/client";
 
 import type { PaginationMeta, Post } from "../../types/api";
 
-import ClubArchiveNav, { getClubPeriods } from "./ClubArchiveNav";
+import ClubArchiveNav from "./ClubArchiveNav";
+import { getClubPeriods } from "./clubPeriods";
 import ClubPostList from "./ClubPostList";
 import Pagination from "../ui/Pagination";
 
@@ -43,6 +44,11 @@ export default function ClubPosts() {
     useEffect(() => {
         let isMounted = true;
 
+        // Reset volontaire vers l'etat « chargement » a chaque changement de page
+        // ou de periode, avant le refetch : l'utilisateur voit un indicateur de
+        // chargement plutot que les anciens articles. Ce setState synchrone dans
+        // l'effet est donc intentionnel.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setState((current) => ({
             ...current,
             loading: true,
