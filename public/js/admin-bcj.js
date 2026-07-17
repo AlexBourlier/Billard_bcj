@@ -204,4 +204,30 @@
     e.preventDefault();
     openPreview();
   });
+
+  /* ---------------------------------------------------------------- */
+  /* 3) Liens de menu hors /admin (ex. doc API) -> nouvel onglet       */
+  /* ---------------------------------------------------------------- */
+
+  function markExternalMenuLinks() {
+    var links = document.querySelectorAll('.sidebar a[href]');
+    for (var i = 0; i < links.length; i++) {
+      var a = links[i];
+      if (a.dataset.bcjExt) continue;
+      try {
+        var u = new URL(a.href, window.location.origin);
+        // Meme domaine mais hors du prefixe /admin : la doc API est servie a la
+        // racine du domaine, on l'ouvre donc dans un nouvel onglet.
+        if (u.origin === window.location.origin && u.pathname.indexOf('/admin') !== 0) {
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          a.dataset.bcjExt = '1';
+        }
+      } catch (e) {
+        /* URL invalide : on ignore */
+      }
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', markExternalMenuLinks);
 })();

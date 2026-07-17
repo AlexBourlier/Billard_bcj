@@ -8,8 +8,8 @@
 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="../docs/css/theme-default.style.css" media="screen">
-    <link rel="stylesheet" href="../docs/css/theme-default.print.css" media="print">
+    <link rel="stylesheet" href="{{ asset("/vendor/scribe/css/theme-default.style.css") }}" media="screen">
+    <link rel="stylesheet" href="{{ asset("/vendor/scribe/css/theme-default.print.css") }}" media="print">
 
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
 
@@ -30,9 +30,9 @@
         var useCsrf = Boolean();
         var csrfUrl = "/sanctum/csrf-cookie";
     </script>
-    <script src="../docs/js/tryitout-5.9.0.js"></script>
+    <script src="{{ asset("/vendor/scribe/js/tryitout-5.11.0.js") }}"></script>
 
-    <script src="../docs/js/theme-default-5.9.0.js"></script>
+    <script src="{{ asset("/vendor/scribe/js/theme-default-5.11.0.js") }}"></script>
 
 </head>
 
@@ -41,7 +41,7 @@
 <a href="#" id="nav-button">
     <span>
         MENU
-        <img src="../docs/images/navbar.png" alt="navbar-image"/>
+        <img src="{{ asset("/vendor/scribe/images/navbar.png") }}" alt="navbar-image"/>
     </span>
 </a>
 <div class="tocify-wrapper">
@@ -72,7 +72,7 @@
                 </li>
                                     <ul id="tocify-subheader-articles" class="tocify-subheader">
                                                     <li class="tocify-item level-2" data-unique="articles-GETapi-v1-posts">
-                                <a href="#articles-GETapi-v1-posts">Liste des articles</a>
+                                <a href="#articles-GETapi-v1-posts">Articles du club</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="articles-GETapi-v1-posts-favoris">
                                 <a href="#articles-GETapi-v1-posts-favoris">Articles favoris</a>
@@ -222,13 +222,13 @@
             </div>
 
     <ul class="toc-footer" id="toc-footer">
-                    <li style="padding-bottom: 5px;"><a href="../docs/collection.json">View Postman collection</a></li>
-                            <li style="padding-bottom: 5px;"><a href="../docs/openapi.yaml">View OpenAPI spec</a></li>
+                    <li style="padding-bottom: 5px;"><a href="{{ route("scribe.postman") }}">View Postman collection</a></li>
+                            <li style="padding-bottom: 5px;"><a href="{{ route("scribe.openapi") }}">View OpenAPI spec</a></li>
                 <li><a href="http://github.com/knuckleswtf/scribe">Documentation powered by Scribe ✍</a></li>
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: July 16, 2026</li>
+        <li>Last updated: July 17, 2026</li>
     </ul>
 </div>
 
@@ -251,12 +251,13 @@ You can switch the language used with the tabs at the top right (or from the nav
 
     
 
-                                <h2 id="articles-GETapi-v1-posts">Liste des articles</h2>
+                                <h2 id="articles-GETapi-v1-posts">Articles du club</h2>
 
 <p>
 </p>
 
-<p>Retourne la liste paginée des articles, triés du plus récent au plus ancien.</p>
+<p>Retourne la liste paginée des articles du club (hors disciplines), triés du
+plus récent au plus ancien. Alimente la page « Vie du club ».</p>
 
 <span id="example-requests-GETapi-v1-posts">
 <blockquote>Example request:</blockquote>
