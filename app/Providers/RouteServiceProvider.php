@@ -24,15 +24,13 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Route::resourceVerbs([
-            'create' => 'creer',
-            'store' => 'enregistrer',
-            'edit' => 'editer',
-            'update' => 'modifier',
-            'destroy' => 'supprimer',
-            'index' => 'lister',
-            'show' => 'afficher',
-        ]);
+        // NB : on n'utilise PAS Route::resourceVerbs() pour franciser les URLs
+        // d'administration (creer/editer...). En effet, ces verbes ne sont
+        // appliques aux routes d'OpenAdmin que lorsque les routes sont mises en
+        // cache (production), pas en developpement (sans cache) : les URLs
+        // differaient alors entre les deux environnements (edit vs editer),
+        // cassant les liens du menu construits en local. On conserve donc les
+        // verbes anglais par defaut (edit/create), coherents partout.
 
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
