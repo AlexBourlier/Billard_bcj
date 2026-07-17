@@ -201,7 +201,7 @@ class AdminPostController extends AdminController
             ->help('Redigez avec la barre d\'outils (titres, gras, listes, liens). Toute mise en forme non autorisee (couleurs, polices, scripts) est retiree automatiquement pour la securite du site.');
         $form->file('thumbnail_upload', __('Image de l\'article'))->removable()
             ->help('Image d\'illustration. Format conseille : JPG ou PNG, largeur environ 1200 px. Inutile si une video est renseignee.');
-        $form->ignore(['thumbnail_upload']);
+        $form->ignore(['thumbnail_upload', 'schedule_publication']);
         $form->url('video', __('Video (lien YouTube)'))
             ->help('Facultatif. Collez le lien YouTube : la video remplacera l\'image.');
         $form->select('discipline', __('Discipline'))->options($disciplines)
@@ -218,8 +218,20 @@ class AdminPostController extends AdminController
             ])
             ->default(Post::STATUS_PUBLISHED)
             ->help('Un brouillon est enregistre mais n\'apparait pas sur le site public.');
-        $form->datetime('published_at', __('Date de publication'))
-            ->help('Laisser vide = publie immediatement. Une date future programme la publication : l\'article reste masque jusqu\'a cette date.');
+
+        // La programmation est explicite : par defaut, un article publie est
+        // visible immediatement. On ne s'appuie donc PAS sur la seule presence
+        // d'une date (le champ pouvant se pre-remplir), mais sur ce choix.
+        $model = $form->model();
+        $isScheduled = $model->published_at
+            && $model->status === Post::STATUS_PUBLISHED
+            && $model->published_at->isFuture();
+
+        $form->switch('schedule_publication', __('Programmer la publication'))
+            ->default((bool) $isScheduled)
+            ->help('Desactive : l\'article publie apparait immediatement. Active : il n\'apparait qu\'a la date choisie ci-dessous.');
+        $form->datetime('published_at', __('Date de publication programmee'))
+            ->help('Utilisee uniquement si la programmation est activee. Doit etre une date/heure future.');
         $form->datetimeRange('created_at', 'updated_at');
 
         // Traitement personnalisé avant sauvegarde
@@ -236,10 +248,19 @@ class AdminPostController extends AdminController
             // Tracabilite : dernier administrateur ayant modifie l'article.
             $model->updated_by = Admin::user()?->id;
 
-            // Un article publie sans date explicite est publie immediatement
-            // (date du jour). Un brouillon peut conserver sa date pour une
-            // future programmation.
-            if ($form->status === Post::STATUS_PUBLISHED && empty($form->published_at)) {
+            // Date de publication effective :
+            // - brouillon           -> aucune date (article masque) ;
+            // - publie + programme  -> date future demandee (sinon maintenant) ;
+            // - publie sans program. -> maintenant (visible immediatement).
+            $scheduledAt = $form->published_at
+                ? \Illuminate\Support\Carbon::parse($form->published_at)
+                : null;
+
+            if ($form->status === Post::STATUS_DRAFT) {
+                $model->published_at = null;
+            } elseif (request()->boolean('schedule_publication') && $scheduledAt && $scheduledAt->isFuture()) {
+                $model->published_at = $scheduledAt;
+            } else {
                 $model->published_at = now();
             }
 

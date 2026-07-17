@@ -2,12 +2,26 @@
 
 namespace App\Models;
 
+use App\Support\ApiCacheInvalidator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
     use HasFactory;
+
+    /**
+     * Les articles alimentent la page d'accueil (article vedette) et les pages
+     * discipline, toutes mises en cache : toute ecriture invalide ce cache pour
+     * qu'une publication (ou un passage en brouillon) soit visible immediatement.
+     */
+    protected static function booted(): void
+    {
+        $forget = static fn () => app(ApiCacheInvalidator::class)->allPublic();
+
+        static::saved($forget);
+        static::deleted($forget);
+    }
 
     /** Article enregistre mais non visible publiquement. */
     public const STATUS_DRAFT = 'draft';
