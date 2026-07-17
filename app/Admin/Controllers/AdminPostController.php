@@ -38,6 +38,9 @@ class AdminPostController extends AdminController
 
         $grid = new Grid(new Post);
 
+        // Liste des articles du plus recent au plus ancien (par defaut).
+        $grid->model()->orderByDesc('created_at');
+
         $grid->filter(function ($filter) use ($disciplines) {
             $filter->expand();
 
