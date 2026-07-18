@@ -63,7 +63,6 @@ export default function ClubPostCard({
             src={imageSrc}
             alt={title}
             width="279"
-            height="auto"
             className="club-post-card__image"
             loading={priority ? "eager" : "lazy"}
             fetchPriority={priority ? "high" : "auto"}

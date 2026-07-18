@@ -29,6 +29,10 @@ export function DesktopFooter({ logoUrl }: Props) {
                                 src={logoUrl}
                                 alt="BCJ37 - Billard Club de Joué-lès-Tours"
                                 className="site-logo__image"
+                                width={706}
+                                height={349}
+                                loading="lazy"
+                                decoding="async"
                             />
                         ) : (
                             <span>BCJ37</span>

@@ -50,6 +50,10 @@ export function HomePage() {
                     src={home.site_settings.banniere_url}
                     alt="Bienvenue au BCJ37"
                     className="hero-banner"
+                    width={3222}
+                    height={964}
+                    fetchPriority="high"
+                    decoding="async"
                 />
             )}
         </div>
@@ -102,6 +106,8 @@ export function HomePage() {
                                         src={home.featured_post.image_url}
                                         alt={home.featured_post.title ?? home.featured_post.titre}
                                         style={{ maxWidth: "100%" }}
+                                        loading="lazy"
+                                        decoding="async"
                                     />
                                 ) : null}
 

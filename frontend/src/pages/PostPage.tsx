@@ -186,6 +186,8 @@ export function PostPage() {
                                 src={post.image_url}
                                 alt={postTitle}
                                 style={{ maxWidth: "800px" }}
+                                fetchPriority="high"
+                                decoding="async"
                             />
                         ) : null}
                     </div>

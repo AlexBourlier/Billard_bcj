@@ -22,6 +22,7 @@ export function ErrorPage({
                     alt=""
                     className="error-page__image"
                     aria-hidden="true"
+                    decoding="async"
                 />
 
                 <p className="error-page__code">

@@ -28,6 +28,9 @@ export function DesktopNavigation({ menus, logoUrl }: Props) {
                             src={logoUrl}
                             alt="BCJ37 - Billard Club de Joué-lès-Tours"
                             className="site-logo-desktop site-logo__image"
+                            width={706}
+                            height={349}
+                            decoding="async"
                         />
                     ) : (
                         <span>BCJ37</span>
@@ -47,6 +50,7 @@ export function DesktopNavigation({ menus, logoUrl }: Props) {
                                     src={menu.image_url}
                                     alt={menu.name}
                                     className="menu-image"
+                                    decoding="async"
                                 />
                             ) : (
                                 menu.name
