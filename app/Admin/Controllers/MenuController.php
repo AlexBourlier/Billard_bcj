@@ -2,17 +2,16 @@
 
 namespace App\Admin\Controllers;
 
-use \App\Models\Menu;
+use App\Models\Menu;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Intervention\Image\Drivers\Gd\Driver as GdDriver;
+use Intervention\Image\ImageManager;
+use OpenAdmin\Admin\Controllers\AdminController;
 use OpenAdmin\Admin\Form;
 use OpenAdmin\Admin\Grid;
 use OpenAdmin\Admin\Show;
-use Illuminate\Support\Facades\Cache;
-use OpenAdmin\Admin\Controllers\AdminController;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
-use Intervention\Image\ImageManager;
-use Intervention\Image\Drivers\Gd\Driver as GdDriver;
-
 
 class MenuController extends AdminController
 {
@@ -23,8 +22,6 @@ class MenuController extends AdminController
      */
     protected $title = 'Menu';
 
-    
-
     /**
      * Make a grid builder.
      *
@@ -32,11 +29,7 @@ class MenuController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Menu());
-        $colors = [
-            0 => 'bg-danger',    // inactif → rouge
-            1 => 'bg-success',   // actif → vert
-        ];
+        $grid = new Grid(new Menu);
 
         $grid->column('nom', __('Nom'));
         $grid->column('image', __('Image'))->display(function ($thumbnail) {
@@ -46,14 +39,11 @@ class MenuController extends AdminController
             }
 
             // Sinon, affiche l'image
-            return '<img src="' . asset('storage/' . $thumbnail) . '" alt="Thumbnail" class="object-cover" style="width:48px; height:auto;">';
+            return '<img src="'.asset('storage/'.$thumbnail).'" alt="Thumbnail" class="object-cover" style="width:48px; height:auto;">';
         });
-        $grid->column('actif', __('Statut'))->display(function ($value) use ($colors) {
-            $color = $colors[$value] ?? 'bg-secondary';
-            $name = $value == 1 ? 'Actif' : 'Inactif';
-        
-            return "<span class='badge {$color}' style='padding:6px 12px; font-size:13px;'>{$name}</span>";
-        });
+        // Interrupteur on/off : active/desactive le menu directement depuis la
+        // liste (mise a jour AJAX du champ `actif`).
+        $grid->column('actif', __('Actif'))->switch();
 
         return $grid;
     }
@@ -61,7 +51,7 @@ class MenuController extends AdminController
     /**
      * Make a show builder.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      * @return Show
      */
     protected function detail($id)
@@ -77,8 +67,8 @@ class MenuController extends AdminController
             if (empty($thumbnail)) {
                 return ''; // Ne rien afficher si le thumbnail est vide
             }
-        
-            return '<img src="' . asset('storage/' . $thumbnail) . '" alt="Thumbnail" class="object-cover" style="width:192px; height:auto;">';
+
+            return '<img src="'.asset('storage/'.$thumbnail).'" alt="Thumbnail" class="object-cover" style="width:192px; height:auto;">';
         });
         $show->field('actif', __('Actif'))->unescape()->as(function ($value) use ($colors) {
             $color = $colors[$value] ?? 'bg-secondary';
@@ -97,7 +87,7 @@ class MenuController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Menu());
+        $form = new Form(new Menu);
 
         $form->text('nom', __('Nom'));
 
@@ -116,9 +106,9 @@ class MenuController extends AdminController
                 $file = request()->file('image_upload');
 
                 // Nom unique
-                $filename = Str::random(12) . '.webp';
+                $filename = Str::random(12).'.webp';
 
-                $manager = new ImageManager(new GdDriver());
+                $manager = new ImageManager(new GdDriver);
 
                 $image = $manager->read($file);
 
@@ -132,12 +122,12 @@ class MenuController extends AdminController
 
                 // Sauvegarde
                 Storage::disk('public')->put(
-                    'menu/' . $filename,
+                    'menu/'.$filename,
                     $webpData
                 );
 
                 // Enregistrement BDD
-                $form->model()->image = 'menu/' . $filename;
+                $form->model()->image = 'menu/'.$filename;
             }
         });
 
@@ -147,7 +137,7 @@ class MenuController extends AdminController
     public function toggle($id)
     {
         $menu = Menu::findOrFail($id);
-        $menu->actif = !$menu->actif;
+        $menu->actif = ! $menu->actif;
         $menu->save();
 
         // Vider le cache après la mise à jour
