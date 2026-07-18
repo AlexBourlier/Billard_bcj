@@ -29,7 +29,11 @@ const DisciplinePostsPage = lazy(() => import("../components/discipline/Discipli
 
 export function AdminRedirect() {
     useEffect(() => {
-        window.location.replace("https://api.test.alexandrebourlier.fr/admin");
+        // L'admin (OpenAdmin) est servi par l'API, sous /admin. On derive l'URL
+        // du domaine de l'API (VITE_API_URL) : plus aucune URL codee en dur a
+        // changer d'un environnement a l'autre (test / production).
+        const adminUrl = new URL(import.meta.env.VITE_API_URL).origin + "/admin";
+        window.location.replace(adminUrl);
     }, []);
 
     return null;
