@@ -1,23 +1,27 @@
+import { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { HomePage } from "../pages/HomePage";
-import { DisciplinePage } from "../pages/DisciplinePage";
-import { NotFoundPage } from "../pages/NotFoundPage";
-import { PostPage } from "../pages/PostPage";
-import { ClubPostsPage } from "../pages/ClubPostsPage";
-import { CalendarPage } from "../pages/CalendarPage";
-import { ContactPage } from "../pages/ContactPage";
-import { ErrorPage } from "../pages/ErrorPage";
-import { CGUPage } from "../pages/CGUPage";
-import { DisciplineDocumentsPage } from "../components/discipline/DisciplineDocumentsPage";
-import { DisciplineRankingsPage } from "../components/discipline/DisciplineRankingsPage";
-import { DisciplineCalendarPage } from "../components/discipline/DisciplineCalendarPage";
-import { DisciplinePostsPage } from "../components/discipline/DisciplinePostsPage";
 import { MainLayout } from "../layouts/MainLayout";
-import { useEffect } from "react";
-import { MentionsPage } from "../pages/MentionsLegales";
-import { PolitiqueConfidentialitePage } from "../pages/PolitiqueConfidentialite";
 import { CookieBanner } from "../components/cookies/CookieBanner";
 import { MatomoTracker } from "../components/analytics/MatomoTracker";
+
+// Chargement differe des pages : chaque page devient un fichier JS separe,
+// telecharge uniquement lorsque l'utilisateur visite la route correspondante.
+// Le bundle initial (page d'accueil) s'en trouve nettement allege.
+const HomePage = lazy(() => import("../pages/HomePage").then((m) => ({ default: m.HomePage })));
+const DisciplinePage = lazy(() => import("../pages/DisciplinePage").then((m) => ({ default: m.DisciplinePage })));
+const NotFoundPage = lazy(() => import("../pages/NotFoundPage").then((m) => ({ default: m.NotFoundPage })));
+const PostPage = lazy(() => import("../pages/PostPage").then((m) => ({ default: m.PostPage })));
+const ClubPostsPage = lazy(() => import("../pages/ClubPostsPage").then((m) => ({ default: m.ClubPostsPage })));
+const CalendarPage = lazy(() => import("../pages/CalendarPage").then((m) => ({ default: m.CalendarPage })));
+const ContactPage = lazy(() => import("../pages/ContactPage").then((m) => ({ default: m.ContactPage })));
+const ErrorPage = lazy(() => import("../pages/ErrorPage").then((m) => ({ default: m.ErrorPage })));
+const CGUPage = lazy(() => import("../pages/CGUPage").then((m) => ({ default: m.CGUPage })));
+const MentionsPage = lazy(() => import("../pages/MentionsLegales").then((m) => ({ default: m.MentionsPage })));
+const PolitiqueConfidentialitePage = lazy(() => import("../pages/PolitiqueConfidentialite").then((m) => ({ default: m.PolitiqueConfidentialitePage })));
+const DisciplineDocumentsPage = lazy(() => import("../components/discipline/DisciplineDocumentsPage").then((m) => ({ default: m.DisciplineDocumentsPage })));
+const DisciplineRankingsPage = lazy(() => import("../components/discipline/DisciplineRankingsPage").then((m) => ({ default: m.DisciplineRankingsPage })));
+const DisciplineCalendarPage = lazy(() => import("../components/discipline/DisciplineCalendarPage").then((m) => ({ default: m.DisciplineCalendarPage })));
+const DisciplinePostsPage = lazy(() => import("../components/discipline/DisciplinePostsPage").then((m) => ({ default: m.DisciplinePostsPage })));
 
 export function AdminRedirect() {
     useEffect(() => {
@@ -31,6 +35,7 @@ export function AppRouter() {
     return (
         <BrowserRouter>
             <MatomoTracker />
+            <Suspense fallback={<div className="route-loading" aria-busy="true" aria-label="Chargement" />}>
             <Routes>
                 <Route
                     path="/"
@@ -163,6 +168,7 @@ export function AppRouter() {
                     element={<AdminRedirect />}
                 />
             </Routes>
+            </Suspense>
             <CookieBanner />
         </BrowserRouter>
     );

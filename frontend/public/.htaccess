@@ -1,0 +1,46 @@
+# Configuration Apache du site public (SPA React).
+# Ce fichier est copie tel quel dans dist/ au build (dossier public/ de Vite)
+# et doit se trouver a la racine du domaine servant le front.
+
+# --- Compression des ressources texte -------------------------------------
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml
+    AddOutputFilterByType DEFLATE application/javascript application/json
+    AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# --- Cache navigateur ------------------------------------------------------
+<IfModule mod_headers.c>
+    # Les assets buildes portent un hash dans leur nom (ex: index-Kk2wqTxI.js) :
+    # leur contenu ne change jamais sans changer de nom -> cache long et immuable.
+    <FilesMatch "\.(js|css|woff2?|ttf|otf|eot|svg|png|jpe?g|webp|avif|gif|ico)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+
+    # index.html ne porte pas de hash : il doit etre revalide a chaque visite
+    # pour recuperer immediatement chaque nouveau deploiement.
+    <FilesMatch "^index\.html$">
+        Header set Cache-Control "no-cache, must-revalidate"
+    </FilesMatch>
+</IfModule>
+
+# robots.txt et sitemap.xml changent regulierement : pas de cache long.
+<IfModule mod_headers.c>
+    <FilesMatch "\.(txt|xml)$">
+        Header set Cache-Control "public, max-age=3600"
+    </FilesMatch>
+</IfModule>
+
+# --- Routage SPA -----------------------------------------------------------
+# Toute URL qui ne correspond pas a un fichier/dossier existant est renvoyee
+# vers index.html : le routage est gere cote client par React Router.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    RewriteRule ^ index.html [L]
+</IfModule>

@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { getHome } from "../api/publicApi";
 import { Link } from "react-router-dom";
 import type { HomeData } from "../types/api";
-import { ClubMap } from "../components/map/ClubMap";
+
+// La carte (Leaflet, dependance lourde) est sous la ligne de flottaison :
+// on la charge a la demande pour ne pas peser sur le rendu initial de l'accueil.
+const ClubMap = lazy(() => import("../components/map/ClubMap").then((m) => ({ default: m.ClubMap })));
 import { InfoBanner } from "../components/info/InfoBanner";
 import { ArticleCard } from "../components/ui/Card";
 import { ArticleTitle } from "../components/ui/Title";
@@ -76,7 +79,9 @@ export function HomePage() {
             <section className="maps" aria-labelledby="maps-title">
                 <ArticleTitle id="maps-title">Nous trouver</ArticleTitle>
                 <ArticleCard className="home-section home-map">
-                    <ClubMap />
+                    <Suspense fallback={<div className="leaflet-map" aria-busy="true" />}>
+                        <ClubMap />
+                    </Suspense>
                 </ArticleCard>
             </section>
 
