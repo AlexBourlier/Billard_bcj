@@ -3,6 +3,9 @@
 namespace App\Admin\Controllers;
 
 use App\Models\SiteSetting;
+use App\Support\ImageOptimizer;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use OpenAdmin\Admin\Admin;
 use OpenAdmin\Admin\Controllers\AdminController;
 use OpenAdmin\Admin\Form;
@@ -83,19 +86,19 @@ class SiteSettingController extends AdminController
         $form = new Form(new SiteSetting);
 
         // --- Identite visuelle ---------------------------------------------
+        // Le logo et la banniere sont recompresses en WebP a l'enregistrement
+        // (voir saving() plus bas) : les fichiers uploades ne sont jamais
+        // stockes bruts, pour ne pas alourdir le chargement du site.
         $form->fieldset(__('Identité visuelle'), function (Form $form) {
-            $form->image('logo', 'Logo du club')
-                ->disk('public')
-                ->move('img')
-                ->uniqueName()
-                ->help('Logo affiché sur le site. Ratio recommandé : 706 × 349 px.');
+            $form->file('logo', 'Logo du club')
+                ->removable()
+                ->rules('nullable|image|max:8192')
+                ->help('Logo affiché sur le site. Ratio recommandé : 706 × 349 px. Converti automatiquement en WebP.');
 
-            $form->image('banniere', 'Bannière d\'accueil')
-                ->disk('public')
-                ->move('img')
-                ->uniqueName()
-                ->rules('image|max:8192')
-                ->help('Grande image en haut de la page d\'accueil. Ratio recommandé : 3222 × 964 px.');
+            $form->file('banniere', 'Bannière d\'accueil')
+                ->removable()
+                ->rules('nullable|image|max:8192')
+                ->help('Grande image en haut de la page d\'accueil. Ratio recommandé : 3222 × 964 px. Convertie automatiquement en WebP.');
         });
 
         // --- Coordonnees ----------------------------------------------------
@@ -116,6 +119,34 @@ class SiteSettingController extends AdminController
                 ->help('Adresse complète de la page (https://…).');
             $form->text('facebook_page_id', 'Identifiant de la page Facebook')
                 ->help('Facultatif — utilisé pour l\'intégration Facebook.');
+        });
+
+        // OpenAdmin ne doit pas enregistrer le fichier brut : on gere logo et
+        // banniere nous-memes dans saving() (conversion WebP + compression).
+        $form->ignore(['logo', 'banniere']);
+
+        $form->saving(function (Form $form) {
+            // Reglages alignes sur la commande images:optimize (coherence).
+            $process = function (string $column, int $maxWidth, int $quality) use ($form) {
+                $file = request()->file($column);
+                if (! $file) {
+                    return;
+                }
+
+                $path = 'img/'.Str::uuid().'.webp';
+                Storage::disk('public')->put($path, ImageOptimizer::toWebp($file, $maxWidth, $quality));
+
+                // Supprime l'ancien fichier lors d'une mise a jour.
+                $old = $form->model()->getOriginal($column);
+                if ($old) {
+                    Storage::disk('public')->delete($old);
+                }
+
+                $form->model()->{$column} = $path;
+            };
+
+            $process('logo', 800, 85);
+            $process('banniere', 2000, 82);
         });
 
         // Aide a la saisie du telephone (mise en forme automatique).
