@@ -7,6 +7,11 @@
 
   <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
 
+  <!-- Ouvre au plus tot la connexion (DNS + TLS) vers l'API, qui sert aussi les
+       images : la banniere d'accueil (element LCP) se telecharge plus vite. -->
+  <link rel="preconnect" href="%VITE_API_URL%" />
+  <link rel="dns-prefetch" href="%VITE_API_URL%" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 
