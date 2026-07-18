@@ -43,8 +43,13 @@ class SiteSettingController extends AdminController
             $actions->disableDelete();
         });
 
-        $grid->column('logo', __('Logo'))->display(fn ($v) => self::imagePreview($v, 40));
-        $grid->column('banniere', __('Bannière'))->display(fn ($v) => self::imagePreview($v, 30));
+        // On capture le rendu dans une variable : les closures display()/as()
+        // sont re-liees au scope du modele par OpenAdmin, ou « self:: » ne
+        // pointerait plus vers ce controleur.
+        $preview = \Closure::fromCallable([self::class, 'imagePreview']);
+
+        $grid->column('logo', __('Logo'))->display(fn ($v) => $preview($v, 40));
+        $grid->column('banniere', __('Bannière'))->display(fn ($v) => $preview($v, 30));
         $grid->column('adresse', __('Adresse'));
         $grid->column('telephone', __('Téléphone'));
         $grid->column('email', __('Email'));
@@ -56,8 +61,12 @@ class SiteSettingController extends AdminController
     {
         $show = new Show(SiteSetting::findOrFail($id));
 
-        $show->field('logo', __('Logo'))->unescape()->as(fn ($v) => self::imagePreview($v, 90));
-        $show->field('banniere', __('Bannière'))->unescape()->as(fn ($v) => self::imagePreview($v, 70));
+        // Voir grid() : « self:: » ne fonctionne pas dans une closure as(),
+        // re-liee au scope du modele. On passe par une variable capturee.
+        $preview = \Closure::fromCallable([self::class, 'imagePreview']);
+
+        $show->field('logo', __('Logo'))->unescape()->as(fn ($v) => $preview($v, 90));
+        $show->field('banniere', __('Bannière'))->unescape()->as(fn ($v) => $preview($v, 70));
         $show->field('adresse', __('Adresse'));
         $show->field('telephone', __('Téléphone'));
         $show->field('email', __('Email'));
