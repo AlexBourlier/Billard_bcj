@@ -47,6 +47,7 @@ function PartnerItem({ partner, duplicated = false }: PartnerItemProps) {
             src={partner.logo_url as string}
             alt={duplicated ? "" : label}
             loading="lazy"
+            decoding="async"
             onError={() => setImageFailed(true)}
         />
     ) : (

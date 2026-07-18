@@ -102,6 +102,9 @@ export function MobileNavigation({ logoUrl }: Props) {
                                 src={logoUrl}
                                 alt="BCJ37 - Billard Club de Joué-lès-Tours"
                                 className="site-logo__image"
+                                width={706}
+                                height={349}
+                                decoding="async"
                             />
                         ) : (
                             <span>BCJ37</span>

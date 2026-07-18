@@ -21,6 +21,7 @@ export function NotFoundPage() {
                     alt=""
                     className="error-page__image"
                     aria-hidden="true"
+                    decoding="async"
                 />
 
                 <p className="error-page__code">404</p>
