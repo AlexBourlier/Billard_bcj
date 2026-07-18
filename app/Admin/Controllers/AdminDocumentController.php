@@ -35,7 +35,7 @@ class AdminDocumentController extends AdminController
 
     protected function grid()
     {
-        $grid = new Grid(new Document());
+        $grid = new Grid(new Document);
 
         $grid->model()->orderBy('discipline')->orderBy('title');
 
@@ -43,13 +43,15 @@ class AdminDocumentController extends AdminController
         $grid->column('discipline', __('Catégorie'))->display(function ($discipline) {
             $color = self::COLORS[$discipline] ?? 'bg-secondary';
             $name = self::DISCIPLINES[$discipline] ?? 'Autre';
+
             return "<span class='badge {$color}'>{$name}</span>";
         });
         $grid->column('file', __('Fichier'))->display(function ($file) {
             if (empty($file)) {
                 return '-';
             }
-            return "<a href='" . asset('storage/' . $file) . "' target='_blank'>Ouvrir le PDF</a>";
+
+            return "<a href='".asset('storage/'.$file)."' target='_blank'>Ouvrir le PDF</a>";
         });
 
         $grid->filter(function ($filter) {
@@ -74,6 +76,7 @@ class AdminDocumentController extends AdminController
                 return '';
             }
             $url = Storage::disk('public')->url($file);
+
             return "<iframe src='{$url}' width='100%' height='800px' style='border:none;'></iframe>";
         });
 
@@ -82,14 +85,17 @@ class AdminDocumentController extends AdminController
 
     protected function form()
     {
-        $form = new Form(new Document());
+        $form = new Form(new Document);
 
         $form->text('title', __('Titre'))->required()
             ->help('Nom du document tel qu\'il apparaitra sur le site.');
         $form->select('discipline', __('Catégorie'))->options(self::DISCIPLINES)->required()
             ->help('Discipline a laquelle se rattache le document.');
         $form->file('file', __('Fichier PDF'))->disk('public')->move('pdf/documents')->uniqueName()
-            ->help('Fichier PDF a mettre a disposition (classement, reglement, convocation...).');
+            // Restreint aux PDF : evite le depot de fichiers actifs (.php, .svg,
+            // .html...) sur le disque public (defense en profondeur).
+            ->rules('mimes:pdf|max:20480')
+            ->help('Fichier PDF a mettre a disposition (classement, reglement, convocation...). 20 Mo maximum.');
 
         return $form;
     }
