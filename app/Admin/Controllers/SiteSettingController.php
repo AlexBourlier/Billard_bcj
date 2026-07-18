@@ -43,8 +43,8 @@ class SiteSettingController extends AdminController
             $actions->disableDelete();
         });
 
-        $grid->column('logo', __('Logo'))->display(fn ($v) => self::imagePreview($v, 40))->unescape();
-        $grid->column('banniere', __('Bannière'))->display(fn ($v) => self::imagePreview($v, 30))->unescape();
+        $grid->column('logo', __('Logo'))->display(fn ($v) => self::imagePreview($v, 40));
+        $grid->column('banniere', __('Bannière'))->display(fn ($v) => self::imagePreview($v, 30));
         $grid->column('adresse', __('Adresse'));
         $grid->column('telephone', __('Téléphone'));
         $grid->column('email', __('Email'));
