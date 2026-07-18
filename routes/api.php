@@ -67,8 +67,12 @@ Route::prefix('v1')->group(function () {
     });
     
     
-    Route::get('/licencies', [LicenciesController::class, 'index']);
-    Route::get('/licencies/search/{name}', [LicenciesController::class, 'searchByName']);
+    // Licenciés : données personnelles (RGPD) → réservé à l'administration
+    // authentifiée (pas d'exposition publique du fichier des adhérents).
+    Route::middleware(['web', 'admin.api'])->group(function () {
+        Route::get('/licencies', [LicenciesController::class, 'index']);
+        Route::get('/licencies/search/{name}', [LicenciesController::class, 'searchByName']);
+    });
 
     // Routes batches
     Route::middleware(['web', 'admin.api'])->group(function () {
@@ -106,7 +110,11 @@ Route::prefix('v1')->group(function () {
 
     // Routes pour les contacts
     Route::prefix('/contact')->group(function () {
-        Route::get('/', [ContactController::class, 'index']);
+        // Liste des messages reçus : données personnelles → réservé à
+        // l'administration authentifiée.
+        Route::get('/', [ContactController::class, 'index'])
+            ->middleware(['web', 'admin.api']);
+        // Envoi public d'un message depuis le formulaire (débit limité).
         Route::post('/', [ContactController::class, 'send'])
             ->middleware('throttle:5,1');
     });
