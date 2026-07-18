@@ -28,6 +28,8 @@ export type SiteSettings = {
     logo_url?: string | null;
     banniere?: string | null;
     banniere_url?: string | null;
+    banniere_width?: number | null;
+    banniere_height?: number | null;
     adresse?: string | null;
     telephone?: string | null;
     email?: string | null;

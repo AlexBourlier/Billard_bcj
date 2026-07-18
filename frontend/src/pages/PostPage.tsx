@@ -177,7 +177,7 @@ export function PostPage() {
                                 height="600"
                                 src={post.video_url}
                                 title={postTitle}
-                                frameBorder="0"
+                                style={{ border: 0 }}
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                 allowFullScreen
                             />

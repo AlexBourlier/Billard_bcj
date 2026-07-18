@@ -53,8 +53,8 @@ export function HomePage() {
                     src={home.site_settings.banniere_url}
                     alt="Bienvenue au BCJ37"
                     className="hero-banner"
-                    width={3222}
-                    height={964}
+                    width={home.site_settings.banniere_width ?? undefined}
+                    height={home.site_settings.banniere_height ?? undefined}
                     fetchPriority="high"
                     decoding="async"
                 />
@@ -102,7 +102,7 @@ export function HomePage() {
                                         height="600"
                                         src={home.featured_post.video_url}
                                         title={home.featured_post.title ?? home.featured_post.titre}
-                                        frameBorder="0"
+                                        style={{ border: 0 }}
                                         allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                         allowFullScreen
                                     />

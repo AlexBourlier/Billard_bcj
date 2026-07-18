@@ -33,7 +33,9 @@ function getYouTubeEmbedUrl(url: string) {
         return null;
     }
 
-    return `https://www.youtube.com/embed/${youtubeId}`;
+    // Domaine « no-cookie » : YouTube ne depose pas de cookie tiers tant que la
+    // video n'est pas lue (respect du consentement, meilleures bonnes pratiques).
+    return `https://www.youtube-nocookie.com/embed/${youtubeId}`;
 }
 
 export default function ClubPostCard({
