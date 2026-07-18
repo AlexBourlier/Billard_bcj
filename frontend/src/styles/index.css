@@ -149,3 +149,9 @@ select {
   height: 100%;
   width: 100%;
 }
+
+/* Espace reserve pendant le chargement differe d'une page (Suspense), pour
+   limiter le saut de mise en page avant l'affichage du contenu. */
+.route-loading {
+  min-height: 60vh;
+}

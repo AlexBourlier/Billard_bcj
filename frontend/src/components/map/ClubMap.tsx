@@ -1,5 +1,10 @@
 import { MapContainer, TileLayer, Marker, Popup, ScaleControl } from "react-leaflet";
 import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+// Icones servies localement (bundlees par Vite) plutot que depuis unpkg.com :
+// on evite deux requetes vers un domaine externe.
+import markerIconUrl from "leaflet/dist/images/marker-icon.png";
+import markerShadowUrl from "leaflet/dist/images/marker-shadow.png";
 
 const position: [number, number] = [
     47.341811344805635,
@@ -7,8 +12,8 @@ const position: [number, number] = [
 ];
 
 const markerIcon = new L.Icon({
-    iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-    shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+    iconUrl: markerIconUrl,
+    shadowUrl: markerShadowUrl,
     iconSize: [25, 41],
     iconAnchor: [12, 41],
 });
