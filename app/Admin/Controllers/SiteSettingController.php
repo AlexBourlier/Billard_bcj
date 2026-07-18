@@ -2,15 +2,13 @@
 
 namespace App\Admin\Controllers;
 
-use Storage;
-use App\Models\Menu;
+use App\Models\SiteSetting;
+use OpenAdmin\Admin\Admin;
+use OpenAdmin\Admin\Controllers\AdminController;
 use OpenAdmin\Admin\Form;
 use OpenAdmin\Admin\Grid;
-use OpenAdmin\Admin\Show;
-use OpenAdmin\Admin\Admin;
-use \App\Models\SiteSetting;
 use OpenAdmin\Admin\Layout\Content;
-use OpenAdmin\Admin\Controllers\AdminController;
+use OpenAdmin\Admin\Show;
 
 class SiteSettingController extends AdminController
 {
@@ -20,26 +18,41 @@ class SiteSettingController extends AdminController
     {
         return $content
             ->title($this->title)
-            ->description('Paramètre du site')
+            ->description('Identité, coordonnées et réseaux du club')
             ->body($this->grid());
+    }
+
+    /** Aperçu image (miniature) a partir d'un chemin stocke dans /storage. */
+    private static function imagePreview(?string $path, int $height): string
+    {
+        if (empty($path)) {
+            return '<span class="text-muted">—</span>';
+        }
+
+        return '<img src="'.asset('storage/'.$path).'" alt="" style="height:'.$height.'px; width:auto; border-radius:6px;">';
     }
 
     protected function grid()
     {
-        $grid = new Grid(new SiteSetting());
-        $grid->column('id', __('Id'));
-        $grid->column('logo', __('Logo'));
-        $grid->column('banniere', __('Bannière'));
+        $grid = new Grid(new SiteSetting);
+
+        // Une seule ligne de reglages : on n'affiche que l'essentiel, avec les
+        // visuels en apercu. Pas de creation ni de suppression (reglages uniques).
+        $grid->disableCreateButton();
+        $grid->actions(function ($actions) {
+            $actions->disableDelete();
+        });
+
+        // On capture le rendu dans une variable : les closures display()/as()
+        // sont re-liees au scope du modele par OpenAdmin, ou « self:: » ne
+        // pointerait plus vers ce controleur.
+        $preview = \Closure::fromCallable([self::class, 'imagePreview']);
+
+        $grid->column('logo', __('Logo'))->display(fn ($v) => $preview($v, 40));
+        $grid->column('banniere', __('Bannière'))->display(fn ($v) => $preview($v, 30));
         $grid->column('adresse', __('Adresse'));
-        $grid->column('telephone', __('Telephone'));
+        $grid->column('telephone', __('Téléphone'));
         $grid->column('email', __('Email'));
-        $grid->column('youtube_page', __('Youtube page'));
-        $grid->column('facebook_page', __('Facebook page'));
-        $grid->column('facebook_token', __('Facebook token'));
-        $grid->column('facebook_page_id', __('Facebook page id'));
-        $grid->column('google_map_api', __('Google map api'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
 
         return $grid;
     }
@@ -47,45 +60,65 @@ class SiteSettingController extends AdminController
     protected function detail($id)
     {
         $show = new Show(SiteSetting::findOrFail($id));
-        $show->field('id', __('Id'));
-        $show->field('logo', __('Logo'));
-        $show->field('banniere', __('Bannière'));
+
+        // Voir grid() : « self:: » ne fonctionne pas dans une closure as(),
+        // re-liee au scope du modele. On passe par une variable capturee.
+        $preview = \Closure::fromCallable([self::class, 'imagePreview']);
+
+        $show->field('logo', __('Logo'))->unescape()->as(fn ($v) => $preview($v, 90));
+        $show->field('banniere', __('Bannière'))->unescape()->as(fn ($v) => $preview($v, 70));
         $show->field('adresse', __('Adresse'));
-        $show->field('telephone', __('Telephone'));
+        $show->field('telephone', __('Téléphone'));
         $show->field('email', __('Email'));
-        $show->field('youtube_page', __('Youtube page'));
-        $show->field('facebook_page', __('Facebook page'));
-        $show->field('facebook_token', __('Facebook token'));
-        $show->field('facebook_page_id', __('Facebook page id'));
-        $show->field('google_map_api', __('Google map api'));
-        $show->field('created_at', __('Created at'));
-        $show->field('updated_at', __('Updated at'));
+        $show->field('youtube_page', __('Page YouTube'));
+        $show->field('facebook_page', __('Page Facebook'));
+        $show->field('facebook_page_id', __('Identifiant page Facebook'));
+        $show->field('updated_at', __('Dernière modification'));
 
         return $show;
     }
 
     protected function form()
     {
-        $form = new Form(new SiteSetting());
+        $form = new Form(new SiteSetting);
 
-        $form->image('logo', 'Logo du site')
-            ->disk('public')
-            ->move('img')
-            ->uniqueName()
-            ->help('Ratio recommandé : 706x349 px');
+        // --- Identite visuelle ---------------------------------------------
+        $form->fieldset(__('Identité visuelle'), function (Form $form) {
+            $form->image('logo', 'Logo du club')
+                ->disk('public')
+                ->move('img')
+                ->uniqueName()
+                ->help('Logo affiché sur le site. Ratio recommandé : 706 × 349 px.');
 
-        $form->image('banniere', 'Bannière du site')
-            ->disk('public')
-            ->move('img')
-            ->uniqueName()
-            ->rules('image|max:8192')
-            ->help('Ratio recommandé : 3222x964 px');
+            $form->image('banniere', 'Bannière d\'accueil')
+                ->disk('public')
+                ->move('img')
+                ->uniqueName()
+                ->rules('image|max:8192')
+                ->help('Grande image en haut de la page d\'accueil. Ratio recommandé : 3222 × 964 px.');
+        });
 
-        $form->text('adresse', 'Adresse');
-        $form->text('telephone', 'Téléphone')
-            ->rules('nullable|regex:/^0[1-9]( ?\d{2}){4}$/')
-            ->help('Format attendu : 06 12 34 56 78 (laisser vide si non renseigné)');
+        // --- Coordonnees ----------------------------------------------------
+        $form->fieldset(__('Coordonnées du club'), function (Form $form) {
+            $form->text('adresse', 'Adresse')
+                ->help('Adresse complète (utilisée sur la carte « Nous trouver »).');
+            $form->text('telephone', 'Téléphone')
+                ->rules('nullable|regex:/^0[1-9]( ?\d{2}){4}$/')
+                ->help('Format : 06 12 34 56 78 (laisser vide si non renseigné).');
+            $form->email('email', 'Email de contact');
+        });
 
+        // --- Reseaux sociaux ------------------------------------------------
+        $form->fieldset(__('Réseaux sociaux'), function (Form $form) {
+            $form->url('youtube_page', 'Page YouTube')
+                ->help('Adresse complète de la chaîne (https://…).');
+            $form->url('facebook_page', 'Page Facebook')
+                ->help('Adresse complète de la page (https://…).');
+            $form->text('facebook_page_id', 'Identifiant de la page Facebook')
+                ->help('Facultatif — utilisé pour l\'intégration Facebook.');
+        });
+
+        // Aide a la saisie du telephone (mise en forme automatique).
         Admin::script(<<<'JS'
             document.addEventListener('DOMContentLoaded', function () {
                 const telInput = document.querySelector('input[name="telephone"]');
@@ -102,16 +135,6 @@ class SiteSettingController extends AdminController
                 }
             });
         JS);
-
-        $form->email('email', 'Email');
-        $form->url('youtube_page', 'Page Youtube');
-        $form->url('facebook_page', 'Page Facebook');
-        // $form->text('facebook_token', 'Facebook Access Token')->attribute(['class' => 'api-field']);
-        // $form->text('facebook_page_id', 'Facebook Page ID')->attribute(['class' => 'api-field']);
-        // $form->text('google_map_api', 'Clé API Google Maps')->attribute(['class' => 'api-field']);
-        $form->text('facebook_token', 'Facebook Access Token');
-        $form->text('facebook_page_id', 'Facebook Page ID');
-        $form->text('google_map_api', 'Clé API Google Maps');
 
         $form->tools(function (Form\Tools $tools) {
             $tools->disableDelete();
