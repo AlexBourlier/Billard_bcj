@@ -48,7 +48,7 @@ export function CalendarPage() {
                             title="Agenda du Billard Club de Joué-lès-Tours - vue semaine"
                             width="100%"
                             height="800"
-                            frameBorder="0"
+                            style={{ border: 0 }}
                             scrolling="no"
                             onError={() => setIframeError(true)}
                         />
