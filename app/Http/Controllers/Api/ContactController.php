@@ -96,12 +96,12 @@ class ContactController extends Controller
 
         try {
             Mail::raw(
-                "Nom : {$validated['name']}\n" .
-                "Email : {$validated['email']}\n\n" .
+                "Nom : {$validated['name']}\n".
+                "Email : {$validated['email']}\n\n".
                 "Message :\n{$validated['message']}",
                 function ($message) use ($validated) {
-                    $message->from('no-reply@bcj37.fr', 'BCJ37 — Formulaire de contact');
-                    $message->to('contact@bcj37.fr');
+                    $message->from(config('mail.contact.from'), config('mail.contact.from_name'));
+                    $message->to(config('mail.contact.to'));
                     $message->replyTo($validated['email'], $validated['name']);
                     $message->subject('Nouveau message depuis le formulaire de contact');
                 }

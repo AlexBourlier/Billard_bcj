@@ -131,4 +131,22 @@ return [
         ],
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Formulaire de contact
+    |--------------------------------------------------------------------------
+    |
+    | Adresses utilisees par le formulaire de contact public : destinataire des
+    | messages recus et expediteur affiche. Pilotables par environnement (ex.
+    | rediriger vers une boite de test) sans modifier le code. Valeurs par
+    | defaut = production.
+    |
+    */
+
+    'contact' => [
+        'to' => env('CONTACT_TO_ADDRESS', 'contact@bcj37.fr'),
+        'from' => env('CONTACT_FROM_ADDRESS', 'no-reply@bcj37.fr'),
+        'from_name' => env('CONTACT_FROM_NAME', 'BCJ37 — Formulaire de contact'),
+    ],
+
 ];
