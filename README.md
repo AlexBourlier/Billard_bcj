@@ -373,18 +373,41 @@ Documentation générée avec Scribe.
 
 # Installation
 
-## Backend Laravel
+Le projet est en **deux parties** : une API Laravel (back-office + API) et un
+frontend React (site public). Il faut lancer les deux.
+
+**Prerequis** : PHP 8.2+, Composer, Node.js 18+, une base MySQL (ou SQLite).
+
+## Backend Laravel (API + administration)
 ```bash
 composer install
 cp .env.example .env
 php artisan key:generate
-php artisan migrate
+
+# Renseigner la base dans .env (DB_DATABASE, DB_USERNAME, DB_PASSWORD...),
+# creer la base correspondante, puis :
+php artisan migrate --seed      # tables + donnees de demonstration + compte admin
+php artisan storage:link        # sert les fichiers/images televerses
+
+php artisan serve               # API disponible sur http://localhost:8000
 ```
-## Frontend React
+
+Le seeding cree du contenu de demonstration (articles, documents) et un compte
+d'administration :
+
+* Administration : http://localhost:8000/admin
+* Identifiants : **admin** / **password** (evaluation locale ; a changer en production)
+
+## Frontend React (site public)
 ```bash
+cd frontend
 npm install
-npm run dev
+cp .env.example .env            # definit VITE_API_URL = http://localhost:8000/api/v1
+npm run dev                     # site public sur http://localhost:5173
 ```
+
+> Le `.env` du front doit pointer vers l'API (`VITE_API_URL`), et l'API doit
+> autoriser l'origine du front (`FRONTEND_URL` dans le `.env` du back).
 ---
 
 # Déploiement

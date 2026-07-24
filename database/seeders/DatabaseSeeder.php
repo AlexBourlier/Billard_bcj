@@ -20,6 +20,15 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
+            // Compte d'administration + reglages du site.
+            AdminUserSeeder::class,
+            SiteSettingSeeder::class,
+            // Contenu de demonstration.
+            PostSeeder::class,
+            DocumentSeeder::class,
+            IndexSeeder::class,
+            // En dernier : recuperation de calendriers via un service externe
+            // (plus lent, necessite un acces reseau).
             CalendarSeeder::class,
         ]);
     }
